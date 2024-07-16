@@ -1,3 +1,10 @@
+<?php
+
+    if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
+        echo '<p>Your session has expired due to inactivity. Please log in again.</p>';
+    } 
+
+?>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -49,7 +56,7 @@
             margin: 0 10px 0 0;
         }
         .login-container {
-            background-color: white;
+            background-color: #DBE9F4;
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
@@ -129,7 +136,7 @@
             <h2>Login now</h2>
                 <button class="login-button" onclick="location.href='signin.php'"><img src="assets/logo/microsoft-logo.png" alt="Microsoft Logo" /><span>SIGN IN WITH YOUR STI O365 ACCOUNT</span></button>
             <footer>
-                <p>© STI Education Services Group, Inc. All Rights Reserved.</p>
+                <p>&copy; STI Education Services Group, Inc. All Rights Reserved.</p>
             </footer>
         </div>
     </body>

@@ -11,6 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = date.getMonth();
         const year = date.getFullYear();
 
+        const today = new Date(); // Get today's date
+
         const firstDay = new Date(year, month, 1).getDay();
         const lastDate = new Date(year, month + 1, 0).getDate();
 
@@ -23,7 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         for (let i = 1; i <= lastDate; i++) {
             const dayDiv = document.createElement('div');
-            dayDiv.innerHTML = i;
+            dayDiv.textContent = i;
+
+            if (year === today.getFullYear() && month === today.getMonth() && i === today.getDate()) {
+                dayDiv.classList.add('today');
+            }
+
             calendarDays.appendChild(dayDiv);
         }
     }

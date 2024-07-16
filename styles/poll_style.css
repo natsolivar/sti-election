@@ -1,0 +1,25 @@
+@import url("sidebar_style.css");
+
+body {
+    background-image: url("assets/images/background.jpg");
+    overflow-y: auto;
+}
+
+.main-content {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 78px);
+    padding: 2rem;
+    
+}
+
+.sidebar.active ~ .main-content {
+    width: calc(100% - 240px);
+    left: 240px;
+}
+
+.main-content #chartContainer {
+    padding-top: 30px;
+}

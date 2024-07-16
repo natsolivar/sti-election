@@ -2,6 +2,8 @@
 session_start();
 require 'config.php';
 
+$db = mysqli_connect('localhost', 'root', '', 'emvs');
+
 if (!isset($_GET['code'])) {
     $_SESSION['state'] = bin2hex(random_bytes(8));
     $authorize_url = AUTHORITY . '/oauth2/v2.0/authorize?' . http_build_query([
@@ -32,8 +34,57 @@ if (!isset($_GET['code'])) {
     $token_response = json_decode($response, true);
     $_SESSION['access_token'] = $token_response['access_token'];
 
-    header('Location: homepage.php');
-    exit();
+    $graph_url = "https://graph.microsoft.com/v1.0/me";
+    $user_response = file_get_contents($graph_url, false, stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => 'Authorization: Bearer ' . $_SESSION['access_token']
+        ]
+    ]));
+    $user = json_decode($user_response, true);
+    $userEmail = $user['mail']; 
+    $displayName = $user['displayName'];
+    $userName = $user['givenName'];
+    $userID = $user['id'];
+
+    $profile_pic_url = "https://graph.microsoft.com/v1.0/me/photo/\$value";
+    $profile_pic_response = @file_get_contents($profile_pic_url, false, stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'header' => 'Authorization: Bearer ' . $_SESSION['access_token']
+        ]
+    ]));
+
+    if ($profile_pic_response !== false) {
+        $profile_pic_data = base64_encode($profile_pic_response);
+        $_SESSION['user_profile_pic'] = $profile_pic_data;
+        // For debugging
+        file_put_contents('profile_pic.jpg', $profile_pic_response);
+    } else {
+        $_SESSION['user_profile_pic'] = null;
+        // For debugging
+        error_log('Failed to fetch profile picture');
+    }
+
+    $qry1 = "SELECT * FROM users WHERE user_email = '$userEmail'";
+    $results = mysqli_query($db, $qry1);
+    if (mysqli_num_rows($results) == 1) {
+        $_SESSION['userEmail'] = $userEmail;
+        $_SESSION['displayName'] = $displayName;
+        $_SESSION['userName'] = $userName;
+        $_SESSION['user_profile_pic'] = $profile_pic_data;
+        header('location: homepage.php');
+    } else {
+        $qry2 = "INSERT INTO users (user_id, user_name, user_email, user_pw) VALUES ('$userID', '$displayName', '$userEmail', '')";
+        mysqli_query($db, $qry2);
+        $_SESSION['userEmail'] = $userEmail;
+        $_SESSION['displayName'] = $displayName;
+        $_SESSION['userName'] = $userName;
+        $_SESSION['user_profile_pic'] = $profile_pic_data;
+        header('location: register.php');
+    }
+
+
 } else {
     echo 'Invalid state or code';
 }
