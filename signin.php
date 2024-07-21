@@ -58,11 +58,9 @@ if (!isset($_GET['code'])) {
     if ($profile_pic_response !== false) {
         $profile_pic_data = base64_encode($profile_pic_response);
         $_SESSION['user_profile_pic'] = $profile_pic_data;
-        // For debugging
         file_put_contents('profile_pic.jpg', $profile_pic_response);
     } else {
         $_SESSION['user_profile_pic'] = null;
-        // For debugging
         error_log('Failed to fetch profile picture');
     }
 
@@ -73,6 +71,7 @@ if (!isset($_GET['code'])) {
         $_SESSION['displayName'] = $displayName;
         $_SESSION['userName'] = $userName;
         $_SESSION['user_profile_pic'] = $profile_pic_data;
+        $_SESSION['userID'] = $user['id'];
         header('location: homepage.php');
     } else {
         $qry2 = "INSERT INTO users (user_id, user_name, user_email, user_pw) VALUES ('$userID', '$displayName', '$userEmail', '')";
@@ -81,6 +80,7 @@ if (!isset($_GET['code'])) {
         $_SESSION['displayName'] = $displayName;
         $_SESSION['userName'] = $userName;
         $_SESSION['user_profile_pic'] = $profile_pic_data;
+        $_SESSION['userID'] = $user['id'];
         header('location: register.php');
     }
 

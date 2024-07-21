@@ -1,0 +1,54 @@
+@import url("sidebar_style.css");
+
+body {
+    background-image: url("assets/images/background.jpg");
+    overflow-y: auto;
+}
+
+.main-content {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 78px);
+    padding: 2rem;
+    
+}
+
+.sidebar.active ~ .main-content {
+    width: calc(100% - 240px);
+    left: 240px;
+}
+
+.button {
+    display: none;
+}
+
+.student-profile .card {
+    border-radius: 10px;
+}
+
+.main-content .student-profile .card .card-header .profile-pic {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin: 10px auto;
+    border-radius: 50%;
+}
+
+.student-profile .card h3 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.student-profile .card p {
+    font-size: 16px;
+    color: #000;
+}
+
+.student-profile .table th,
+.student-profile .table td {
+    font-size: 14px;
+    padding: 5px 10px;
+    color: #000;
+}

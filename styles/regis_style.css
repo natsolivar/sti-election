@@ -1,0 +1,112 @@
+@import url("sidebar_style.css");
+
+body {
+    background-image: url("assets/images/background.jpg");
+    overflow-y: auto;
+}
+
+.main-content {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 78px);
+    padding: 2rem;
+    
+}
+
+.sidebar.active ~ .main-content {
+    width: calc(100% - 240px);
+    left: 240px;
+}
+
+.button {
+    display: none;
+}
+
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container {
+    max-width: 100%;
+    padding: 28px;
+    margin:  0 28px;
+}
+
+h2 {
+    font-size: 26px;
+    font-weight: 600;
+    text-align: left;
+    color: #2f4f4f;
+    padding-bottom: 8px;
+    border-bottom: 1px solid silver;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.input-box {
+    display: flex;
+    flex-wrap: wrap;
+    width: 50%;
+    padding-bottom: 15px;
+}
+
+.input-box:nth-child(2n) {
+    justify-content: start;
+}
+
+.input-box label, .gender-title {
+    width: 100%;
+    color: #2f4f4f;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.gender-title {
+    font-size: 16px;
+}
+
+.input-box input, select {
+    height: 40px;
+    width: 95%;
+    padding: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.input-box input, select::-ms-expand {
+    padding-right: 2px;
+}
+
+
+.input-box textarea {
+    width: 95%;
+    padding: 10px 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    outline: none;
+}
+
+.input-box input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-box input:is(:focus, :valid) {
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+

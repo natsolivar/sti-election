@@ -37,7 +37,7 @@
         var chart = new CanvasJS.Chart("chartContainer", {
             animationEnabled: true,
             title:{
-                text: "QOS - Survey Result"
+                text: "Poll Result"
             },
             axisY:{
                 title: "Response values",

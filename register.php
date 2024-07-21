@@ -3,14 +3,30 @@ session_start();
 include 'session.php';
 require 'config.php';
 
-$voter_name = $_SESSION['displayName'];
-$voter_email = $_SESSION['userEmail'];
-$voter_grade = "";
-$voter_gender = "";
-$voter_program = "";
-$voter_club = "";
-$voter_num = "";
-$voter_pass = "";
+function getSchoolYear($currentDate) {
+    $currentMonth = (int) date('m', strtotime($currentDate));
+    $currentYear = (int) date('Y', strtotime($currentDate));
+    
+    if ($currentMonth >= 9) {
+        $startYear = $currentYear;
+        $endYear = $currentYear + 1;
+    } else {
+        $startYear = $currentYear - 1;
+        $endYear = $currentYear;
+    }
+    return "$startYear-$endYear";
+    }
+
+    $voter_name = $_SESSION['displayName'];
+    $voter_email = $_SESSION['userEmail'];
+    $voter_grade = "";
+    $voter_gender = "";
+    $voter_program = "";
+    $voter_club = "";
+    $voter_num = "";
+    $voter_pass = "";
+    $currentDate = date('Y-m-d');
+    $schoolYear = getSchoolYear($currentDate);
 
 $sql = mysqli_connect('localhost', 'root', '', 'emvs');
 
@@ -24,14 +40,14 @@ if (isset($_POST['register'])) {
     
     $voter_pass_hashed = password_hash($voter_pass, PASSWORD_DEFAULT);
 
-    $qry2 = "SELECT user_id FROM users WHERE user_email = '$voter_email'";
+    $qry2 = "SELECT user_id FROM users WHERE user_email = '$_SESSION[userID]'";
     $result = mysqli_query($sql, $qry2);
 
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         $user_id = $row['user_id'];
 
-        $qry3 = "INSERT INTO voters (user_id, voter_gender, voter_num, voter_grade, program_code, voter_club, date_registered, vote_status) VALUES ('$user_id', '$voter_gender', '$voter_num', '$voter_grade', '$voter_program', '$voter_club', NOW(), 'NO')";
+        $qry3 = "INSERT INTO voters (user_id, voter_gender, voter_num, voter_grade, program_code, voter_club, academic_year, date_registered, vote_status) VALUES ('$user_id', '$voter_gender', '$voter_num', '$voter_grade', '$voter_program', '$voter_club', '$schoolYear', NOW(), 'NO')";
         $result_insert = mysqli_query($sql, $qry3);
 
         if ($result_insert) {
@@ -39,6 +55,14 @@ if (isset($_POST['register'])) {
             $result_update = mysqli_query($sql, $qry4);
 
             if ($result_update) {
+                $qry5 = "SELECT voter_id FROM voters WHERE user_id = '$userID'";
+                $result_select = mysqli_query($sql, $qry5);
+                if ($result_select->num_rows > 0) { 
+                    while ($row = $result_select->fetch_assoc()) {
+                        $voter_id = $row['voter_id'];
+                        $SESSION['voter_id'] = $voter_id;
+                    }
+                }
                 header('location: homepage.php');
                 exit;
             } else {
@@ -235,7 +259,6 @@ mysqli_close($sql);
             }
         }
 
-
         </style>
     </head>
     <body>
@@ -254,12 +277,12 @@ mysqli_close($sql);
                         <div class="input-box">
                             <label for="grade">Grade/Year Level</label>
                             <select id="grade" name="grade" required>
-                                <option value="g11">Grade 11</option>
-                                <option value="g12">Grade 12</option>
-                                <option value="1st">1st Year</option>
-                                <option value="2nd">2nd Year</option>
-                                <option value="3rd">3rd Year</option>
-                                <option value="4th">4th Year</option>
+                                <option value="Grade 11">Grade 11</option>
+                                <option value="Grade 12">Grade 12</option>
+                                <option value="1st year">1st Year</option>
+                                <option value="2nd year">2nd Year</option>
+                                <option value="3rd year">3rd Year</option>
+                                <option value="4th year">4th Year</option>
                             </select>
                         </div>
                         <div class="input-box">
@@ -301,11 +324,11 @@ mysqli_close($sql);
                         </div>
                         <span class="gender-title">Gender</span>
                             <div class="gender-category">
-                                <input type="radio" name="gender" id="male" required>
+                                <input type="radio" name="gender" id="male" value="Male" required>
                                 <label for="gender">Male</label>
-                                <input type="radio" name="gender" id="female">
+                                <input type="radio" name="gender" id="female" value="Female">
                                 <label for="gender">Female</label>
-                                <input type="radio" name="gender" id="other">
+                                <input type="radio" name="gender" id="other" value="Other">
                                 <label for="gender">Other</label>
                             </div>
                     </div>
@@ -321,33 +344,33 @@ mysqli_close($sql);
     </body>
     <script>
         const programOptions = {
-    g11: [
+    'Grade 11': [
       { value: 'ABM', text: 'Accountancy, Business, and Management(ABM)' },
       { value: 'HUMMS', text: 'Humanities and Social Sciences(HUMSS)' },
       { value: 'STEM', text: 'Science, Technology, Engineering, and Mathematics(STEM)' },
       { value: 'CUART', text: 'Culinary Arts(CUART)' },
       { value: 'MAWD', text: 'Mobile App & Web Development(MAWD)' }
     ],
-    g12: [
+    'Grade 12': [
       { value: 'ABM', text: 'Accountancy, Business, and Management(ABM)' },
       { value: 'HUMMS', text: 'Humanities and Social Sciences(HUMSS)' },
       { value: 'STEM', text: 'Science, Technology, Engineering, and Mathematics(STEM)' },
       { value: 'CUART', text: 'Culinary Arts(CUART)' },
       { value: 'MAWD', text: 'Mobile App & Web Development(MAWD)' }
     ],
-    '1st': [
+    '1st year': [
       { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
       { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
     ],
-    '2nd': [
+    '2nd year': [
       { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
       { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
     ],
-    '3rd': [
+    '3rd year': [
       { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
       { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
     ],
-    '4th': [
+    '4th year': [
       { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
       { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
     ]
@@ -463,6 +486,6 @@ mysqli_close($sql);
         } else {
             formErrorMessage.style.display = 'none';
         }
-        });
+        }); 
 </script>
-    </html>
+</html>

@@ -150,7 +150,8 @@ body {
 	height: 45px;
 	width: 45px;
 	object-fit: cover;
-	border-radius: 12px;
+	border-radius: 100%;
+	margin-right: 10px;
 }
 
 .profile .profile_details .name {

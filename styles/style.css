@@ -134,6 +134,8 @@ body {
     width: 250px;
     height: auto;
     margin-right: 20px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 .candidate-info {
@@ -147,10 +149,10 @@ body {
 
 @media (max-width: 768px) {
     .calendar-header button {
-        font-size: 0.8rem; /* Adjust font size for smaller screens */
+        font-size: 0.8rem; 
     }
 
     .calendar-weekdays div, .calendar-days div {
-        padding: 0.1rem 0; /* Adjust padding for smaller screens */
+        padding: 0.1rem 0; 
     }
 }

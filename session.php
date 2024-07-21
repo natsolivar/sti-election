@@ -1,6 +1,6 @@
 <?php
 
-    $timeoutDuration = 600; 
+    $timeoutDuration = 6000; 
 
     if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > $timeoutDuration) {
         session_unset();
