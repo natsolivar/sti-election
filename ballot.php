@@ -65,170 +65,497 @@
         ?></div>
         </div>
         <div class="main-content">
+        <form action="vote_count.php" method="post" id="vote">
             <div class="box" ><h1>PRESIDENT / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                    <?php 
+                        
+                        $qry2 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES'";
+                        $result = mysqli_query($conn, $qry2);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='president' value='$name' id='pres' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
+
                 </div>
             <div class="box" ><h1>TERTIARY VICE PRESIDENT / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TERVP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='tervpresident' value='$name' id='tervp' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
-            <div class="box" ><h1>SENIOR HIGH VICE PRESIDENT / Vote for 1</h1></div>
+                <div class="box" ><h1>SENIOR HIGH VICE PRESIDENT / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'SHVP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='shvpresident' value='$name' id='shvp' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>INTERNAL SECRETARY / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'ENTSEC'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='entsec' value='$name' id='entsec' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>EXTERNAL SECRETARY / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'EXTSEC'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='extsec' value='$name' id='extsec' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>TREASURER / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TREA'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='trea' value='$name' id='trea' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>AUDITOR / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'AUD'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='aud' value='$name' id='aud' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>PUBLIC INFORMATION OFFICER / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                    <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PIO'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='pio' value='$name' id='pio' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (ABM) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11ABMREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='11abmrep' value='$name' id='11abmrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (HUMSS) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11HUMSSREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11hummsrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (STEM) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11STEMREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='11stemrep' value='$name' id='11stemrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (CUART) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11CUARTREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='11cuartrep' value='$name' id='11cuartrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (MAWD) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11MAWDREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='11mawdrep' value='$name' id='11mawdrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (ABM) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12ABMREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='12abmrep' value='$name' id='12abmrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (HUMSS) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12HUMSSREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12hummsrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (STEM) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12STEMREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='12stemrep' value='$name' id='12stemrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (CUART) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12SCUARTREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='12cuartrep' value='$name' id='12cuartrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (MAWD) / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12MAWDREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='12mawdrep' value='$name' id='12mawdrep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSTM 1A REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1AREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm1arep' value='$name' id='bstm1arep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSTM 1B REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1BREP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm1brep' value='$name' id='bstm1brep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSTM 2 REPRESENTATIVE/ Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
-                </>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm2rep' value='$name' id='bstm2rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
+                </div>
             <div class="box" ><h1>BSTM 3 REPRESENTATIVE/ Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM3REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm3rep' value='$name' id='bstm3rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSTM 4 REPRESENTATIVE/ Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM4REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm4rep' value='$name' id='bstm4rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSIS 1 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS1REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bsis1rep' value='$name' id='bsis1rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSIS 2 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS2REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bsis2rep' value='$name' id='bsis2rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSIS 3 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS3REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bsis3rep' value='$name' id='bsis3rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
             <div class="box" ><h1>BSIS 4 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
-                    <div class="item"><input type="radio" name="choices[]" value="1" id="checkbox1"> <label for="checkbox1">Checkbox 1</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="2" id="checkbox2"> <label for="checkbox2">Checkbox 2</label></div>
-                    <div class="item"><input type="radio" name="choices[]" value="3" id="checkbox3"> <label for="checkbox3">Checkbox 3</label></div>
+                <?php 
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS4REP'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bsis4rep' value='$name' id='bsis4rep' required><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
                 </div>
-        </div>
-        
+                <button type="submit" class="btn btn-primary" name="vote">Submit</button>  
+        </form>
+        </div>   
     </body>
     <script>
     </script>

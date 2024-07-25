@@ -1,8 +1,9 @@
 <?php 
 
 	include 'session.php';
-
+	include 'db.php'; 
 	$userProfilePic = $_SESSION['user_profile_pic'] ?? null;
+	$user_id = $_SESSION['userID'];
 ?>
 <!DOCTYPE html>
 <html>
@@ -11,7 +12,8 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width-device-width; initial-scale=1.0">
         <!-- <link rel="stylesheet" type="text/css" href="sidebar_style.css?v=<?php echo time(); ?>"> -->
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>	
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">	
         <title>EMVS</title>
     </head>
 	<style>
@@ -286,6 +288,8 @@
 			transform: translate(0);
 		}
 
+		
+
 	</style>
     <body>
 	<div class="sidebar">
@@ -338,16 +342,42 @@
 			</div>
 		</div>
 	</div>
-    <a style="--clr: #7808d0" class="button" href="ballot.php">
-      <span class="button__icon-wrapper">
-        <svg width="10" class="button__icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 15">
-          <path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
-        </svg>
-        <svg class="button__icon-svg  button__icon-svg--copy" xmlns="http://www.w3.org/2000/svg" width="10" fill="none" viewBox="0 0 14 15">
-            <path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
-          </svg>
-      </span>Vote now!
-    </a>
+	<?php 
+		
+		$qry1 = "SELECT * FROM voters WHERE user_id = '$user_id'";
+		$result = mysqli_query($conn, $qry1);
+
+		if ($result->num_rows > 0) {
+			while ($row = $result->fetch_assoc()) {
+				$vote_status = $row['vote_status'];
+
+				if (!$vote_status == 'YES') {
+
+					echo '<a style="--clr: #7808d0" class="button" href="ballot.php">
+							<span class="button__icon-wrapper">
+								<svg width="10" class="button__icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 15">
+								<path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+								</svg>
+								<svg class="button__icon-svg  button__icon-svg--copy" xmlns="http://www.w3.org/2000/svg" width="10" fill="none" viewBox="0 0 14 15">
+									<path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+								</svg>
+							</span>Vote now!
+							</a>';
+				}
+			}
+			
+		}
+	
+	?>
+
+	<div id="myModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Modal Header</h2>
+        <p>This is a simple modal example.</p>
+    </div>
+</div>
+	
 	<script type="text/javascript">
 		let btn = document.querySelector("#btn");
 		let sidebar = document.querySelector(".sidebar");

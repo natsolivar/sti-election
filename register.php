@@ -1,5 +1,6 @@
 <?php
 session_start();
+include 'db.php';
 include 'session.php';
 require 'config.php';
 
@@ -28,35 +29,33 @@ function getSchoolYear($currentDate) {
     $currentDate = date('Y-m-d');
     $schoolYear = getSchoolYear($currentDate);
 
-$sql = mysqli_connect('localhost', 'root', '', 'emvs');
-
 if (isset($_POST['register'])) {
-    $voter_grade = mysqli_real_escape_string($sql, $_POST['grade']);
-    $voter_gender = mysqli_real_escape_string($sql, $_POST['gender']);
-    $voter_program = mysqli_real_escape_string($sql, $_POST['program']);
-    $voter_club = mysqli_real_escape_string($sql, $_POST['club']);
-    $voter_num = mysqli_real_escape_string($sql, $_POST['num']);
-    $voter_pass = mysqli_real_escape_string($sql, $_POST['confirm-pass']);
+    $voter_grade = mysqli_real_escape_string($conn, $_POST['grade']);
+    $voter_gender = mysqli_real_escape_string($conn, $_POST['gender']);
+    $voter_program = mysqli_real_escape_string($conn, $_POST['program']);
+    $voter_club = mysqli_real_escape_string($conn, $_POST['club']);
+    $voter_num = mysqli_real_escape_string($conn, $_POST['num']);
+    $voter_pass = mysqli_real_escape_string($conn, $_POST['confirm-pass']);
     
     $voter_pass_hashed = password_hash($voter_pass, PASSWORD_DEFAULT);
 
-    $qry2 = "SELECT user_id FROM users WHERE user_email = '$_SESSION[userID]'";
-    $result = mysqli_query($sql, $qry2);
+    $qry2 = "SELECT user_id FROM users WHERE user_id = '$_SESSION[userID]'";
+    $result = mysqli_query($conn, $qry2);
 
     if ($result) {
         $row = mysqli_fetch_assoc($result);
         $user_id = $row['user_id'];
 
         $qry3 = "INSERT INTO voters (user_id, voter_gender, voter_num, voter_grade, program_code, voter_club, academic_year, date_registered, vote_status) VALUES ('$user_id', '$voter_gender', '$voter_num', '$voter_grade', '$voter_program', '$voter_club', '$schoolYear', NOW(), 'NO')";
-        $result_insert = mysqli_query($sql, $qry3);
+        $result_insert = mysqli_query($conn, $qry3);
 
         if ($result_insert) {
             $qry4 = "UPDATE users SET user_pw = '$voter_pass_hashed' WHERE user_email = '$voter_email'";
-            $result_update = mysqli_query($sql, $qry4);
+            $result_update = mysqli_query($conn, $qry4);
 
             if ($result_update) {
                 $qry5 = "SELECT voter_id FROM voters WHERE user_id = '$userID'";
-                $result_select = mysqli_query($sql, $qry5);
+                $result_select = mysqli_query($conn, $qry5);
                 if ($result_select->num_rows > 0) { 
                     while ($row = $result_select->fetch_assoc()) {
                         $voter_id = $row['voter_id'];
@@ -66,16 +65,16 @@ if (isset($_POST['register'])) {
                 header('location: homepage.php');
                 exit;
             } else {
-                echo 'Error updating password: ' . mysqli_error($sql);
+                echo 'Error updating password: ' . mysqli_error($conn);
             }
         } else {
-            echo 'Error inserting voter: ' . mysqli_error($sql);
+            echo 'Error inserting voter: ' . mysqli_error($conn);
         }
     } else {
-        echo 'Error fetching user_id: ' . mysqli_error($sql);
+        echo 'Error fetching user_id: ' . mysqli_error($conn);
     }
 }
-mysqli_close($sql);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -297,12 +296,20 @@ mysqli_close($sql);
                         <div class="input-box">
                             <label for="club">Club</label>
                             <select id="club" name="club" required>
-                                <option value="SINS">Society of Information System</option>
-                                <option value="g12">to be added ..</option>
-                                <option value="1st">to be added ..</option>
-                                <option value="2nd">to be added ..</option>
-                                <option value="3rd">to be added ..</option>
-                                <option value="4th">to be added ..</option>
+                                <?php 
+                                    $qry6 = "SELECT club_id, club_name FROM club";
+                                    $result = mysqli_query($conn, $qry6);
+
+                                    if ($result->num_rows > 0) {
+                                        while ($row = $result->fetch_assoc()) {
+                                            $club_id = $row['club_id'];
+                                            $club_name = $row['club_name'];
+                                            echo '<option value="' . $club_id . '">' . $club_name . '</option>';
+                                        }
+                                    } else {
+                                        echo '<option value="">No clubs available</option>';
+                                    }
+                                ?>
                             </select>
                         </div>
                         <div class="input-box">
@@ -313,15 +320,20 @@ mysqli_close($sql);
                             <label for="confirm-password">Confirm Password</label>
                             <input type="password" id="confirm-password" placeholder="Confirm password" name="confirm-pass" required disabled>
                         </div>
-                        <div id="validation-message" class="validation-message">
+                        <div class="input-box" id="confirm-pass">
+                            <div id="validation-message" class="validation-message">
                                 <span id="length" class="invalid">At least 8 characters</span>
                                 <span id="uppercase" class="invalid">At least 1 uppercase letter</span>
                                 <span id="special" class="invalid">At least 1 special character</span>
                                 <span id="number" class="invalid">At least 1 number</span>
+                            </div>
                         </div>
-                        <div id="confirm-password-validation-message" class="validation-message">
+                        <div class="input-box" id="confirm-pass">
+                            <div id="confirm-password-validation-message" class="validation-message">
                                 <span id="confirm-message" class="invalid">Passwords do not match</span>
+                            </div>
                         </div>
+
                         <span class="gender-title">Gender</span>
                             <div class="gender-category">
                                 <input type="radio" name="gender" id="male" value="Male" required>

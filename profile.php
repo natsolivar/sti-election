@@ -2,9 +2,9 @@
     session_start();
     include 'sidebar.php';
     include 'session.php';
+    include 'db.php';
     require 'config.php';
     
-    $db = mysqli_connect('localhost', 'root', '', 'emvs');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,7 +35,7 @@
                 <div class="card-body">
                     <p class="mb-0"><strong class="pr-1">Email:</strong><?php 
                     $qry1 = "SELECT user_email FROM users WHERE user_id = '$_SESSION[userID]'";
-                    $results = mysqli_query($db, $qry1);
+                    $results = mysqli_query($conn, $qry1);
                     if ($results->num_rows > 0) { 
                         while ($row = $results->fetch_assoc()) {
                             echo $row['user_email'] . "<br>";
@@ -46,7 +46,7 @@
                     ?></p>
                     <p class="mb-0"><strong class="pr-1">Grade/Year Level:</strong><?php 
                     $qry1 = "SELECT voter_grade FROM voters WHERE user_id = '$_SESSION[userID]'";
-                    $results = mysqli_query($db, $qry1);
+                    $results = mysqli_query($conn, $qry1);
                     if ($results->num_rows > 0) { 
                         while ($row = $results->fetch_assoc()) {
                             echo $row['voter_grade'] . "<br>";
@@ -57,7 +57,7 @@
                     ?></p>
                     <p class="mb-0"><strong class="pr-1">Program:</strong><?php 
                     $qry2 = "SELECT program_code FROM voters WHERE user_id = '$_SESSION[userID]'";
-                    $results = mysqli_query($db, $qry2);
+                    $results = mysqli_query($conn, $qry2);
                     if ($results->num_rows > 0) { 
                         while ($row = $results->fetch_assoc()) {
                             echo $row['program_code'] . "<br>";
@@ -81,7 +81,7 @@
                         <td width="2%">:</td>
                         <td><?php 
                          $qry3 = "SELECT voter_id FROM voters WHERE user_id = '$_SESSION[userID]'";
-                         $results = mysqli_query($db, $qry3);
+                         $results = mysqli_query($conn, $qry3);
                          if ($results->num_rows > 0) { 
                              while ($row = $results->fetch_assoc()) {
                                  echo $row['voter_id'] . "<br>";
@@ -96,7 +96,7 @@
                         <td width="2%">:</td>
                         <td><?php 
                          $qry4 = "SELECT academic_year FROM voters WHERE user_id = '$_SESSION[userID]'";
-                         $results = mysqli_query($db, $qry4);
+                         $results = mysqli_query($conn, $qry4);
                          if ($results->num_rows > 0) { 
                             while ($row = $results->fetch_assoc()) {
                                 echo $row['academic_year'] . "<br>";
@@ -111,7 +111,7 @@
                         <td width="2%">:</td>
                         <td><?php 
                         $qry5 = "SELECT voter_gender FROM voters WHERE user_id = '$_SESSION[userID]'";
-                        $results = mysqli_query($db, $qry5);
+                        $results = mysqli_query($conn, $qry5);
                         if ($results->num_rows > 0) { 
                            while ($row = $results->fetch_assoc()) {
                                echo $row['voter_gender'] . "<br>";
@@ -126,7 +126,7 @@
                         <td width="2%">:</td>
                         <td><?php 
                         $qry6 = "SELECT voter_club FROM voters WHERE user_id = '$_SESSION[userID]'";
-                        $results = mysqli_query($db, $qry6);
+                        $results = mysqli_query($conn, $qry6);
                         if ($results->num_rows != NULL) { 
                            while ($row = $results->fetch_assoc()) {
                                echo $row['voter_club'] . "<br>";
@@ -141,7 +141,7 @@
                         <td width="2%">:</td>
                         <td><?php 
                         $qry6 = "SELECT vote_status FROM voters WHERE user_id = '$_SESSION[userID]'";
-                        $results = mysqli_query($db, $qry6);
+                        $results = mysqli_query($conn, $qry6);
                         if ($results->num_rows > 0) { 
                            while ($row = $results->fetch_assoc()) {
                                echo $row['vote_status'] . "<br>";
@@ -153,7 +153,25 @@
                     <tr>
                         <th width="30%">Candidacy</th>
                         <td width="2%">:</td>
-                        <td><a href="candidate_registration.php">Register Candidacy</a></td>
+                        <td><?php 
+                        $qry7 = "SELECT voter_id FROM candidate WHERE voter_id = (SELECT voter_id FROM voters WHERE user_id = '".$_SESSION['userID']."')";
+                        $results = mysqli_query($conn, $qry7);
+                        if ($results->num_rows > 0) {
+                            while ($row = $results -> fetch_assoc()) {
+                                $voter_id = $row['voter_id'];
+                                $qry8 = "SELECT p.position_name FROM candidate c JOIN position p ON c.position_id = p.position_id WHERE c.voter_id = '$voter_id'";
+                                $result = mysqli_query($conn, $qry8);
+                                while ($row1 = $result->fetch_assoc()) {
+                                    echo $row1['position_name'] . "<br>";
+                                }
+                            }
+                            
+                        } else {
+                            echo "<a href='candidate_registration.php'>Register Candidacy</a>";
+                        }
+                        
+                        ?></td>
+
                     </tr>
                     </table>
                 </div>

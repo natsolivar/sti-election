@@ -53,8 +53,26 @@
                 $file_paths[] = null;
             }
         
-            $qry2 = "INSERT INTO candidate (candidate_id, voter_id, position_id, candidate_img1, candidate_img2, candidate_details, platform, party_id, date_applied, status) VALUES ('', '$voter_id', '$position_id', '$file_paths[0]', '$file_paths[1]', '$details', '$platform', '$party_id', NOW(), 'Under Review')";
-            $result = mysqli_query($conn, $qry2);    
+            $qry2 = "INSERT INTO candidate (voter_id, position_id, candidate_img1, candidate_img2, candidate_details, platform, party_code, date_applied, status) 
+            VALUES ('$voter_id', '$position_id', '$file_paths[0]', '$file_paths[1]', '$details', '$platform', '$party_id', NOW(), 'Under Review')";
+            $result = mysqli_query($conn, $qry2);
+            
+            $qry3 = "SELECT candidate_id FROM candidate WHERE voter_id = '$voter_id'";
+            $results = mysqli_query($conn, $qry3);
+            
+            if ($results->num_rows > 0) {
+                while ($row = $results->fetch_assoc()) {
+                    $candidate_id = $row['candidate_id'];
+                    
+                    $qry4 = "INSERT INTO votes (candidate_id, vote_count, date_updated) 
+                                VALUES ('$candidate_id', 0, NOW())";
+                    $insert_result = mysqli_query($conn, $qry4);
+            
+                    $qry5 = "INSERT INTO polls (candidate_id, poll_count, date_updated) 
+                                VALUES ('$candidate_id', 0, NOW())";
+                    $insert_results = mysqli_query($conn, $qry5);
+                }
+            }
         }
 
     }
@@ -89,7 +107,7 @@
                             <label for="position">Position</label>
                             <select id="position" name="position" required>
                                 <?php 
-                                $sql = "SELECT position_id, position_name FROM position";
+                                $sql = "SELECT position_id, position_name FROM position ORDER BY position_rank";
                                 $result = $conn->query($sql);
                     
                                 if ($result->num_rows > 0) {
@@ -107,12 +125,12 @@
                             <label for="party">Partylist</label>
                             <select id="party" name="party" required>
                             <?php 
-                                $sql = "SELECT party_id, party_name FROM party";
+                                $sql = "SELECT party_code, party_name FROM party";
                                 $result = $conn->query($sql);
                     
                                 if ($result->num_rows > 0) {
                                     while ($row = $result->fetch_assoc()) {
-                                        echo '<option value="' . $row['party_id'] . '">' . $row['party_name'] . '</option>';
+                                        echo '<option value="' . $row['party_code'] . '">' . $row['party_name'] . '</option>';
                                     }
                                 } else {
                                     echo '<option value="">No positions available</option>';

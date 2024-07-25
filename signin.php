@@ -2,7 +2,7 @@
 session_start();
 require 'config.php';
 
-$db = mysqli_connect('localhost', 'root', '', 'emvs');
+$db = mysqli_connect('localhost', 'root', '', 'electionmvs');
 
 if (!isset($_GET['code'])) {
     $_SESSION['state'] = bin2hex(random_bytes(8));

@@ -58,7 +58,7 @@ body {
     font-size: 15px
 }
 
-.main-content {
+.main-content, form {
     padding: 20px;
     margin-top: 20px;
     display: flex;

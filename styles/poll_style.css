@@ -20,6 +20,6 @@ body {
     left: 240px;
 }
 
-.main-content #chartContainer {
-    padding-top: 30px;
+.main-content #chart {
+    padding: 4rem;
 }

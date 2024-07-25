@@ -54,7 +54,7 @@
                             $qry1 = "SELECT u.user_name, v.program_code, v.voter_grade, c.candidate_img1, c.candidate_img2, c.candidate_details, p.party_name, pos.position_name FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            JOIN party p ON c.party_id = p.party_id
+                            JOIN party p ON c.party_code = p.party_code
                             JOIN position pos ON c.position_id = pos.position_id
                             WHERE v.voter_id = (SELECT voter_id FROM voters WHERE user_id = '".$_SESSION['userID']."')";
                             $result = $conn->query($qry1);
@@ -90,6 +90,7 @@
                                     <p>Hi students of STI College Iligan! My name is <strong>$formatted_name</strong>, a $grade $program student and I am currently running for the position of $position.</p>
                                     <p>$details</p>
                                     </div>";
+                                    
                                 }
                             } else {
                                 echo "No candidate found.";

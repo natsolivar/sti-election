@@ -99,8 +99,8 @@ h2 {
 }
 
 .input-box input[type="file"] {
-    width: 100%;
-    padding: 10px;
+    width: 95%;
+    padding: 5px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -109,4 +109,19 @@ h2 {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);
 }
 
+.alert p {
+    font-size: 14px;
+    font-style: italic;
+    color: dimgray;
+    margin: 5px 0;
+    padding: 10px;
+}
+
+.alert a {
+    text-decoration: none;
+}
+
+.alert a:hover {
+    text-decoration: underline;
+}
 
