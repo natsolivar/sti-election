@@ -8,6 +8,21 @@
 
     $formattedDate = $dateTime->format('Y-m-d');
 
+    $query1 = "SELECT voter_id FROM voters WHERE user_id = '$_SESSION[userID]'";
+    $result = mysqli_query($conn, $query1);
+
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            $voter_id = $row['voter_id'];
+
+            $query2 = "SELECT voter_id FROM registered_votes WHERE voter_id = '$voter_id'";
+            $result_votes = mysqli_query($conn, $query2);
+
+            if($result_votes->num_rows > 0) {
+                echo "You already voted";
+            }
+        }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +35,10 @@
     <title>EMVS</title>
 </head>
 <body>
+<div id="loading" class="loading">
+        <div class="spinner"></div>
+</div>
+<div class="content">
     <header class="site-header">
         <div class="site-identity">
             <a href="#"><img src="assets/logo/STI-LOGO.png" alt="STI logo" /></a>
@@ -62,6 +81,7 @@
             } else {
                 echo "NO DATA AVAILABLE";
             }
+
         ?></div>
         </div>
         <div class="main-content">
@@ -555,8 +575,18 @@
                 </div>
                 <button type="submit" class="btn btn-primary" name="vote">Submit</button>  
         </form>
-        </div>   
+        </div>  
+    </div> 
     </body>
     <script>
+         window.addEventListener('load', function() {
+        // Show the loading screen for a specified duration
+        setTimeout(function() {
+            const loading = document.getElementById('loading');
+            const content = document.getElementById('content');
+            loading.style.display = 'none'; // Hide the spinner
+            content.style.display = 'block'; // Show the content
+        }, 2000); // Adjust the time in milliseconds (e.g., 3000ms = 3 seconds)
+    });
     </script>
     </html>

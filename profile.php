@@ -92,21 +92,6 @@
                          ?></td>
                     </tr>
                     <tr>
-                        <th width="30%">Academic Year	</th>
-                        <td width="2%">:</td>
-                        <td><?php 
-                         $qry4 = "SELECT academic_year FROM voters WHERE user_id = '$_SESSION[userID]'";
-                         $results = mysqli_query($conn, $qry4);
-                         if ($results->num_rows > 0) { 
-                            while ($row = $results->fetch_assoc()) {
-                                echo $row['academic_year'] . "<br>";
-                            }
-                         } else {
-                            echo "NO DATA";
-                        }
-                        ?></td>
-                    </tr>
-                    <tr>
                         <th width="30%">Gender</th>
                         <td width="2%">:</td>
                         <td><?php 
@@ -172,6 +157,21 @@
                         
                         ?></td>
 
+                    </tr>
+                    <tr>
+                        <th width="30%">Academic Year	</th>
+                        <td width="2%">:</td>
+                        <td><?php 
+                         $qry4 = "SELECT academic_year FROM voters WHERE user_id = '$_SESSION[userID]'";
+                         $results = mysqli_query($conn, $qry4);
+                         if ($results->num_rows > 0) { 
+                            while ($row = $results->fetch_assoc()) {
+                                echo $row['academic_year'] . "<br>";
+                            }
+                         } else {
+                            echo "NO DATA";
+                        }
+                        ?></td>
                     </tr>
                     </table>
                 </div>
