@@ -1,24 +1,23 @@
 <?php
-
     if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
         echo '<p>Your session has expired due to inactivity. Please log in again.</p>';
     } 
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width-device-width; initial-scale=1.0">
-        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-        <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-        <title>Login | EMVS</title>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+    <title>Login | EMVS</title>
     <style>
 
         * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
         body {
@@ -27,11 +26,13 @@
             background-size: cover;
             background-attachment: fixed;
             background-position: 0px 60px;
+            font-family: Arial, sans-serif;
         }
 
-        .site-header { 
+        .site-header {
             padding: .5em 1em;
             background-color: #0079c2;
+            width: 100%;
         }
 
         .site-header::after {
@@ -41,20 +42,20 @@
         }
 
         .site-identity {
-            float: left;
+            display: flex;
+            justify-content: flex-start;
         }
 
         .site-identity h1 {
             font-size: 1.5em;
             margin: .7em 0 .3em 0;
-            display: inline-block;
         }
 
         .site-identity img {
             max-width: 55px;
-            float: left;
-            margin: 0 10px 0 0;
+            margin-right: 10px;
         }
+
         .login-container {
             background-color: #DBE9F4;
             padding: 20px;
@@ -64,15 +65,17 @@
             position: absolute;
             top: 30vh;
             right: 10vh;
+            width: 350px;
         }
 
         .logo img {
-            max-width: 20%;
+            max-width: 55px;
             height: auto;
         }
 
         h2 {
             margin: 20px 0;
+            font-size: 1.5em;
         }
 
         .login-button {
@@ -116,28 +119,64 @@
 
         footer {
             margin-top: 20px;
-            font-size: 12px;
+            font-size: 0.8em;
             color: #777;
         }
 
+        /* Additional CSS for responsiveness */
+        @media (max-width: 768px) {
+            .site-identity {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .site-identity img {
+                margin: 0 auto 10px auto;
+            }
+
+            .login-container {
+                top: 30vh;
+                right: 50%;
+                transform: translateX(50%);
+            }
+        }
+
+        @media (max-width: 365px) {
+            .site-identity {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .site-identity img {
+                margin: 0 auto 10px auto;
+            }
+
+            .login-container {
+                top: 30vh;
+                right: 50%;
+            }
+        }
     </style>
-    </head>
-    <body>
-        <header class="site-header">
+</head>
+<body>
+    <header class="site-header">
         <div class="site-identity">
             <a href="#"><img src="assets/logo/STI-LOGO.png" alt="Site Name" /></a>
             <h1>Election Management and Voting System</h1>
         </div>  
-        </header>
-        <div class="login-container">
-            <div class="logo">
-                <img src="assets/logo/STI-LOGO.png" alt="STI Logo">
-            </div>
-            <h2>Login now</h2>
-                <button class="login-button" onclick="location.href='signin.php'"><img src="assets/logo/microsoft-logo.png" alt="Microsoft Logo" /><span>SIGN IN WITH YOUR STI O365 ACCOUNT</span></button>
-            <footer>
-                <p>&copy; STI Education Services Group, Inc. All Rights Reserved.</p>
-            </footer>
+    </header>
+    <div class="login-container">
+        <div class="logo">
+            <img src="assets/logo/STI-LOGO.png" alt="STI Logo">
         </div>
-    </body>
+        <h2>Login now</h2>
+        <button class="login-button" onclick="location.href='signin.php'">
+            <img src="assets/logo/microsoft-logo.png" alt="Microsoft Logo" />
+            <span>SIGN IN WITH YOUR STI O365 ACCOUNT</span>
+        </button>
+        <footer>
+            <p>&copy; STI Education Services Group, Inc. All Rights Reserved.</p>
+        </footer>
+    </div>
+</body>
 </html>

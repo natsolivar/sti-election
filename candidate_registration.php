@@ -64,8 +64,8 @@
                 while ($row = $results->fetch_assoc()) {
                     $candidate_id = $row['candidate_id'];
                     
-                    $qry4 = "INSERT INTO votes (candidate_id, vote_count, date_updated) 
-                                VALUES ('$candidate_id', 0, NOW())";
+                    $qry4 = "INSERT INTO votes (candidate_id, SHvote_count, TERvote_count, date_updated) 
+                                VALUES ('$candidate_id', 0, 0, NOW())";
                     $insert_result = mysqli_query($conn, $qry4);
             
                     $qry5 = "INSERT INTO polls (candidate_id, poll_count, date_updated) 

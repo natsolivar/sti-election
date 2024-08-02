@@ -15,7 +15,6 @@ body {
     flex-wrap: wrap;
     padding: 0.3rem;
     justify-content: space-around;
-    
 }
 
 .sidebar.active ~ .main-content {
@@ -23,7 +22,7 @@ body {
     left: 240px;
 }
 
-.main-content .box{
+.main-content .box {
     min-height: 150px;
     width: 50px; 
     height: 250px; 
@@ -41,7 +40,7 @@ body {
 }
 
 #box1 h1 {
-    font-size: 50px;
+    font-size: 40px;
 }
 
 #box1 p {
@@ -58,7 +57,6 @@ body {
     height: 100%;
 }
 
-
 .calendar {
     width: 100%;
     border-radius: 5px;
@@ -71,7 +69,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem 1rem; /* Relative padding */
+    padding: 0.5rem 1rem;
     background: #0079c2;
     color: #fff;
 }
@@ -147,13 +145,99 @@ body {
     margin: 0 0 10px;
 }
 
+/* Additional CSS for responsiveness */
+@media (max-width: 1200px) {
+    .main-content {
+        left: 60px;
+        width: calc(100% - 60px);
+    }
+    
+    .sidebar.active ~ .main-content {
+        left: 200px;
+        width: calc(100% - 200px);
+    }
+}
 
 @media (max-width: 768px) {
     .calendar-header button {
-        font-size: 0.8rem; 
+        font-size: 0.8rem;
     }
 
     .calendar-weekdays div, .calendar-days div {
-        padding: 0.1rem 0; 
+        padding: 0.1rem 0;
+    }
+
+    .main-content {
+        position: static;
+        width: 100%;
+        margin-top: 80px; /* Add some margin to the top for spacing */
+    }
+
+    .main-content .box {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+
+    #box1 {
+        width: 100%;
+    }
+
+    #box2 {
+        width: 100%;
+    }
+
+    .candidate {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .candidate img {
+        width: 100%;
+        max-width: 250px;
+        margin: 0 auto 20px;
+    }
+
+    .candidate-info {
+        width: 100%;
+        max-width: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .main-content {
+        position: static;
+        width: 100%;
+        margin-top: 80px; /* Add some margin to the top for spacing */
+    }
+
+    .main-content .box {
+        width: 100%;
+        height: auto;
+        padding: 1rem;
+    }
+
+    #box1 {
+        width: 100%;
+    }
+
+    #box2 {
+        width: 100%;
+    }
+
+    .candidate {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .candidate img {
+        width: 100%;
+        max-width: 200px;
+        margin: 0 auto 20px;
+    }
+
+    .candidate-info {
+        width: 100%;
+        max-width: none;
     }
 }

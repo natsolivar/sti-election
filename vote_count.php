@@ -94,8 +94,6 @@
                             if ($result_pres->num_rows > 0) {
                                 $row_pres = mysqli_fetch_assoc($result_pres);
                                 $candidate_id_pres = $row_pres['candidate_id'];
-                                $c_id = $row_pres['c_id'];
-                                echo $candidate_id_pres;
 
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_pres'";
@@ -105,10 +103,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
-
-                                            echo $c_id;
-
+                                            echo $voter_grade;
                                             if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                                 $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pres'";
                                                 $update_result_pres = mysqli_query($conn, $qry5);
@@ -117,7 +112,7 @@
                                                 $update_result_pres = mysqli_query($conn, $qry5);
                                             }
 
-                                        }
+                                        
 
                                     }
 
@@ -136,7 +131,6 @@
                             if ($result_vp && mysqli_num_rows($result_vp) > 0) {
                                 $row_vp = mysqli_fetch_assoc($result_vp);
                                 $candidate_id_vp = $row_vp['candidate_id'];
-                                $c_id = $row_pres['c_id'];
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_vp'";
                                 $result_q = mysqli_query($conn, $query);
@@ -145,7 +139,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                      
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_vp'";
@@ -154,8 +148,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_vp'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                 }
                                 }
     
                             } 
@@ -171,7 +165,6 @@
                             if ($result_shvp && mysqli_num_rows($result_shvp) > 0) {
                                 $row_shvp = mysqli_fetch_assoc($result_shvp);
                                 $candidate_id_shvp = $row_shvp['candidate_id'];
-                                $c_id = $row_pres['c_id'];
     
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_shvp'";
                                 $result_q = mysqli_query($conn, $query);
@@ -180,7 +173,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                       
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_shvp'";
@@ -189,8 +182,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_shvp'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -206,7 +199,7 @@
                             if ($result_intsec && mysqli_num_rows($result_intsec) > 0) {
                                 $row_intsec = mysqli_fetch_assoc($result_intsec);
                                 $candidate_id_intsec = $row_intsec['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_intsec'";
                                 $result_q = mysqli_query($conn, $query);
@@ -215,7 +208,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_intsec'";
@@ -224,8 +217,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_intsec'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -241,7 +234,7 @@
                             if ($result_extsec && mysqli_num_rows($result_extsec) > 0) {
                                 $row_extsec = mysqli_fetch_assoc($result_extsec);
                                 $candidate_id_extsec = $row_extsec['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_extsec'";
                                 $result_q = mysqli_query($conn, $query);
@@ -250,7 +243,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                       
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_extsec'";
@@ -259,8 +252,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_extsec'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -276,7 +269,7 @@
                             if ($result_trea && mysqli_num_rows($result_trea) > 0) {
                                 $row_trea = mysqli_fetch_assoc($result_trea);
                                 $candidate_id_trea = $row_trea['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
     
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_trea'";
                                 $result_q = mysqli_query($conn, $query);
@@ -285,7 +278,6 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_trea'";
@@ -294,8 +286,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_trea'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
-                                    }
-                                }
+                                  
+                                    
                                 }
     
                             } 
@@ -311,7 +303,7 @@
                             if ($result_aud && mysqli_num_rows($result_aud) > 0) {
                                 $row_aud = mysqli_fetch_assoc($result_aud);
                                 $candidate_id_aud = $row_aud['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_aud'";
                                 $result_q = mysqli_query($conn, $query);
@@ -320,7 +312,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                    
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_aud'";
@@ -329,8 +321,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_aud'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
-                                    }
-                                }
+                                  
+                                    
                                 }
     
                             } 
@@ -346,7 +338,7 @@
                             if ($result_pio && mysqli_num_rows($result_pio) > 0) {
                                 $row_pio = mysqli_fetch_assoc($result_pio);
                                 $candidate_id_pio = $row_pio['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_pio'";
                                 $result_q = mysqli_query($conn, $query);
@@ -355,7 +347,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pio'";
@@ -364,8 +356,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pio'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -381,7 +373,7 @@
                             if ($result_11abmrep && mysqli_num_rows($result_11abmrep) > 0) {
                                 $row_11abmrep = mysqli_fetch_assoc($result_11abmrep);
                                 $candidate_id_11abmrep = $row_11abmrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_11abmrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -390,7 +382,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                     
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11abmrep'";
@@ -399,8 +391,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11abmrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -416,7 +408,7 @@
                             if ($result_11humssrep && mysqli_num_rows($result_11humssrep) > 0) {
                                 $row_11humssrep = mysqli_fetch_assoc($result_11humssrep);
                                 $candidate_id_11humssrep = $row_11humssrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_11humssrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -425,8 +417,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
-
+                                        
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
@@ -434,8 +425,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -451,7 +442,7 @@
                             if ($result_11stemrep && mysqli_num_rows($result_11stemrep) > 0) {
                                 $row_11stemrep = mysqli_fetch_assoc($result_11stemrep);
                                 $candidate_id_11stemrep = $row_11stemrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_11stemrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -460,7 +451,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11stemrep'";
@@ -469,8 +460,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11stemrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -486,7 +477,7 @@
                             if ($result_11cuartrep && mysqli_num_rows($result_11cuartrep) > 0) {
                                 $row_11cuartrep = mysqli_fetch_assoc($result_11cuartrep);
                                 $candidate_id_11cuartrep = $row_11cuartrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_11cuartrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -495,7 +486,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                       
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11cuartrep'";
@@ -504,8 +495,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11cuartrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -521,7 +512,7 @@
                             if ($result_11mawdrep && mysqli_num_rows($result_11mawdrep) > 0) {
                                 $row_11mawdrep = mysqli_fetch_assoc($result_11mawdrep);
                                 $candidate_id_11mawdrep = $row_11mawdrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_11mawdrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -530,7 +521,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11mawdrep'";
@@ -539,8 +530,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11mawdrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -556,7 +547,7 @@
                             if ($result_12abmrep && mysqli_num_rows($result_12abmrep) > 0) {
                                 $row_12abmrep = mysqli_fetch_assoc($result_12abmrep);
                                 $candidate_id_12abmrep = $row_12abmrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_12abmrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -565,7 +556,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                       
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12abmrep'";
@@ -574,8 +565,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12abmrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -591,7 +582,7 @@
                             if ($result_12humssrep && mysqli_num_rows($result_12humssrep) > 0) {
                                 $row_12humssrep = mysqli_fetch_assoc($result_12humssrep);
                                 $candidate_id_12humssrep = $row_12humssrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_12humssrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -600,7 +591,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12humssrep'";
@@ -609,8 +600,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -626,7 +617,7 @@
                             if ($result_12cuartrep && mysqli_num_rows($result_12cuartrep) > 0) {
                                 $row_12cuartrep = mysqli_fetch_assoc($result_12cuartrep);
                                 $candidate_id_12cuartrep = $row_12cuartrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_12cuartrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -635,7 +626,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12cuartrep'";
@@ -644,8 +635,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12cuartrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -661,7 +652,7 @@
                             if ($result_12mawdrep && mysqli_num_rows($result_12mawdrep) > 0) {
                                 $row_12mawdrep = mysqli_fetch_assoc($result_12mawdrep);
                                 $candidate_id_12mawdrep = $row_12mawdrep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_12mawdrep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -670,7 +661,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12mawdrep'";
@@ -679,8 +670,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12mawdrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -696,7 +687,7 @@
                             if ($result_bstm1arep && mysqli_num_rows($result_bstm1arep) > 0) {
                                 $row_bstm1arep = mysqli_fetch_assoc($result_bstm1arep);
                                 $candidate_id_bstm1arep = $row_bstm1arep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bstm1arep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -705,7 +696,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1arep'";
@@ -714,8 +705,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1arep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -731,7 +722,7 @@
                             if ($result_bstm1brep && mysqli_num_rows($result_bstm1brep) > 0) {
                                 $row_bstm1brep = mysqli_fetch_assoc($result_bstm1brep);
                                 $candidate_id_bstm1brep = $row_bstm1brep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bstm1brep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -740,7 +731,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1brep'";
@@ -749,8 +740,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1brep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -766,7 +757,7 @@
                             if ($result_bstm3rep && mysqli_num_rows($result_bstm3rep) > 0) {
                                 $row_bstm3rep = mysqli_fetch_assoc($result_bstm3rep);
                                 $candidate_id_bstm3rep = $row_bstm3rep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                               
                     
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bstm3rep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -775,7 +766,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm3rep'";
@@ -784,8 +775,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm3rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -801,7 +792,7 @@
                             if ($result_bstm4rep && mysqli_num_rows($result_bstm4rep) > 0) {
                                 $row_bstm4rep = mysqli_fetch_assoc($result_bstm4rep);
                                 $candidate_id_bstm4rep = $row_bstm4rep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                               
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bstm4rep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -810,7 +801,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm4rep'";
@@ -820,7 +811,7 @@
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     }
-                                }
+                                
                                 }
     
                             } 
@@ -836,7 +827,7 @@
                             if ($result_bsis1rep && mysqli_num_rows($result_bsis1rep) > 0) {
                                 $row_bsis1rep = mysqli_fetch_assoc($result_bsis1rep);
                                 $candidate_id_bsis1rep = $row_bsis1rep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bsis1rep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -845,7 +836,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis1rep'";
@@ -854,8 +845,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis1rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -871,7 +862,7 @@
                             if ($result_bsis2rep && mysqli_num_rows($result_bsis2rep) > 0) {
                                 $row_bsis2rep = mysqli_fetch_assoc($result_bsis2rep);
                                 $candidate_id_bsis2rep = $row_bsis2rep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bsis2rep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -880,7 +871,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis2rep'";
@@ -889,8 +880,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis2rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -906,7 +897,7 @@
                             if ($result_bsis3rep && mysqli_num_rows($result_bsis3rep) > 0) {
                                 $row_bsis3rep = mysqli_fetch_assoc($result_bsis3rep);
                                 $candidate_id_bsis3rep = $row_bsis3rep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bsis3rep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -915,7 +906,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                             $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis3rep'";
@@ -924,8 +915,8 @@
                                             $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis3rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
+                                    
                                     }
-                                }
                                 }
     
                             } 
@@ -941,7 +932,7 @@
                             if ($result_bsis4rep && mysqli_num_rows($result_bsis4rep) > 0) {
                                 $row_bsis4rep = mysqli_fetch_assoc($result_bsis4rep);
                                 $candidate_id_bsis4rep = $row_bsis4rep['candidate_id'];
-                                $c_id = $row_pres['c_id'];
+                                
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE c.candidate_id = '$candidate_id_bsis4rep'";
                                 $result_q = mysqli_query($conn, $query);
@@ -950,7 +941,7 @@
                                     while ($row = $result_q->fetch_assoc()) {
                                         $voter_grade = $row['voter_grade'];
 
-                                        if ($c_id > 0) {
+                                       
 
                                             if ($voter_grade == 'g11' || $voter_grade == 'g12') {
                                                 $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis4rep'";
@@ -959,10 +950,10 @@
                                                 $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis4rep'";
                                                 $update_result_pres = mysqli_query($conn, $qry5);
                                             }
-                                        }
+                                        }   
                                     }
                                 }
-    
+                            }
                             } 
                         }
 
