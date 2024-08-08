@@ -2,6 +2,7 @@
     session_start();
     include 'sidebar.php';
     include 'session.php';
+    include 'db.php';
 
 ?>
 <!DOCTYPE html>
@@ -19,77 +20,82 @@
         <div class="header">
             <p>The Council of Leaders</p>
         </div>
-        <div id="CandidatesContent" class="content">
-        <div id="president">
+    <div id="CandidatesContent" class="content">
+        <div class="position">
             <h3>PRESIDENT</h3>
             <div class="image-container">
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-                </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
-            </div>
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-            </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
-            </div>
+                <?php 
+                
+                    $qry1 = "SELECT co.*, p.position_name 
+                    FROM council_old co
+                    INNER JOIN position p ON co.position_id = p.position_id
+                    WHERE co.position_id = 'PRES'";
+                    $res1 = mysqli_query ($conn, $qry1);
+
+                    if ($res1 -> num_rows > 0) {
+                        while ($rows = $res1 -> fetch_assoc()) {
+                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
+                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
+                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
+                            $imgData = $rows['image'];
+                            $fullname = $fname . " " . $lname;
+
+                            $imgBase64 = base64_encode($imgData);
+                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
+
+                            echo "<div class='card'>";
+                            echo "<div class='image'><span class='image-wrapper'>";
+                            echo "<img src=$imgSrc alt=''>";
+                            echo "</span>";
+                            echo "</div>";
+                            echo "<p class='title'>$fullname</p>";
+                            echo "<p class='price'>$position</p>";
+                            echo "</div>";
+
+                        }
+                    }
+                
+                
+                ?>   
+            </div>     
         </div>
-        </div>
-        <div id="v-president">
-        <h3>VICE PRESIDENT</h3>
+        <div class="position">
+            <h3>VICE PRESIDENT</h3>
             <div class="image-container">
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-                </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
+                <?php 
+                    
+                    $qry2 = "SELECT co.*, p.position_name 
+                    FROM council_old co
+                    INNER JOIN position p ON co.position_id = p.position_id
+                    WHERE co.position_id = 'TERVP' OR co.position_id = 'SHVP'";
+                    $res2 = mysqli_query ($conn, $qry2);
+
+                    if ($res2 -> num_rows > 0) {
+                        while ($rows = $res2 -> fetch_assoc()) {
+                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
+                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
+                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
+                            $imgData = $rows['image'];
+                            $fullname = $fname . " " . $lname;
+
+                            $imgBase64 = base64_encode($imgData);
+                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
+
+                            echo "<div class='card'>";
+                            echo "<div class='image'><span class='image-wrapper'>";
+                            echo "<img src=$imgSrc alt=''>";
+                            echo "</span>";
+                            echo "</div>";
+                            echo "<p class='title'>$fullname</p>";
+                            echo "<p class='price'>$position</p>";
+                            echo "</div>";
+
+                        }
+                    }
+                
+                
+                ?>     
             </div>
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-            </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
-            </div>
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-            </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
-            </div>
-        </div>
-        </div>
-        <div id="v-president">
-        <h3>SECRETARY</h3>
-            <div class="image-container">
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-                </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
-            </div>
-            <div class="card">
-                <div class="image"><span class="image-wrapper">
-                <img src="assets/images/sample-images.png" alt="">
-                </span>
-            </div>
-                <span class="title">Renato Olivar</span>
-                <span class="price">President</span>
-            </div>
-        </div>
         </div>
     </div>
     </body>
