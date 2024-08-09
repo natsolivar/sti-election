@@ -74,7 +74,7 @@ if (!isset($_GET['code'])) {
         $_SESSION['userID'] = $user['id'];
         header('location: homepage.php');
     } else {
-        $qry2 = "INSERT INTO users (user_id, user_name, user_email, user_pw) VALUES ('$userID', '$displayName', '$userEmail', '')";
+        $qry2 = "INSERT INTO users (user_id, user_profile, user_name, user_email, user_pw) VALUES ('$userID', '$profile_pic_data', '$displayName', '$userEmail', '')";
         mysqli_query($db, $qry2);
         $_SESSION['userEmail'] = $userEmail;
         $_SESSION['displayName'] = $displayName;

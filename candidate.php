@@ -27,18 +27,20 @@
         <div class="flex-container">
                 <?php 
 
-                    $qry1 = "SELECT * FROM candidate c 
-                    JOIN position p ON c.position_id = p.position_id 
-                    JOIN voters v ON c.voter_id = v.voter_id 
-                    JOIN users u ON v.user_id = u.user_id 
+                    $qry1 = "SELECT * FROM candidate c
+                    LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                    INNER JOIN position p ON c.position_id = p.position_id 
+                    INNER JOIN voters v ON c.voter_id = v.voter_id 
+                    INNER JOIN users u ON v.user_id = u.user_id 
                     WHERE c.position_id = 'PRES'";
                     $result = mysqli_query($conn, $qry1);
 
                     if($result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-                            $img1 = $row['candidate_img1'];
+                            $img1 = $row['image'];
                             $user_name = $row['user_name'];
                             $pos = $row['position_name'];
+                            $candidate_id = $row['candidate_id'];
 
                             $user_name = str_replace("(Student)", "", $user_name);
                             $name_parts = explode(", ", trim($user_name));
@@ -49,10 +51,11 @@
                             }
                             
                             echo "<div class='flex-item'>";
-                            if (!$img1 == NULL || !$img1 == '' ) {
-                                echo "<img src='$img1' alt='Image 1'>";
+                            if (isset($img1) && !empty($img1)) {
+                                $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                                echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
                             } else {
-                                echo "<img src='assets/images/profile.png' alt='Image 1'>";
+                                echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
                             }
                             echo "<div class='details'>
                                     <h2>$formatted_name</h2>
@@ -71,17 +74,19 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = 'TERVP' OR c.position_id = 'SHVP'";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
+                        
 
                         $user_name = str_replace("(Student)", "", $user_name);
                         $name_parts = explode(", ", trim($user_name));
@@ -93,9 +98,10 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
                         } else {
-                            echo "<img src='assets/images/profile.png' alt='Image 1'>";
+                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1'></a>";
                         }
                         echo "<div class='details'>
                                 <h2>$formatted_name</h2>
@@ -114,15 +120,16 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = 'EXTSEC' OR c.position_id = 'INTSEC'";
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
+                 WHERE c.position_id = 'EXTSEC' OR c.position_id = 'INTSEC'";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -136,7 +143,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -157,15 +165,16 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = 'TREA'";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -179,7 +188,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -200,15 +210,16 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = 'AUD'";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -222,7 +233,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -245,15 +257,16 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = 'PIO'";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -267,7 +280,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -288,16 +302,17 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = '11ABMREP' OR c.position_id = '11STEMREP' OR c.position_id = '11HUMSSREP' OR c.position_id = '11CUARTREP' OR c.position_id = '11MAWDREP'
                 ORDER BY c.position_id";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -311,7 +326,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -332,16 +348,17 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = '12ABMREP' OR c.position_id = '12STEMREP' OR c.position_id = '12HUMSSREP' OR c.position_id = '12CUARTREP' OR c.position_id = '12MAWDREP'
                 ORDER BY c.position_id";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -355,7 +372,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -376,16 +394,17 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = 'BSTM1AREP' OR c.position_id = 'BSTM1BREP' OR c.position_id = 'BSTM2REP' OR c.position_id = 'BSTM3REP' OR c.position_id = 'BSTM4REP'
                 ORDER BY c.position_id";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -399,7 +418,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }
@@ -422,16 +442,17 @@
             <?php 
 
                 $qry2 = "SELECT * FROM candidate c 
-                JOIN position p ON c.position_id = p.position_id 
-                JOIN voters v ON c.voter_id = v.voter_id 
-                JOIN users u ON v.user_id = u.user_id 
+                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+                INNER JOIN position p ON c.position_id = p.position_id 
+                INNER JOIN voters v ON c.voter_id = v.voter_id 
+                INNER JOIN users u ON v.user_id = u.user_id 
                 WHERE c.position_id = 'BSIS1REP' OR c.position_id = 'BSIS2REP' OR c.position_id = 'BSIS3REP' OR c.position_id = 'BSIS4REP'
                 ORDER BY c.position_id";
                 $result = mysqli_query($conn, $qry2);
 
                 if($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['candidate_img1'];
+                        $img1 = $row['image'];
                         $user_name = $row['user_name'];
                         $pos = $row['position_name'];
 
@@ -445,7 +466,8 @@
 
                         echo "<div class='flex-item'>";
                         if (!$img1 == NULL || !$img1 == '' ) {
-                            echo "<img src='$img1' alt='Image 1'>";
+                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
+                            echo "<img src='$image_url' alt='Image 1'>";
                         } else {
                             echo "<img src='assets/images/profile.png' alt='Image 1'>";
                         }

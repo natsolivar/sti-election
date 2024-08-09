@@ -2,6 +2,8 @@
     if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
         echo '<p>Your session has expired due to inactivity. Please log in again.</p>';
     } 
+
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">

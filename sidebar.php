@@ -1,5 +1,4 @@
 <?php 
-
 	include 'session.php';
 	include 'db.php'; 
 	$userProfilePic = $_SESSION['user_profile_pic'] ?? null;
@@ -348,14 +347,14 @@
 	</div>
 	<?php 
 		
-		$qry1 = "SELECT * FROM voters WHERE user_id = '$user_id'";
+		$qry1 = "SELECT vote_status FROM voters WHERE user_id = '$user_id'";
 		$result = mysqli_query($conn, $qry1);
 
 		if ($result->num_rows > 0) {
 			while ($row = $result->fetch_assoc()) {
 				$vote_status = $row['vote_status'];
 
-				if (!$vote_status == 'YES') {
+				if ($vote_status == 'NO') {
 
 					echo '<a style="--clr: #7808d0" class="button" href="#exampleModalLong" data-toggle="modal">
 							<span class="button__icon-wrapper">
@@ -397,6 +396,8 @@
 	<script type="text/javascript">
 		let btn = document.querySelector("#btn");
 		let sidebar = document.querySelector(".sidebar");
+
+		sidebar.classList.add("active");
 
 		btn.onclick = function () {
 			sidebar.classList.toggle("active");

@@ -115,6 +115,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
+                                
                                 echo "<div class='item'><input type='radio' name='tervpresident' value='$name' id='tervp' required><label for='checkbox1'>$name</label></div>";
                             }
                         } else {

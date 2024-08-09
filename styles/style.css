@@ -170,7 +170,7 @@ body {
     .main-content {
         position: static;
         width: 100%;
-        margin-top: 80px; /* Add some margin to the top for spacing */
+        margin-top: 80px; 
     }
 
     .main-content .box {

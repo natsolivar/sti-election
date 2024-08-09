@@ -17,7 +17,7 @@
     
         if ($hour < 12) {
             return "Good morning ";
-        } elseif ($hour < 17) {
+        } elseif ($hour <= 18) {
             return "Good afternoon ";
         } else {
             return "Good evening ";
@@ -68,12 +68,14 @@
                 </div>
                 <div class="box" id="box3">
                         <?php
-                            $qry1 = "SELECT u.user_name, v.program_code, v.voter_grade, c.candidate_img1, c.candidate_img2, c.candidate_details, p.party_name, pos.position_name
+                            $qry1 = "SELECT u.user_name, v.program_code, v.voter_grade, c.candidate_details, p.party_name, pos.position_name, i.image
                                     FROM candidate c
+                                    LEFT JOIN images i ON c.candidate_id = i.candidate_id
                                     LEFT JOIN voters v ON c.voter_id = v.voter_id
                                     LEFT JOIN users u ON v.user_id = u.user_id
                                     LEFT JOIN party p ON c.party_code = p.party_code
                                     LEFT JOIN position pos ON c.position_id = pos.position_id
+                                    WHERE pos.position_id = 'PRES'
                                     ORDER BY RAND()
                                     LIMIT 1";
                             $result = $conn->query($qry1);
@@ -82,9 +84,8 @@
                                 while ($row = $result->fetch_assoc()) {
                                     $user_name = $row['user_name'];
                                     $details = $row['candidate_details'];
-                                    $img1 = $row['candidate_img1'];
-                                    $img2 = $row['candidate_img2'];
                                     $program = $row['program_code'];
+                                    $img = $row['image'];
                                     $grade = $row['voter_grade'];
                                     $party = $row['party_name'];
                                     $position = $row['position_name'];
@@ -112,8 +113,9 @@
                                     }
 
 
-                                    if ($img1) {
-                                        echo "<img src='$img1' alt='Candidate image' >";
+                                    if ($img) {
+                                        $image_url = 'data:image/jpeg;base64,' . base64_encode($img);
+                                        echo "<img src='$image_url' alt='Candidate image' >";
                                     } else {
                                         echo "<img src='assets/images/profile.png' alt='Image 1' alt='Candidate image' >";
                                     }

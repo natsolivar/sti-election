@@ -25,6 +25,7 @@
             </div>
                 <div class="item" id="item-3">
                     <select id="positionDropdown" onchange="updateTable()">
+                        <option value="" disabled selected hidden>All candidates</option>
                         <?php 
 
                             $query = "SELECT position_id, position_name FROM position ORDER BY position_rank";
@@ -87,7 +88,7 @@
                                         $ggrade = $grade;
                                     }   
 
-                                        echo "<tr data-position='$position_id'>";
+                                        echo "<tr class='clickable-row' data-position='$position_id' data-candidate-id='$c_id'>";
                                         echo "<th scope='row'>$c_id</th>";
                                         echo "<td>$usern</td>";
                                         echo "<td>$ggrade</td>";
@@ -118,12 +119,12 @@
                                                 <form method='POST' action='update_status.php' style='display:inline;' onsubmit='return confirmAction()'>
                                                     <input type='hidden' name='candidate_id' value='$c_id'>
                                                     <input type='hidden' name='status' value='Accepted'>
-                                                    <button type='submit' id='btn' class='btn btn-success'>Accept</button>
+                                                    <button type='submit' id='btn' class='btn btn-success' onclick='event.stopPropagation();'>Accept</button>
                                                 </form>
                                                 <form method='POST' action='update_status.php' style='display:inline;' onsubmit='return confirmAction()'>
                                                     <input type='hidden' name='candidate_id' value='$c_id'>
                                                     <input type='hidden' name='status' value='Rejected'>
-                                                    <button type='submit' id='btn' class='btn btn-danger'>Reject</button>
+                                                    <button type='submit' id='btn' class='btn btn-danger' onclick='event.stopPropagation();'>Reject</button>
                                                 </form>
                                             </td>";
                                         }
@@ -138,6 +139,23 @@
             </div>
         </div>
         <script>
+
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('.clickable-row').forEach(row => {
+                        row.addEventListener('click', function() {
+                            const candidateId = this.getAttribute('data-candidate-id');
+                            window.location.href = `can-details.php?candidate_id=${candidateId}`;
+                        });
+                    });
+
+                    // Prevent row click event when clicking on buttons
+                    document.querySelectorAll('button').forEach(button => {
+                        button.addEventListener('click', function(event) {
+                            event.stopPropagation();
+                        });
+                    });
+                });
+
                 function updateTable() {
                     var dropdown = document.getElementById("positionDropdown");
                     var selectedPosition = dropdown.value;

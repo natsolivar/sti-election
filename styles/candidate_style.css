@@ -12,7 +12,6 @@ body {
     transition: all 0.5s ease;
     width: calc(100% - 78px);
     padding: 2rem;
-    
 }
 
 .sidebar.active ~ .main-content {
@@ -26,42 +25,48 @@ body {
 }
 
 header {
-    width: 100%;
-    text-align: left;
-    padding: 1rem 0;
+    text-align: center;
+    margin: 40px 0 20px; 
+    font-size: 20px;
     border-bottom: 1px solid;
 }
 
 main {
     display: flex;
     align-items: center;
-    justify-content: space-evenly;
-    height: 50vh; 
+    justify-content: center; 
+    flex-wrap: wrap; 
     margin-bottom: 6rem;
 }
 
 .flex-container {
     display: flex;
     width: 100%; 
-    height: 250px; 
-    border-radius: 8px;
-    justify-content: space-evenly;
+    justify-content: center; 
     flex-wrap: wrap;
+    gap: 20px; 
+    margin-bottom: 40px;
 }
 
 .flex-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     overflow: hidden;
     flex: 0 0 200px; 
-    height: 100%; 
+    height: 300px;
     margin: 2rem;
     text-align: center;
+    border-radius: 8px;
+    position: relative; 
 }
 
 .flex-item img {
-    padding: 0.5rem;
-    width: 80%;
-    height: auto;
+    width: 100%;
+    height: 200px; 
+    object-fit: cover;
     border-radius: 20px;
+    display: block; 
 }
 
 .details {

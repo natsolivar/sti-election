@@ -27,7 +27,8 @@
                         ></path>
                         </g>
                     </svg>
-                    <input class="input" type="search" placeholder="Search" />
+                    <input type="text" class="input" type="search" placeholder="Search" />
+                    <div id="results"></div>
                     </div></div>
                 <div class="item" id="item-2">
                     <h2>Election Data</h2>
@@ -120,6 +121,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="item" id="item-2">
+                    <H3>Vote Monitoring</H3>
+                    <div id="chart"></div>
+                    <?php include 'e-date_data.php'; ?>
+                    <script src="chart.js"></script>
+                </div>
                 <div class="item" id="item-3">
                     <h3>Registered Voters</h3>
                     <div id="pieChart"></div>
@@ -191,6 +198,7 @@
 
         </div>
         <script>
+
     document.addEventListener("DOMContentLoaded", function() {
       var optionsPie = {
         series: [<?php 
