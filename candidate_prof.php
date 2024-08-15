@@ -16,7 +16,7 @@
             $candidate_id = $_GET['id'];
             
 
-            $query = "SELECT u.user_name, v.voter_grade, v.program_code, v.voter_gender, v.voter_club, c.candidate_id, c.candidate_details, c.platform, c.party_code, p.position_name, i.image, v.academic_year
+            $query = "SELECT u.user_name, v.voter_grade, v.program_code, v.voter_gender, v.voter_club, c.candidate_id, c.candidate_details, c.platform, c.party_code, p.position_name, i.image, v.academic_year, v.voter_id
               FROM users u
               INNER JOIN voters v ON u.user_id = v.user_id
               INNER JOIN candidate c ON v.voter_id = c.voter_id
@@ -67,21 +67,47 @@
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // Get POST data
             $id = $_POST['id'];
+            $user_id = $_SESSION['userID'];
         
-            // Perform SQL query using mysqli_query
-            $sql = "UPDATE candidate SET support_count = support_count + 1 WHERE candidate_id = $id";
+            $quer = "SELECT voter_id FROM voters WHERE user_id = '$user_id'";
+            $res = mysqli_query($conn, $quer);
+
         
-            if ($conn->query($sql) === TRUE) {
-                echo "Record updated successfully";
-            } else {
-                echo "Error updating record: " . $conn->error;
+            if ($res->num_rows > 0) {
+                $rows = $res->fetch_assoc();
+                $v_id = $rows['voter_id'];
+        
+                $checkSupport = "SELECT * FROM support WHERE voter_id = '$v_id' AND candidate_id = '$id'";
+                $supportResult = mysqli_query($conn, $checkSupport);
+        
+                if ($supportResult->num_rows > 0) {
+
+                    $removeSupport = "DELETE FROM support WHERE voter_id = '$v_id' AND candidate_id = '$id'";
+                    mysqli_query($conn, $removeSupport);
+        
+                    $updateCandidate = "UPDATE candidate SET support_count = support_count - 1 WHERE candidate_id = $id";
+                    mysqli_query($conn, $updateCandidate);
+        
+                } else {
+
+                    $addSupport = "INSERT INTO support (voter_id, candidate_id) VALUES ('$v_id', '$id')";
+                    mysqli_query($conn, $addSupport);
+        
+                    $updateCandidate = "UPDATE candidate SET support_count = support_count + 1 WHERE candidate_id = $id";
+                    mysqli_query($conn, $updateCandidate);
+        
+                }
             }
         
             $conn->close();
-            exit(); // End script execution after handling AJAX request
+            exit();
         }
+
+            $checkSupport = "SELECT * FROM support WHERE voter_id = (SELECT voter_id FROM voters WHERE user_id = '$user_id') AND candidate_id = '$candidate_id'";
+            $supportResult = mysqli_query($conn, $checkSupport);
+
+            $isSupported = $supportResult->num_rows > 0;
     }
 
 ?>
@@ -104,7 +130,7 @@
     <div class="main-content">
             <div class="student-profile py-4">
             <div class="back-button">
-                <i class='bx bx-arrow-back' onclick="location.href='admin-candidate.php'"></i>
+                <i class='bx bx-arrow-back' onclick="location.href='javascript:history.go(-1)'"></i>
             </div>
                 <div class="container">
                     <div class="row">
@@ -128,7 +154,11 @@
                             <p class="mb-0"><strong class="pr-1">Running for:</strong><?php echo $position; ?></p>
                             <p class="mb-0"><strong class="pr-1">Grade/Year Level:</strong><?php echo $grade; ?></p>
                             <p class="mb-0"><strong class="pr-1">Program:</strong></strong><?php echo $program; ?></p>
-                            <button class="support-button" data-id="<?php echo $candidate_id; ?>" onclick="updateVote(this)"><i class='bx bxs-heart'></i>Support Candidate</button>
+                            <button class="support-button <?php echo $isSupported ? 'active' : ''; ?>" 
+                                    data-id="<?php echo $candidate_id; ?>" 
+                                    onclick="updateVote(this)">
+                                <i class='bx bxs-heart'></i>Support Candidate
+                            </button>
 
                         </div>
                         </div>
@@ -212,20 +242,24 @@
     <script>
         function updateVote(button) {
             const id = button.getAttribute('data-id');
+            const isActive = button.classList.contains('active');
+
             button.classList.toggle('active');
 
-            // Send AJAX request
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', '', true); // Use the same file for the AJAX request
+            xhr.open('POST', '', true);
             xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     console.log('Success:', xhr.responseText);
                 } else {
                     console.error('Error:', xhr.statusText);
+                    button.classList.toggle('active');
                 }
             };
             xhr.send(`id=${id}`);
         }
+
+
     </script>
 </html>

@@ -1,8 +1,10 @@
 @import url("sidebar_style.css");
 
+
 body {
     background-image: url("assets/images/background.jpg");
     overflow-y: auto;
+
 }
 
 .main-content {
@@ -13,8 +15,7 @@ body {
     width: calc(100% - 78px);
     display: flex;
     flex-wrap: wrap;
-    padding: 0.3rem;
-    justify-content: space-around;
+    padding-left: 0.5rem;
 }
 
 .sidebar.active ~ .main-content {
@@ -22,39 +23,122 @@ body {
     left: 240px;
 }
 
-.main-content .box {
-    min-height: 150px;
-    width: 50px; 
-    height: 250px; 
+.main-content .item {
+    min-height: 50px; 
     text-align: left;
-    padding: 2rem;
+    padding: 0.5rem;
     border-radius: 5px;
     margin: 5px;
-    flex-wrap: nowrap;
+    gap: 10px;
 }
 
-#box1 {
-    width: 55%;
-    height: 200px;
-    flex: 1 1 auto;
+.main-content #item-1 {
+    flex-grow: 1;
+    width: 50%;
+    height: 250px;
+    margin-bottom: 50px;
 }
 
-#box1 h1 {
-    font-size: 40px;
+.main-content #item-1 h1 {
+    font-size: 35px !important;
 }
 
-#box1 p {
+.main-content #item-1 p {
     font-size: 20px;
 }
 
-#box2 {
-    flex-grow: 2;
+.main-content #item-2{
+    width: 40%;
+    height: 250px;
+}
+
+.main-content #item-3 {
+    flex-grow: 1;
+    width: 50%;
+    height: auto;
+}
+
+.main-content #item-3 h2 {
+    font-size: 20px;
+}
+
+.main-content #item-4 {
+    width: 40%;
+    height: auto;
+}
+
+.main-content #item-5 {
+    flex-grow: 1;
+    width: 15%;
     padding: 0;
 }
 
-#box3 {
+.main-content img {
     width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.main-content #item-6 {
+    width: 35%;
+    
+}
+
+.main-content #item-7 {
+    width: 40%;
+}
+
+.sub-items {
+    display: flex;
+    min-height: 250px; 
+    max-height: 350px;
+    text-align: left;
+    padding: 0;
+    border-radius: 5px;
+    margin: 5px;
+    min-width: 100%;
+    }
+
+.sub-items .sub-item img {
+    height: auto;
+    object-fit: cover;
+    border-radius: 10px;
+    }
+
+.sub-items #item-8 {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    }
+
+.sub-items #item-8 #sub-item1 {
+    width: 50%;
     height: 100%;
+    }
+
+.sub-items #item-8 #sub-item2 {
+    width: 50%;
+    height: 100%;
+    }
+
+.sub-items #item-8 #sub-item2 h2 {
+    font-size: 30px;
+    }
+
+.sub-items #item-8 #sub-item2 .percentage {
+    padding-top: 25px;
+    font-size: 50px;
+    text-align: center;
+    font-weight: bold;
+    }
+
+.sub-items #item-8 #sub-item2 .position {
+    padding-top: 50px;
+    align-items: center;
+    font-weight: bold;
+    font-size: 20px;
 }
 
 .calendar {
@@ -99,10 +183,12 @@ body {
     text-align: center;
     padding: 0.2rem 0;
     box-sizing: border-box;
+    border-radius: 5px;
 }
 
 .calendar-weekdays {
     border-bottom: 1px solid #ddd;
+    border-radius: 5px;
 }
 
 .calendar-days div {
@@ -115,129 +201,9 @@ body {
 }
 
 .today {
-    background-color: yellow; 
+    background-color: yellow !important; 
 }
 
-.candidates {
-    margin: 0 auto;
-    padding: 5px;
-}
-
-.candidate {
-    display: flex;
-    align-items: flex-start; 
-    margin-top: 20px;
-}
-
-.candidate img {
-    width: 250px;
-    height: auto;
-    margin-right: 20px;
-    object-fit: cover;
-    border-radius: 10px;
-}
-
-.candidate-info {
-    max-width: 450px;
-}
-
-.candidate-info p {
-    margin: 0 0 10px;
-}
-
-/* Additional CSS for responsiveness */
-@media (max-width: 1200px) {
-    .main-content {
-        left: 60px;
-        width: calc(100% - 60px);
-    }
-    
-    .sidebar.active ~ .main-content {
-        left: 200px;
-        width: calc(100% - 200px);
-    }
-}
-
-@media (max-width: 768px) {
-    .calendar-header button {
-        font-size: 0.8rem;
-    }
-
-    .calendar-weekdays div, .calendar-days div {
-        padding: 0.1rem 0;
-    }
-
-    .main-content {
-        position: static;
-        width: 100%;
-        margin-top: 80px; 
-    }
-
-    .main-content .box {
-        width: 100%;
-        height: auto;
-        padding: 1rem;
-    }
-
-    #box1 {
-        width: 100%;
-    }
-
-    #box2 {
-        width: 100%;
-    }
-
-    .candidate {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .candidate img {
-        width: 100%;
-        max-width: 250px;
-        margin: 0 auto 20px;
-    }
-
-    .candidate-info {
-        width: 100%;
-        max-width: none;
-    }
-}
-
-@media (max-width: 480px) {
-    .main-content {
-        position: static;
-        width: 100%;
-        margin-top: 80px; /* Add some margin to the top for spacing */
-    }
-
-    .main-content .box {
-        width: 100%;
-        height: auto;
-        padding: 1rem;
-    }
-
-    #box1 {
-        width: 100%;
-    }
-
-    #box2 {
-        width: 100%;
-    }
-
-    .candidate {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .candidate img {
-        width: 100%;
-        max-width: 200px;
-        margin: 0 auto 20px;
-    }
-
-    .candidate-info {
-        width: 100%;
-        max-width: none;
-    }
+.election-period {
+    background-color: #0079c2;
 }

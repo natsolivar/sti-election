@@ -192,7 +192,7 @@ if (isset($_GET['candidate_id'])) {
         <div class="main-content">
             <div class="student-profile py-4">
             <div class="back-button">
-                <i class='bx bx-arrow-back' onclick="location.href='admin-candidate.php'"></i>
+                <i class='bx bx-arrow-back' onclick="location.href='javascript:history.go(-1)'"></i>
             </div>
                 <div class="container">
                     <div class="row">

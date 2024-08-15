@@ -85,8 +85,8 @@
                         
                         if (!empty($pres)) {
                             $qry4 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
-                            JOIN voters v ON c.voter_id = v.voter_id 
-                            JOIN users u ON v.user_id = u.user_id 
+                            INNER JOIN voters v ON c.voter_id = v.voter_id 
+                            INNER JOIN users u ON v.user_id = u.user_id 
                             WHERE u.user_name = '$pres' AND c.position_id = 'PRES'";
                             $result_pres = mysqli_query($conn, $qry4);
 
@@ -105,10 +105,10 @@
 
                                             echo $voter_grade;
                                             if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                                $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pres'";
+                                                $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_pres'";
                                                 $update_result_pres = mysqli_query($conn, $qry5);
                                             } else {
-                                                $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pres'";
+                                                $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_pres'";
                                                 $update_result_pres = mysqli_query($conn, $qry5);
                                             }
 
@@ -142,10 +142,10 @@
                                       
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_vp'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_vp'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_vp'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_vp'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -176,10 +176,10 @@
                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_shvp'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_shvp'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_shvp'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_shvp'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -211,10 +211,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_intsec'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_intsec'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_intsec'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_intsec'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -246,10 +246,10 @@
                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_extsec'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_extsec'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_extsec'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_extsec'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -280,10 +280,10 @@
 
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_trea'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_trea'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_trea'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_trea'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                   
@@ -315,10 +315,10 @@
                     
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_aud'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_aud'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_aud'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_aud'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                   
@@ -350,10 +350,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pio'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_pio'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_pio'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_pio'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -385,10 +385,10 @@
                                      
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11abmrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11abmrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11abmrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11abmrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -419,10 +419,10 @@
 
                                         
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11humssrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11humssrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -454,10 +454,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11stemrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11stemrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11stemrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11stemrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -489,10 +489,10 @@
                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11cuartrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11cuartrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11cuartrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11cuartrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -524,10 +524,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11mawdrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11mawdrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_11mawdrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_11mawdrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -559,10 +559,10 @@
                                        
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12abmrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12abmrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12abmrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12abmrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -594,10 +594,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12humssrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12humssrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12humssrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -629,10 +629,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12cuartrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12cuartrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12cuartrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12cuartrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -664,10 +664,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12mawdrep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12mawdrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_12mawdrep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_12mawdrep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -699,10 +699,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1arep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1arep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1arep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1arep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -734,10 +734,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1brep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1brep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1brep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm1brep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -769,10 +769,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm3rep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm3rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm3rep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm3rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -804,10 +804,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm4rep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm4rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm4rep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bstm4rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     }
@@ -839,10 +839,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis1rep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis1rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis1rep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis1rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -874,10 +874,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis2rep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis2rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis2rep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis2rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -909,10 +909,10 @@
                                         
 
                                         if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis3rep'";
+                                            $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis3rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         } else {
-                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis3rep'";
+                                            $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis3rep'";
                                             $update_result_pres = mysqli_query($conn, $qry5);
                                         }
                                     
@@ -944,10 +944,10 @@
                                        
 
                                             if ($voter_grade == 'g11' || $voter_grade == 'g12') {
-                                                $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis4rep'";
+                                                $qry5 = "UPDATE votes SET SHvote_count = SHvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis4rep'";
                                                 $update_result_pres = mysqli_query($conn, $qry5);
                                             } else {
-                                                $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis4rep'";
+                                                $qry5 = "UPDATE votes SET TERvote_count = TERvote_count + 1, total_votes = SHvote_count + TERvote_count, date_updated = NOW() WHERE candidate_id = '$candidate_id_bsis4rep'";
                                                 $update_result_pres = mysqli_query($conn, $qry5);
                                             }
                                         }   

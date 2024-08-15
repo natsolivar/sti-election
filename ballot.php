@@ -90,7 +90,7 @@
                 <div class="container">
                     <?php 
                         
-                        $qry2 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES'";
+                        $qry2 = "SELECT u.user_name FROM candidate c INNER JOIN voters v ON c.voter_id = v.voter_id INNER JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES'";
                         $result = mysqli_query($conn, $qry2);
 
                         if ($result->num_rows > 0) {
@@ -214,7 +214,7 @@
                     
                     ?>
                 </div>
-            <div class="box" ><h1>PUBLIC INFORMATION OFFICER / Vote for 1</h1></div>
+            <div class="box" ><h1>PUBLIC INFORMATION OFFICER / Vote for 2</h1></div>
                 <div class="container">
                     <?php 
                         
@@ -224,7 +224,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='pio' value='$name' id='pio' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='checkbox' name='pio' value='$name' id='pio' required><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";

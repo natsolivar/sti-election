@@ -73,7 +73,7 @@
             <div class="col-lg-8">
                 <div class="card shadow-sm">
                 <div class="card-header bg-transparent border-0">
-                    <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Voters Information</h3>
+                    <h3 class="mb-0"><i class='bx bx-user' style="font-size: 32px;"></i>Voters Information</h3>
                 </div>
                 <div class="card-body pt-0">
                     <table class="table table-bordered">
@@ -178,14 +178,127 @@
                 </div>
                 </div>
                 <div style="height: 26px"></div>
-                <div class="card shadow-sm">
-                <div class="card-header bg-transparent border-0">
-                    <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Other Information</h3>
-                </div>
-                <div class="card-body pt-0">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-                </div>
-                </div>
+                        <?php 
+                        $qry5 = "SELECT voter_id FROM voters WHERE user_id = '$_SESSION[userID]'";
+                        $result = mysqli_query($conn, $qry5);
+                        if ($result -> num_rows > 0) {
+                            while ($row = $result -> fetch_assoc()) {
+                                $v_id = $row['voter_id'];
+
+                                 if ($v_id) {
+                                    
+                                    $qry6 = "SELECT c.candidate_id, c.candidate_details, c.platform, c.party_code, c.date_applied, c.status, p.position_name
+                                            FROM users u
+                                            INNER JOIN voters v ON u.user_id = v.user_id
+                                            INNER JOIN candidate c ON v.voter_id = c.voter_id
+                                            LEFT JOIN position p ON c.position_id = p.position_id
+                                            WHERE c.voter_id = $v_id";
+                                    $res = mysqli_query($conn, $qry6);
+
+                                    if ($res -> num_rows > 0 ) {
+                                        while ($rows = $res -> fetch_assoc()) {
+                                            $candid = $rows['candidate_id'];
+                                            $candide = $rows['candidate_details'];
+                                            $candipla = $rows['platform'];
+                                            $candipa = $rows['party_code'];
+                                            $date_app = $rows['date_applied'];
+                                            $status = $rows['status'];
+                                            $pos = $rows['position_name'];
+
+                                            $imageQuery = "SELECT id, image FROM images WHERE candidate_id = $candid";
+                                            $imageResult = mysqli_query($conn, $imageQuery);
+                                            if ($imageResult->num_rows > 0) {
+                                                while ($imageRow = $imageResult->fetch_assoc()) {
+                                                    $images[] = [
+                                                        'id' => $imageRow['id'],
+                                                        'url' => 'data:image/jpeg;base64,' . base64_encode($imageRow['image'])
+                                                    ];
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                 }
+
+                                 ?>
+
+                            <div class="card shadow-sm">
+                                <div class="card-header bg-transparent border-0">
+                                    <h3 class="mb-0"><i class='bx bxs-user-account' style="font-size: 32px;"></i>Candidacy Information</h3>
+                                </div>
+                                <div class="card-body pt-0">
+                                    <table class="table table-bordered">
+                                    <tr>
+                                        <th width="30%">Candidate ID</th>
+                                        <td width="2%">:</td>
+                                        <td><?php echo $candid; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Position</th>
+                                        <td width="2%">:</td>
+                                        <td><?php echo $pos; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Details</th>
+                                        <td width="2%">:</td>
+                                        <td><?php echo $candide; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Platform</th>
+                                        <td width="2%">:</td>
+                                        <td><?php echo $candipla; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Partylist</th>
+                                        <td width="2%">:</td>
+                                        <td><?php echo $candipa; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Image Uploaded</th>
+                                        <td width="2%">:</td>
+                                        <td> 
+                                            <?php if (!empty($images)): ?>
+                                                <?php foreach ($images as $image): ?>
+                                                    <img src="<?php echo $image['url']; ?>" alt="Candidate Image" class="img-thumbnail" width="150">
+                                                    <?php endforeach; ?>
+                                                <?php else: ?>
+                                                <p>No images uploaded.</p>
+                                            <?php endif; ?>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Date Applied</th>
+                                        <td width="2%">:</td>
+                                        <td><?php echo $date_app; ?></td>
+                                    </tr>
+                                    <tr>
+                                        <th width="30%">Candidacy Status</th>
+                                        <td width="2%">:</td>
+                                        <?php 
+
+                                            if ($status == 'Accepted') {
+                                                
+                                                echo "<td style='color: green;'>$status</td>";
+
+                                            } else {
+
+                                                echo "<td style='color: red;'>$status</td>";
+
+                                            }
+
+                                        ?>
+                                    </tr>
+                                </table>
+                                </div>
+                                </div>
+
+
+                                 <?php
+                            }
+                        }
+                        
+                        ?>
             </div>
             </div>
         </div>

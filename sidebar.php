@@ -325,7 +325,7 @@
 				</a>
 				<span class="tooltip">Council of Leaders</span>
 			</li>
-			<li>
+			<li hidden>
 				<a href="poll.php">
                     <i class='bx bx-bar-chart-alt'></i>
 					<span class="links_name">Poll</span>
