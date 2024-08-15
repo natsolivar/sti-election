@@ -7,12 +7,13 @@
 
     $pres = isset($_POST['president']) ? mysqli_real_escape_string($conn, $_POST['president']) : null;;
     $tervp = isset($_POST['tervpresident']) ? mysqli_real_escape_string($conn, $_POST['tervpresident']) : null;;
-    $shvp = isset($_POST['shvp']) ? mysqli_real_escape_string($conn, $_POST['shvp']) : null;;
+    $shvp = isset($_POST['shvpresident']) ? mysqli_real_escape_string($conn, $_POST['shvpresident']) : null;;
     $intsec = isset($_POST['intsec']) ? mysqli_real_escape_string($conn, $_POST['intsec']) : null;;
     $extsec = isset($_POST['extsec']) ? mysqli_real_escape_string($conn, $_POST['extsec']) : null;;
     $trea = isset($_POST['trea']) ? mysqli_real_escape_string($conn, $_POST['trea']) : null;;
     $aud = isset($_POST['aud']) ? mysqli_real_escape_string($conn, $_POST['aud']) : null;;
-    $pio = isset($_POST['pio']) ? mysqli_real_escape_string($conn, $_POST['pio']) : null;;
+    $pio1 = isset($_POST['pio1']) ? mysqli_real_escape_string($conn, $_POST['pio1']) : null;
+    $pio2 = isset($_POST['pio2']) ? mysqli_real_escape_string($conn, $_POST['pio2']) : null;
     $g11abmrep = isset($_POST['11abmrep']) ? mysqli_real_escape_string($conn, $_POST['11abmrep']) : null;; 
     $g11humssrep = isset($_POST['11humssrep']) ? mysqli_real_escape_string($conn, $_POST['11humssrep']) : null;; 
     $g11stemrep = isset($_POST['11stemrep']) ? mysqli_real_escape_string($conn, $_POST['11stemrep']) : null;;
@@ -35,6 +36,16 @@
 
     if (isset($_POST['vote'])) {
 
+        $selected_pio = isset($_POST['pio']) ? $_POST['pio'] : [];
+
+        $selected_pio = array_map(function($value) use ($conn) {
+            return mysqli_real_escape_string($conn, $value);
+        }, $selected_pio);
+
+        if (count($selected_pio) > 2) {
+            $selected_pio = array_slice($selected_pio, 0, 2);
+        }
+
         $qry1 = "SELECT voter_id FROM voters WHERE user_id = '$_SESSION[userID]'";
         $result = mysqli_query($conn, $qry1);
 
@@ -43,7 +54,7 @@
             $voter_id = $row['voter_id'];
 
 
-            $qry2 = "INSERT INTO registered_votes (r_vote_id, voter_id, president, ter_vpresident, sh_vpresident, secretary_inter, secretary_exter, treasurer, auditor, pio, g11abm_representative, g11humss_representative, g11stem_representative, g11cuart_representative, g11mawd_representative, g12abm_representative, g12humss_representative, g12stem_representative, g12cuart_representative, g12mawd_representative, g12toper_representative, bstm1a_representative, bstm1b_representative, bsis1_representative, bstm2_representative, bsis2_representative, bstm3_representative, bsis3_representative, bstm4_representative, bsis4_representative, vote_date) VALUES ('','$voter_id','$pres','$tervp','$shvp','$intsec','$extsec','$trea','$aud','$pio','$g11abmrep','$g11humssrep','$g11stemrep','$g11cuartrep','$g11mawdrep','$g12abmrep','$g12humssrep','$g12stemrep','$g12cuartrep','$g12mawdrep','','$bstm1arep','$bstm1brep','$bsis1rep','$bstm2rep','$bsis2rep','$bstm3rep','$bsis3rep','$bstm4rep','$bsis4rep', NOW())";
+            $qry2 = "INSERT INTO registered_votes (r_vote_id, voter_id, president, ter_vpresident, sh_vpresident, secretary_inter, secretary_exter, treasurer, auditor, pio, pio_2, g11abm_representative, g11humss_representative, g11stem_representative, g11cuart_representative, g11mawd_representative, g12abm_representative, g12humss_representative, g12stem_representative, g12cuart_representative, g12mawd_representative, g12toper_representative, bstm1a_representative, bstm1b_representative, bsis1_representative, bstm2_representative, bsis2_representative, bstm3_representative, bsis3_representative, bstm4_representative, bsis4_representative, vote_date) VALUES ('','$voter_id','$pres','$tervp','$shvp','$intsec','$extsec','$trea','$aud','" . (isset($selected_pio[0]) ? $selected_pio[0] : '') . "','" . (isset($selected_pio[1]) ? $selected_pio[1] : '') . "','$g11abmrep','$g11humssrep','$g11stemrep','$g11cuartrep','$g11mawdrep','$g12abmrep','$g12humssrep','$g12stemrep','$g12cuartrep','$g12mawdrep','','$bstm1arep','$bstm1brep','$bsis1rep','$bstm2rep','$bsis2rep','$bstm3rep','$bsis3rep','$bstm4rep','$bsis4rep', NOW())";
             $results = mysqli_query($conn, $qry2);
 
             $vote_status = "UPDATE voters SET vote_status = 'YES' WHERE voter_id = '$voter_id'";

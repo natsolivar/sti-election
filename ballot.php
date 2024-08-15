@@ -18,9 +18,19 @@
             $query2 = "SELECT voter_id FROM registered_votes WHERE voter_id = '$voter_id'";
             $result_votes = mysqli_query($conn, $query2);
 
-            if($result_votes->num_rows > 0) {
-                echo "You already voted";
+            if($result_votes->num_rows < 0) {
+                echo "<script>
+                alert('You have already voted.');
+                window.location.href = 'javascript:history.go(-1)'; 
+                </script>";
+            } else {
+
             }
+        } else {
+            echo "<script>
+                    alert('Error retrieving voter information.');
+                    window.location.href = 'javascript:history.go(-1)'; 
+                  </script>";
         }
 
 ?>
@@ -51,7 +61,7 @@
             <p>Quezon Avenue corner Mabini Street, Iligan City 9200</p>
             <p>Type: <strong>COL</strong></p>
             <h3>INSTRUCTIONS FOR VOTING</h3>
-            <p><strong>(1) Select the Appropriate Number of Candidates:</strong> For example, if the system allows you to vote for up to three candidates, make sure you choose exactly three, not more or less.</p>
+            <p><strong>(1) Select the Appropriate Number of Candidates:</strong> For example, if the system allows you to vote for two candidates, make sure you choose exactly two, not more or less.</p>
             <p><strong>(2) Review Your Choices Carefully:</strong> Thoroughly review all available options and candidates before making your selection.</p>
         </div>
         <div class="box" id="box2"><?php 
@@ -96,7 +106,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='president' value='$name' id='pres' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='president' value='$name' id='pres'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -116,7 +126,7 @@
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
                                 
-                                echo "<div class='item'><input type='radio' name='tervpresident' value='$name' id='tervp' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='tervpresident' value='$name' id='tervp'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -134,7 +144,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='shvpresident' value='$name' id='shvp' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='shvpresident' value='$name' id='shvp'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -152,7 +162,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='entsec' value='$name' id='entsec' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='entsec' value='$name' id='entsec'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -170,7 +180,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='extsec' value='$name' id='extsec' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='extsec' value='$name' id='extsec'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -188,7 +198,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='trea' value='$name' id='trea' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='trea' value='$name' id='trea'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -206,7 +216,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='aud' value='$name' id='aud' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='aud' value='$name' id='aud'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -222,9 +232,13 @@
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
+                            $count = 1;
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='checkbox' name='pio' value='$name' id='pio' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='checkbox' name='pio[]' value='$name' id='pio_{$count}_$name'><label for='checkbox1'>$name</label></div>";
+
+                            $count++;
+
                             }
                         } else {
                             echo "No candidate";
@@ -242,7 +256,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11abmrep' value='$name' id='11abmrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11abmrep' value='$name' id='11abmrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -260,7 +274,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11hummsrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11hummsrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -278,7 +292,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11stemrep' value='$name' id='11stemrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11stemrep' value='$name' id='11stemrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -296,7 +310,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11cuartrep' value='$name' id='11cuartrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11cuartrep' value='$name' id='11cuartrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -314,7 +328,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11mawdrep' value='$name' id='11mawdrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11mawdrep' value='$name' id='11mawdrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -332,7 +346,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12abmrep' value='$name' id='12abmrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12abmrep' value='$name' id='12abmrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -350,7 +364,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12hummsrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12hummsrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -368,7 +382,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12stemrep' value='$name' id='12stemrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12stemrep' value='$name' id='12stemrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -386,7 +400,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12cuartrep' value='$name' id='12cuartrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12cuartrep' value='$name' id='12cuartrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -404,7 +418,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12mawdrep' value='$name' id='12mawdrep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12mawdrep' value='$name' id='12mawdrep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -422,7 +436,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm1arep' value='$name' id='bstm1arep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm1arep' value='$name' id='bstm1arep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -440,7 +454,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm1brep' value='$name' id='bstm1brep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm1brep' value='$name' id='bstm1brep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -458,7 +472,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm2rep' value='$name' id='bstm2rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm2rep' value='$name' id='bstm2rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -476,7 +490,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm3rep' value='$name' id='bstm3rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm3rep' value='$name' id='bstm3rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -494,7 +508,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm4rep' value='$name' id='bstm4rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm4rep' value='$name' id='bstm4rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -512,7 +526,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis1rep' value='$name' id='bsis1rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis1rep' value='$name' id='bsis1rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -530,7 +544,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis2rep' value='$name' id='bsis2rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis2rep' value='$name' id='bsis2rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -548,7 +562,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis3rep' value='$name' id='bsis3rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis3rep' value='$name' id='bsis3rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -566,7 +580,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis4rep' value='$name' id='bsis4rep' required><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis4rep' value='$name' id='bsis4rep'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -574,20 +588,168 @@
                     
                     ?>
                 </div>
-                <button type="submit" class="btn btn-primary" name="vote">Submit</button>  
+                <button class="submit-ballot" id="scrollButton" name="vote" style="display: none;">
+                    <div>
+                        <div class="pencil"></div>
+                        <div class="folder">
+                            <div class="top">
+                                <svg viewBox="0 0 24 27">
+                                    <path d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z"></path>
+                                </svg>
+                            </div>
+                            <div class="paper"></div>
+                        </div>
+                    </div>
+                    Submit Ballot
+                </button>
         </form>
         </div>  
     </div> 
+
+    <div id="voteModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Your Vote</h2>
+            <p id="voteSummary"></p>
+            <button id="editVote">Edit Vote</button>
+            <button id="confirmVote">Confirm Vote</button>
+        </div>
+    </div>
     </body>
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const checkboxes = document.querySelectorAll('input[name="pio[]"]');
+            const maxSelection = 2;
+            let selectedCheckboxes = [];
+
+            checkboxes.forEach(function(checkbox) {
+                checkbox.addEventListener('change', function() {
+                    if (checkbox.checked) {
+                        selectedCheckboxes.push(checkbox);
+                    } else {
+                        selectedCheckboxes = selectedCheckboxes.filter(cb => cb !== checkbox);
+                    }
+                    if (selectedCheckboxes.length > maxSelection) {
+                        const oldestCheckbox = selectedCheckboxes.shift();
+                        oldestCheckbox.checked = false;
+                    }
+                });
+            });
+        });
+
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            
+            if (scrollPosition >= documentHeight) {
+                document.getElementById('scrollButton').style.display = 'block';
+            } else {
+                document.getElementById('scrollButton').style.display = 'none';
+            }
+        });
+
+
          window.addEventListener('load', function() {
-        // Show the loading screen for a specified duration
         setTimeout(function() {
             const loading = document.getElementById('loading');
             const content = document.getElementById('content');
-            loading.style.display = 'none'; // Hide the spinner
-            content.style.display = 'block'; // Show the content
-        }, 2000); // Adjust the time in milliseconds (e.g., 3000ms = 3 seconds)
+            loading.style.display = 'none';
+            content.style.display = 'block'; 
+        }, 2000); 
     });
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const form = document.getElementById('vote');
+    const modal = document.getElementById('voteModal');
+    const closeModal = document.querySelector('.modal .close');
+    const voteSummary = document.getElementById('voteSummary');
+    const editVote = document.getElementById('editVote');
+    const confirmVote = document.getElementById('confirmVote');
+
+    const categoryTitles = {
+        'president': 'President',
+        'tervpresident': 'Tertiary Vice President',
+        'shvpresident': 'Senior High Vice President',
+        'intsec': 'Internal Secretary',
+        'extsec': 'External Secretary',
+        'trea': 'Treasurer',
+        'aud': 'Auditor',
+        'pio': 'PIO',
+        '11abmrep': '11 ABM Representative',
+        '11humssrep': '11 HUMSS Representative',
+        '11stemrep': '11 STEM Representative',
+        '11cuartrep': '11 CUART Representative',
+        '11mawdrep': '11 MAWD Representative',
+        '12abmrep': '12 ABM Representative',
+        '12humssrep': '12 HUMSS Representative',
+        '12stemrep': '12 STEM Representative',
+        '12cuartrep': '12 CUART Representative',
+        '12mawdrep': '12 MAWD Representative',
+        'bstm1arep': 'BSTM 1-A Representative',
+        'bstm1brep': 'BSTM 1-B Representative',
+        'bstm2rep': 'BSTM 2 Representative',
+        'bstm3rep': 'BSTM 3 Representative',
+        'bstm4rep': 'BSTM 4 Representative',
+        'bsis1rep': 'BSIS 1 Representative',
+        'bsis2rep': 'BSIS 2 Representative',
+        'bsis3rep': 'BSIS 3 Representative',
+        'bsis4rep': 'BSIS 4 Representative'
+    };
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); 
+
+        const categories = Object.keys(categoryTitles);
+        let summaryHTML = '<div class="vote-summary">';
+
+        categories.forEach(category => {
+            if (category === 'pio') {
+                const selectedCheckboxes = Array.from(document.querySelectorAll(`input[name="pio[]"]:checked`));
+                const votes = selectedCheckboxes.map(cb => cb.nextElementSibling.textContent).join(', ') || 'Not selected';
+                const title = categoryTitles[category];
+                summaryHTML += `<p>${title}: ${votes}</p>`;
+            } else {
+                const selectedRadio = document.querySelector(`input[name="${category}"]:checked`);
+                const vote = selectedRadio ? selectedRadio.nextElementSibling.textContent : 'Not selected';
+                const title = categoryTitles[category];
+                summaryHTML += `<p>${title}: ${vote}</p>`;
+            }
+        });
+
+        summaryHTML += '</div>';
+
+        voteSummary.innerHTML = summaryHTML;
+        modal.style.display = 'block';
+    });
+
+    closeModal.addEventListener('click', function () {
+        modal.style.display = 'none'; 
+    });
+
+    editVote.addEventListener('click', function () {
+        modal.style.display = 'none'; 
+    });
+
+    confirmVote.addEventListener('click', function () {
+        const formData = new FormData(form);
+
+        const xhr = new XMLHttpRequest();
+
+        xhr.open('POST', 'vote_count.php', true);
+
+        xhr.onload = function () {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                window.location.href = 'thank_you.php'; 
+            } else {
+                console.error('An error occurred:', xhr.statusText);
+            }
+        };
+
+        xhr.send(formData);
+
+        modal.style.display = 'none'; 
+    });
+});
+
     </script>
     </html>
