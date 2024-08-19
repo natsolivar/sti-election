@@ -53,13 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
         }
 
-        $qry4 = "INSERT INTO votes (candidate_id, SHvote_count, TERvote_count, date_updated) 
-                 VALUES ('$candidate_id', 0, 0, NOW())";
-        mysqli_query($conn, $qry4);
-
-        $qry5 = "INSERT INTO polls (candidate_id, poll_count, date_updated) 
-                 VALUES ('$candidate_id', 0, NOW())";
-        mysqli_query($conn, $qry5);
     }
 }
 ?>

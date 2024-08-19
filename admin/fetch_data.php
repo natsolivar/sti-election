@@ -5,11 +5,10 @@ include 'db.php';
 
 $position = $_GET['position'];
 
-// Query to get candidate names and their vote counts for SH and TER
 $qry = "SELECT u.user_name, vs.SHvote_count, vs.TERvote_count
     FROM candidate c 
-    JOIN voters v ON c.voter_id = v.voter_id 
-    JOIN users u ON v.user_id = u.user_id 
+    INNER JOIN voters v ON c.voter_id = v.voter_id 
+    INNER JOIN users u ON v.user_id = u.user_id 
     LEFT JOIN votes vs ON vs.candidate_id = c.candidate_id
     WHERE c.position_id = ?";
 
@@ -37,11 +36,9 @@ if ($result->num_rows > 0) {
     }
 }
 
-// Close the connection
 $stmt->close();
 $conn->close();
 
-// Output JSON
 echo json_encode(['names' => $candidate_names, 'sh_votes' => $sh_votes, 'ter_votes' => $ter_votes]);
 
 

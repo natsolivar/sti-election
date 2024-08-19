@@ -34,7 +34,7 @@
     $bsis3rep = isset($_POST['bsis3rep']) ? mysqli_real_escape_string($conn, $_POST['bsis3rep']) : null;;
     $bsis4rep = isset($_POST['bsis4rep']) ? mysqli_real_escape_string($conn, $_POST['bsis4rep']) : null;;
 
-    if (isset($_POST['vote'])) {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         $selected_pio = isset($_POST['pio']) ? $_POST['pio'] : [];
 
@@ -976,3 +976,43 @@
     }
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width-device-width; initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>EMVS</title>
+</head>
+<style>
+
+</style>
+<body style="background-color: #0079c2;">
+<div class="modal" id="myModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thank you for voting!</h5>
+            </div>
+            <div class="modal-body">
+                <p>Thank you for participating in the Council of Leaders election at STI College Iligan. Your vote is a vital part of our democratic process and helps us shape a better future for our school community.
+                We appreciate your time and involvement in making a difference. Stay tuned for the results and continue to engage with your student council!</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="window.location.href='homepage.php';">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+    <script>
+
+    $(document).ready(function() {
+            $('#myModal').modal('show');
+        });
+    </script>
+</body>
+</html>

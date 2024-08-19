@@ -288,23 +288,18 @@
 				</a>
 			</li>
 			<li>
-				<a href="admin-council.php">
-                    <i class='bx bx-group'></i>
-					<span class="links_name">COLs</span>
-				</a>
-			</li>
-			<li>
 				<a href="admin-voters.php">
-                    <i class='bx bx-bar-chart-alt'></i>
+                    <i class='bx bx-group'></i>
 					<span class="links_name">Voters</span>
 				</a>
 			</li>
-            <li>
-				<a href="admin-party.php">
+			<li>
+				<a href="admin-council.php">
                     <i class='bx bx-bar-chart-alt'></i>
-					<span class="links_name">Partylist</span>
+					<span class="links_name">Election details</span>
 				</a>
 			</li>
+            <li>
 		</ul>
 		<div class="profile_content">
 			<div class="profile">

@@ -1,0 +1,111 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-image: url("assets/images/background.jpg");
+    overflow-y: auto;
+    box-sizing: border-box;
+	font-family: "Poppins" , sans-serif;
+}
+
+.main-content {
+    position: absolute;
+    top: 0;
+    left: 80px;
+    transition: all 0.5s ease;
+    width: calc(100% - 78px);
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.3rem;
+    
+}
+
+.sidebar.active ~ .main-content {
+    width: calc(100% - 240px);
+    left: 240px;
+}
+
+.main-content .item {
+    min-height: 50px; 
+    text-align: left;
+    padding: 2rem;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);   
+    flex: auto;
+}
+
+.main-content #item-1 {
+    flex-basis: 100%;
+    height: 100px; 
+}
+
+.main-content #item-1 h2 {
+    font-weight: bolder;
+}
+
+.main-content #item-2 {
+    flex-basis: 100%;
+    height: auto;
+    align-items: left;
+    justify-content: left;
+    display: flex;
+    gap: 10px 10px;
+}
+
+.main-content #item-2 .child {
+    display: flex;
+    height: auto;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    font-size: 16px; 
+    gap: 10px;
+}
+
+.main-content #item-2 .child form {
+    margin-left: 10px;
+}
+
+
+.main-content #item-2 .child-item #c-item1 {
+    flex-basis: 30%;
+}
+.main-content #item-2 .child-item #c-item1 p {
+    font-size: 50px;
+}
+
+.main-content #item-2 .child-item #c-item2 {
+    flex-basis: 10%;
+}
+
+.main-content #item-3 {
+    flex-basis: 100%;
+    min-height: auto;
+    align-items: center;
+}
+
+.main-content #item-3 h3 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.main-content #item-4 {
+    flex-basis: 100%; 
+    min-height: auto;
+}
+
+.main-content #item-4 h3 {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.table .input-row {
+    position: relative;
+    bottom: 0;
+    background-color: #f9f9f9;
+}
+

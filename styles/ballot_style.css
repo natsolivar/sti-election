@@ -23,6 +23,7 @@ body {
 }
 
 .site-identity {
+  padding-left: 20px;
     float: left;
 }
 
@@ -87,6 +88,7 @@ body {
     padding: 20px;
     width: 100%;
     display: flex;
+    flex-wrap: nowrap;
     flex-direction: row;
     justify-content: space-evenly;
     align-items: center;
@@ -338,7 +340,6 @@ input[type="checkbox"] {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Close button styling */
 .close {
     color: #aaa;
     float: right;
@@ -364,7 +365,6 @@ input[type="checkbox"] {
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
 
-/* Styling for vote summary */
 .vote-summary {
     display: flex;
     flex-direction: column;
@@ -389,8 +389,6 @@ input[type="checkbox"] {
     background-color: #0056b3;
 }
   
-
-/* Media Query for Responsive Layout on Smaller Screens */
 @media   
   (max-device-width: 720px) {
 
@@ -399,18 +397,10 @@ input[type="checkbox"] {
         padding: 20px;
         width: 100%;
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-evenly;
         align-items: center;
         text-align: center;
-    }
-
-    .main-content .container .item {
-        max-width: 100%;
-        font-size: 30px;
-    }
-    .main-content .box {
-        height: auto;
-        font-size: 20px;
     }
 
 }

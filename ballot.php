@@ -8,12 +8,14 @@
 
     $formattedDate = $dateTime->format('Y-m-d');
 
-    $query1 = "SELECT voter_id FROM voters WHERE user_id = '$_SESSION[userID]'";
+    $query1 = "SELECT * FROM voters WHERE user_id = '$_SESSION[userID]'";
     $result = mysqli_query($conn, $query1);
 
         if ($result) {
             $row = mysqli_fetch_assoc($result);
             $voter_id = $row['voter_id'];
+            $voter_grade = $row['voter_grade'];
+            $voter_program = $row['program_code'];
 
             $query2 = "SELECT voter_id FROM registered_votes WHERE voter_id = '$voter_id'";
             $result_votes = mysqli_query($conn, $query2);
@@ -57,12 +59,13 @@
         </div> 
     </header>
     <div class="header-content">
-        <div class="box" id="box1"><h3>September 32, 2024 STI College Council of Leaders Election</h3>
+        <div class="box" id="box1"><h3>STI College Council of Leaders Election</h3>
             <p>Quezon Avenue corner Mabini Street, Iligan City 9200</p>
             <p>Type: <strong>COL</strong></p>
             <h3>INSTRUCTIONS FOR VOTING</h3>
             <p><strong>(1) Select the Appropriate Number of Candidates:</strong> For example, if the system allows you to vote for two candidates, make sure you choose exactly two, not more or less.</p>
-            <p><strong>(2) Review Your Choices Carefully:</strong> Thoroughly review all available options and candidates before making your selection.</p>
+            <p><strong>(2) Candidate Selection by Grade or Program:</strong> Vote a candidate based on your Grade/Year level and Academic Program.</p>
+            <p><strong>(3) Review Your Choices Carefully:</strong> Thoroughly review all available options and candidates before making your selection.</p>
         </div>
         <div class="box" id="box2"><?php 
             $qry1 = "SELECT *, DATE(date_registered) AS date_registered FROM voters WHERE voter_id = (SELECT voter_id FROM voters WHERE user_id = '".$_SESSION['userID']."')";
@@ -118,6 +121,8 @@
             <div class="box" ><h1>TERTIARY VICE PRESIDENT / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (($voter_grade == 'g11' || $voter_grade == 'g12'));
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TERVP'";
                         $result = mysqli_query($conn, $qry3);
@@ -125,8 +130,10 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
+
+                                $disabled = $disable_vote ? 'disabled' : '';
                                 
-                                echo "<div class='item'><input type='radio' name='tervpresident' value='$name' id='tervp'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='tervpresident' value='$name' id='tervp' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -138,13 +145,16 @@
                 <div class="container">
                 <?php 
                         
+                        $disable_vote = (!($voter_grade == 'g11' || $voter_grade == 'g12'));
+                        $disabled = $disable_vote ? 'disabled' : '';
+
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'SHVP'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='shvpresident' value='$name' id='shvp'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='shvpresident' value='$name' id='shvp' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -249,6 +259,9 @@
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (ABM) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'ABM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11ABMREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -256,7 +269,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11abmrep' value='$name' id='11abmrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11abmrep' value='$name' id='11abmrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -268,13 +281,16 @@
                 <div class="container">
                 <?php 
                         
+                        $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'HUMSS'));
+                        $disabled = $disable_vote ? 'disabled' : '';
+
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11HUMSSREP'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11hummsrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11hummsrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -285,6 +301,9 @@
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (STEM) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'STEM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11STEMREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -292,7 +311,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11stemrep' value='$name' id='11stemrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11stemrep' value='$name' id='11stemrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -303,6 +322,9 @@
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (CUART) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'CUART'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11CUARTREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -310,7 +332,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11cuartrep' value='$name' id='11cuartrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11cuartrep' value='$name' id='11cuartrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -321,6 +343,9 @@
             <div class="box" ><h1>GRADE 11 REPRESENTATIVE (MAWD) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'MAWD'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11MAWDREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -328,7 +353,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11mawdrep' value='$name' id='11mawdrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11mawdrep' value='$name' id='11mawdrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -339,6 +364,9 @@
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (ABM) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'ABM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12ABMREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -346,7 +374,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12abmrep' value='$name' id='12abmrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12abmrep' value='$name' id='12abmrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -357,6 +385,9 @@
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (HUMSS) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'HUMSS'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12HUMSSREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -364,7 +395,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12hummsrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12hummsrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -375,6 +406,9 @@
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (STEM) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'STEM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12STEMREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -382,7 +416,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12stemrep' value='$name' id='12stemrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12stemrep' value='$name' id='12stemrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -393,6 +427,9 @@
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (CUART) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'CUART'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12SCUARTREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -400,7 +437,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12cuartrep' value='$name' id='12cuartrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12cuartrep' value='$name' id='12cuartrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -411,6 +448,9 @@
             <div class="box" ><h1>GRADE 12 REPRESENTATIVE (MAWD) / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'MAWD'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12MAWDREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -418,7 +458,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12mawdrep' value='$name' id='12mawdrep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12mawdrep' value='$name' id='12mawdrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -429,6 +469,9 @@
             <div class="box" ><h1>BSTM 1A REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1AREP'";
                         $result = mysqli_query($conn, $qry3);
@@ -436,7 +479,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm1arep' value='$name' id='bstm1arep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm1arep' value='$name' id='bstm1arep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -448,13 +491,16 @@
                 <div class="container">
                 <?php 
                         
+                        $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
+
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1BREP'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm1brep' value='$name' id='bstm1brep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm1brep' value='$name' id='bstm1brep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -465,6 +511,9 @@
             <div class="box" ><h1>BSTM 2 REPRESENTATIVE/ Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2REP'";
                         $result = mysqli_query($conn, $qry3);
@@ -472,7 +521,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm2rep' value='$name' id='bstm2rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm2rep' value='$name' id='bstm2rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -484,13 +533,16 @@
                 <div class="container">
                 <?php 
                         
+                        $disable_vote = (!($voter_grade == '3rd year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
+
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM3REP'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm3rep' value='$name' id='bstm3rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm3rep' value='$name' id='bstm3rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -501,6 +553,9 @@
             <div class="box" ><h1>BSTM 4 REPRESENTATIVE/ Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '4th year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM4REP'";
                         $result = mysqli_query($conn, $qry3);
@@ -508,7 +563,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm4rep' value='$name' id='bstm4rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm4rep' value='$name' id='bstm4rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -519,6 +574,9 @@
             <div class="box" ><h1>BSIS 1 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSIS'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS1REP'";
                         $result = mysqli_query($conn, $qry3);
@@ -526,7 +584,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis1rep' value='$name' id='bsis1rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis1rep' value='$name' id='bsis1rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -537,6 +595,9 @@
             <div class="box" ><h1>BSIS 2 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSIS'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS2REP'";
                         $result = mysqli_query($conn, $qry3);
@@ -544,7 +605,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis2rep' value='$name' id='bsis2rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis2rep' value='$name' id='bsis2rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -555,6 +616,9 @@
             <div class="box" ><h1>BSIS 3 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '3rd year' && $voter_program == 'BSIS'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS3REP'";
                         $result = mysqli_query($conn, $qry3);
@@ -562,7 +626,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis3rep' value='$name' id='bsis3rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis3rep' value='$name' id='bsis3rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -573,6 +637,9 @@
             <div class="box" ><h1>BSIS 4 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
+
+                        $disable_vote = (!($voter_grade == '4th year' && $voter_program == 'BSIS'));
+                        $disabled = $disable_vote ? 'disabled' : '';
                         
                         $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS4REP'";
                         $result = mysqli_query($conn, $qry3);
@@ -580,7 +647,7 @@
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bsis4rep' value='$name' id='bsis4rep'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bsis4rep' value='$name' id='bsis4rep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -696,60 +763,52 @@
         'bsis4rep': 'BSIS 4 Representative'
     };
 
-    form.addEventListener('submit', function (event) {
-        event.preventDefault(); 
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); 
 
-        const categories = Object.keys(categoryTitles);
-        let summaryHTML = '<div class="vote-summary">';
+            const categories = Object.keys(categoryTitles);
+            let summaryHTML = '<div class="vote-summary">';
 
-        categories.forEach(category => {
-            if (category === 'pio') {
-                const selectedCheckboxes = Array.from(document.querySelectorAll(`input[name="pio[]"]:checked`));
-                const votes = selectedCheckboxes.map(cb => cb.nextElementSibling.textContent).join(', ') || 'Not selected';
-                const title = categoryTitles[category];
-                summaryHTML += `<p>${title}: ${votes}</p>`;
-            } else {
-                const selectedRadio = document.querySelector(`input[name="${category}"]:checked`);
-                const vote = selectedRadio ? selectedRadio.nextElementSibling.textContent : 'Not selected';
-                const title = categoryTitles[category];
-                summaryHTML += `<p>${title}: ${vote}</p>`;
-            }
+            categories.forEach(category => {
+                if (category === 'pio') {
+                    const selectedCheckboxes = Array.from(document.querySelectorAll(`input[name="pio[]"]:checked`));
+                    const votes = selectedCheckboxes.map(cb => {
+                        let name = cb.nextElementSibling.textContent.trim();
+                        name = name.replace("(Student)", "").trim();
+                        return name;
+                    }).join(', ') || 'None';
+                    const title = categoryTitles[category];
+                    summaryHTML += `<p><b>${title}:</b> ${votes}</p>`;
+                } else {
+                    const selectedRadio = document.querySelector(`input[name="${category}"]:checked`);
+                    let vote = selectedRadio ? selectedRadio.nextElementSibling.textContent.trim() : 'None';
+                    if (vote !== 'None') {
+                        vote = vote.replace("(Student)", "").trim();
+                    }
+                    const title = categoryTitles[category];
+                    summaryHTML += `<p><b>${title}:</b> ${vote}</p>`;
+                }
+            });
+
+            summaryHTML += '</div>';
+
+            voteSummary.innerHTML = summaryHTML;
+            modal.style.display = 'block';
+            alert("Modal displayed with summary");
         });
 
-        summaryHTML += '</div>';
+        closeModal.addEventListener('click', function () {
+            modal.style.display = 'none'; 
+        });
 
-        voteSummary.innerHTML = summaryHTML;
-        modal.style.display = 'block';
+        editVote.addEventListener('click', function () {
+            modal.style.display = 'none'; 
+        });
+
+        confirmVote.addEventListener('click', function () {
+            form.submit(); 
+        });
     });
-
-    closeModal.addEventListener('click', function () {
-        modal.style.display = 'none'; 
-    });
-
-    editVote.addEventListener('click', function () {
-        modal.style.display = 'none'; 
-    });
-
-    confirmVote.addEventListener('click', function () {
-        const formData = new FormData(form);
-
-        const xhr = new XMLHttpRequest();
-
-        xhr.open('POST', 'vote_count.php', true);
-
-        xhr.onload = function () {
-            if (xhr.status >= 200 && xhr.status < 300) {
-                window.location.href = 'thank_you.php'; 
-            } else {
-                console.error('An error occurred:', xhr.statusText);
-            }
-        };
-
-        xhr.send(formData);
-
-        modal.style.display = 'none'; 
-    });
-});
 
     </script>
     </html>
