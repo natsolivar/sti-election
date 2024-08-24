@@ -3,6 +3,21 @@ session_start();
 include 'db.php';
 include 'session.php';
 require 'config.php';
+require 'check_login.php';
+
+if (isset($_SESSION['userID'])) {
+    $user_id = $_SESSION['userID'];
+
+    $result = mysqli_query($conn, "SELECT COUNT(*) AS count FROM voters WHERE user_id = '$user_id'");
+    if (!$result) {
+        die("Query failed: " . mysqli_error($conn));
+    }
+    $row = mysqli_fetch_assoc($result);
+    if ($row['count'] > 0) {
+        header('Location: homepage.php');
+        exit();
+    }
+}
 
 function getSchoolYear($currentDate) {
     $currentMonth = (int) date('m', strtotime($currentDate));
@@ -276,8 +291,8 @@ if (isset($_POST['register'])) {
                         <div class="input-box">
                             <label for="grade">Grade/Year Level</label>
                             <select id="grade" name="grade" required>
-                                <option value="Grade 11">Grade 11</option>
-                                <option value="Grade 12">Grade 12</option>
+                                <option value="g11">Grade 11</option>
+                                <option value="g12">Grade 12</option>
                                 <option value="1st year">1st Year</option>
                                 <option value="2nd year">2nd Year</option>
                                 <option value="3rd year">3rd Year</option>
@@ -356,16 +371,16 @@ if (isset($_POST['register'])) {
     </body>
     <script>
         const programOptions = {
-    'Grade 11': [
+    'g11': [
       { value: 'ABM', text: 'Accountancy, Business, and Management(ABM)' },
-      { value: 'HUMMS', text: 'Humanities and Social Sciences(HUMSS)' },
+      { value: 'HUMSS', text: 'Humanities and Social Sciences(HUMSS)' },
       { value: 'STEM', text: 'Science, Technology, Engineering, and Mathematics(STEM)' },
       { value: 'CUART', text: 'Culinary Arts(CUART)' },
       { value: 'MAWD', text: 'Mobile App & Web Development(MAWD)' }
     ],
-    'Grade 12': [
+    'g12': [
       { value: 'ABM', text: 'Accountancy, Business, and Management(ABM)' },
-      { value: 'HUMMS', text: 'Humanities and Social Sciences(HUMSS)' },
+      { value: 'HUMSS', text: 'Humanities and Social Sciences(HUMSS)' },
       { value: 'STEM', text: 'Science, Technology, Engineering, and Mathematics(STEM)' },
       { value: 'CUART', text: 'Culinary Arts(CUART)' },
       { value: 'MAWD', text: 'Mobile App & Web Development(MAWD)' }

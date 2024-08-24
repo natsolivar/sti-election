@@ -19,13 +19,20 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Important Voting Information</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        ...
+        <p>Thank you for taking the time to vote for the STI College Iligan Council of Leaders. Your participation is vital in shaping the future of our college.</p>
+        <p><b>Before you finalize your vote:</b></p>
+        <ol>
+          <li><b>Review Your Choices:</b> Double-check that you have selected the candidates you support.</li>
+          <li><b>Confirm Your Vote:</b> Ensure that your choices are correct before submitting. Once submitted, changes cannot be made.</li>
+        </ol> 
+        <p>Your vote matters and will help us build a stronger and more responsive student leadership.</p>
+        <p>Thank you for being an active part of the STI College Iligan Community!</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

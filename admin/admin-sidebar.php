@@ -1,5 +1,5 @@
 <?php 
-
+	include 'admin-check_login.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -170,7 +170,7 @@
 		}
 
 		.profile .profile_details .name {
-			font-size: 10px;
+			font-size: 20px;
 			font-weight: 400;
 		}
 
@@ -295,7 +295,7 @@
 			</li>
 			<li>
 				<a href="admin-council.php">
-                    <i class='bx bx-bar-chart-alt'></i>
+					<i class='bx bxs-widget'></i>
 					<span class="links_name">Election details</span>
 				</a>
 			</li>
@@ -304,9 +304,9 @@
 		<div class="profile_content">
 			<div class="profile">
 				<div class="profile_details">
-					<div class="name"></div>
+					<div class="name"><?php echo htmlspecialchars($_SESSION['username']); ?></div>
 				</div>
-				<i class='bx bx-log-out' id="log_out" onclick="location.href='logout.php'"></i>
+				<i class='bx bx-log-out' id="log_out" onclick="location.href='admin-logout.php'"></i>
 			</div>
 		</div>
 	</div>

@@ -125,7 +125,6 @@
             color: #777;
         }
 
-        /* Additional CSS for responsiveness */
         @media (max-width: 768px) {
             .site-identity {
                 flex-direction: column;

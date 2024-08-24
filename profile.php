@@ -6,6 +6,26 @@
     include 'db.php';
     require 'config.php';
     
+    $que = "SELECT date_start, date_end FROM c_period ORDER BY id DESC LIMIT 1";
+    $result = mysqli_query($conn, $que);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $date_start = $row['date_start'];
+        $date_end = $row['date_end'];
+    } else {
+        $date_start = $date_end = null;
+    }
+
+    $currentDate = new DateTime("now", new DateTimeZone('Asia/Hong_Kong'));
+    $startDate = new DateTime($date_start, new DateTimeZone('Asia/Hong_Kong'));
+    $endDate = new DateTime($date_end, new DateTimeZone('Asia/Hong_Kong'));
+
+
+    $daysRemaining = $currentDate->diff($startDate)->days;
+        
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,7 +70,12 @@
                     $results = mysqli_query($conn, $qry1);
                     if ($results->num_rows > 0) { 
                         while ($row = $results->fetch_assoc()) {
-                            echo $row['voter_grade'] . "<br>";
+                            if ($row['voter_grade'] == 'g11') {
+                                echo "Grade 11" . "<br>";
+                            } elseif ($row['voter_grade'] == 'g12') {
+                                echo "Grade 12" . "<br>";
+                            }
+                            
                         }
                     } else {
                         echo "NO DATA";
@@ -153,14 +178,21 @@
                             }
                             
                         } else {
-                            echo "<a href='candidate_registration.php'>Register Candidacy</a>";
-                        }
+
+                            if ($currentDate <= $startDate) {
+                                echo "Candidacy starts in {$daysRemaining} day/s";
+                            } elseif ($currentDate > $endDate) {
+                                echo "Candidacy period has ended.";
+                            } else { 
+                                echo "<a href='candidate_registration.php'>Register Candidacy</a>";
+                            }
+                        } 
                         
                         ?></td>
 
                     </tr>
                     <tr>
-                        <th width="30%">Academic Year	</th>
+                        <th width="30%">Academic Year</th>
                         <td width="2%">:</td>
                         <td><?php 
                          $qry4 = "SELECT academic_year FROM voters WHERE user_id = '$_SESSION[userID]'";
@@ -184,8 +216,6 @@
                         if ($result -> num_rows > 0) {
                             while ($row = $result -> fetch_assoc()) {
                                 $v_id = $row['voter_id'];
-
-                                 if ($v_id) {
                                     
                                     $qry6 = "SELECT c.candidate_id, c.candidate_details, c.platform, c.party_code, c.date_applied, c.status, p.position_name
                                             FROM users u
@@ -216,9 +246,6 @@
                                                 }
                                             }
                                         }
-                                    }
-
-                                 }
 
                                  ?>
 
@@ -295,6 +322,7 @@
 
 
                                  <?php
+                                }
                             }
                         }
                         

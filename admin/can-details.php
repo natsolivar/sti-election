@@ -310,7 +310,20 @@ if (isset($_GET['candidate_id'])) {
                                     <tr>
                                         <th width="30%">Candidacy Status</th>
                                         <td width="2%">:</td>
-                                        <td><?php echo $can_status; ?></td>
+                                        <?php 
+                                        
+                                        if ($can_status == 'Accepted') {
+                                                
+                                            echo "<td style='color: green;'>$can_status</td>";
+
+                                        } else {
+
+                                            echo "<td style='color: red;'>$can_status</td>";
+
+                                        }
+                                        
+                                        
+                                        ?>
                                     </tr>
                                 </table>
                                 </div>

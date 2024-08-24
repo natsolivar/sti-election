@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -36,6 +38,16 @@ body {
     background-color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2);   
     flex: auto;
+    border: 0.5px groove grey;  
+}
+
+.main-content .item1 {
+    min-height: 50px; 
+    text-align: left;
+    padding: 2rem;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: white;
 }
 
 .main-content .item #positionDropdown {

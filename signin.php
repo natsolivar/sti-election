@@ -72,7 +72,10 @@ if (!isset($_GET['code'])) {
         $_SESSION['userName'] = $userName;
         $_SESSION['user_profile_pic'] = $profile_pic_data;
         $_SESSION['userID'] = $user['id'];
-        header('location: homepage.php');
+        if (isset($_SESSION['userID'])) {
+            header('Location: ' . ($_SESSION['redirect_to'] ?? 'homepage.php'));
+            exit();
+        }
     } else {
         $qry2 = "INSERT INTO users (user_id, user_profile, user_name, user_email, user_pw) VALUES ('$userID', '$profile_pic_data', '$displayName', '$userEmail', '')";
         mysqli_query($db, $qry2);

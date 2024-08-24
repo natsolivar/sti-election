@@ -19,7 +19,7 @@
     </head>
     <body>
         <div class="main-content">
-                <div class="item" id="item-1"><div class="group">
+                <div class="item1" id="item-1"><div class="group">
                     <svg viewBox="0 0 24 24" aria-hidden="true" class="icon">
                         <g>
                         <path
@@ -29,13 +29,14 @@
                     </svg>
                     <input type="text" class="input" type="search" placeholder="Search" />
                     <div id="results"></div>
-                    </div></div>
+                </div></div>
                 <div class="item" id="item-2">
                     <h2>Election Data</h2>
                     <p>Summary</p>
                     <div class="child">
                         <div class="child-item">
                         <h3>
+                        <i class='bx bxs-user-detail'></i>
                             <?php 
 
                                 $qry1 = "SELECT COUNT('voter_id') AS voters FROM voters";
@@ -59,6 +60,7 @@
                         </div>
                         <div class="child-item">
                         <h3>
+                        <i class='bx bxs-user-plus'></i>
                         <?php 
 
                             $qry2 = "SELECT COUNT('candidate_id') AS candidate FROM candidate";
@@ -79,7 +81,9 @@
                             ?></h3>
                             <p>Number of Potential Candidates</p>
                         </div>
-                        <div class="child-item"><h3>
+                        <div class="child-item">
+                        <h3>
+                        <i class='bx bxs-been-here'></i>
                         <?php 
 
                             $qry3 = "SELECT COUNT('r_vote_id') AS r_votes FROM registered_votes";
@@ -99,7 +103,9 @@
                             ?></h3>
                             <p>Number of Counted Votes</p>
                         </div>
-                        <div class="child-item"><h3>
+                        <div class="child-item">
+                        <h3>
+                        <i class='bx bxs-user-check'></i>
                         <?php 
 
                             $qry4 = "SELECT COUNT('user_id') AS user FROM users";
@@ -161,10 +167,23 @@
                                         echo "<td>$voterid</td>";
                                         echo "<td>$username</td>";
                                         echo "<td>$program</td>";
-                                        echo "<td>$status</td>";
+                                        echo "<td>"; 
+                                        
+                                        if ($status == 'NO' || $status == 'NULL' || (empty($status))) {
+                                            echo "<i class='bx bxs-user-x' style='color: red;'></i>";
+                                        } else {
+                                            echo "<i class='bx bxs-user-check' style='color: green;'></i>";
+                                        }
+                                        
+                                        
+                                        echo "</td>";
                                         echo "</tr>";
                                     }
-                                }            
+                                } else {
+                                    echo "<tr>";
+                                    echo "<td>NO DATA</td>";
+                                    echo "</tr>";
+                                }           
                             ?>
                         </tbody>
                     </table>

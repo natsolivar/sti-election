@@ -12,6 +12,7 @@ $res = $conn->query($sql1);
 
 $error_message = '';
 $error_message1 = '';
+$error_message2 = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['form_type'])) {
@@ -77,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 } catch (mysqli_sql_exception $e) {
                     if ($e->getCode() == 1451) { 
-                        $error_message1 = "Unable to delete. This party is active and has members.";
+                        $error_message1 = "Unable to delete. This party is active and have members.";
                     } else {
                         $error_message1 = "Error deleting party: " . $conn->error;
                     }
@@ -97,7 +98,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 } catch (mysqli_sql_exception $e) {
                     if ($e->getCode() == 1451) { 
-                        $error_message = "Unable to delete. This club is active and has members.";
+                        $error_message = "Unable to delete. This club is active and have members.";
                     } else {
                         $error_message = "Error deleting club: " . $conn->error;
                     }
@@ -138,6 +139,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
         $stmt->close();
     }
+
+    if (!empty($_POST['candidacyStartDate']) && !empty($_POST['candidacyEndDate']) && !isset($_POST['updateCandidacyDates'])) {
+        $candidacyStartDate = $_POST['candidacyStartDate'];
+        $candidacyEndDate = $_POST['candidacyEndDate'];
+        $date_initialized = date("Y-m-d H:i:s");
+
+        $insert_query = "INSERT INTO c_period (date_start, date_end, date_initialized) VALUES ('$candidacyStartDate', '$candidacyEndDate', '$date_initialized')";
+        if ($conn->query($insert_query) === TRUE) {
+            echo "New candidacy period set successfully.";
+            echo "<meta http-equiv='refresh' content='0'>";
+        } else {
+            echo "Error: " . $insert_query . "<br>" . $conn->error;
+        }
+    } elseif (isset($_POST['updateCandidacyDates'])) {
+        $candidacyStartDate = $_POST['candidacyStartDate'];
+        $candidacyEndDate = $_POST['candidacyEndDate'];
+        $date_initialized = date("Y-m-d H:i:s");
+
+        $update_query = "UPDATE c_period SET date_start = '$candidacyStartDate', date_end = '$candidacyEndDate', date_initialized = '$date_initialized' WHERE id = 1";
+        if ($conn->query($update_query) === TRUE) {
+            echo "Candidacy dates updated successfully.";
+            echo "<meta http-equiv='refresh' content='0'>";
+        } else {
+            echo "Error: " . $update_query . "<br>" . $conn->error;
+        }
+    }
 }
 
 ob_end_flush();
@@ -169,8 +196,50 @@ if (!empty($error_message1)) {
     </head>
     <body>
     <div class="main-content">
-            <div class="item" id="item-1">
+            <div class="item1" id="item-1">
                 <h2>Other Election Details</h2>
+            </div>
+            <div class="item" id="item-1-5">
+                <div class="child" id="c-item1"><p style="font-size: 25px; font-weight: bold;">Date of Candidacy:</p>
+                <?php 
+                $quer_candidacy = "SELECT id, date_start, date_end, date_initialized FROM c_period ORDER BY id DESC LIMIT 1";
+                $ress_candidacy = $conn->query($quer_candidacy);
+                $current_date = date("Y-m-d");
+
+                if ($ress_candidacy->num_rows > 0) {
+                    $rowwss_candidacy = $ress_candidacy->fetch_assoc();
+                    $date_start_candidacy = new DateTime($rowwss_candidacy['date_start']);
+                    $date_end_candidacy = new DateTime($rowwss_candidacy['date_end']);
+
+                        echo "<div id='candidacyDateDisplay'>";
+                        echo "<h2 style='margin-left: 20px;'>" . $date_start_candidacy->format('F j, Y') . " - " .  $date_end_candidacy->format('F j, Y') . "</h2>";
+                        echo "<button type='button' class='btn btn-primary btn-sm' onclick='showEditCandidacyForm()'>Edit Dates</button>";
+                        echo "</div>";
+
+                } else {
+                    ?>
+                    <form action="admin-council.php" method="post">
+                        <label for="candidacyStartDate">Start Date:</label>
+                        <input type="date" id="candidacyStartDate" name="candidacyStartDate" required>
+                        <label for="candidacyEndDate">End Date:</label>
+                        <input type="date" id="candidacyEndDate" name="candidacyEndDate" required>     
+                        <button type="submit" class="btn btn-primary btn-sm">Set Candidacy Dates</button>
+                    </form>
+                <?php 
+                }
+                ?>
+                <div id="editCandidacyForm" style="display: none;">
+                    <form action="admin-council.php" method="post">
+                        <input type="hidden" name="updateCandidacyDates" value="1">
+                        <label for="editCandidacyStartDate">Start Date:</label>
+                        <input type="date" id="editCandidacyStartDate" name="candidacyStartDate" required>
+                        <label for="editCandidacyEndDate">End Date:</label>
+                        <input type="date" id="editCandidacyEndDate" name="candidacyEndDate" required>
+                        <button type="submit" class="btn btn-primary btn-sm">Update Dates</button>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="hideEditCandidacyForm()">Cancel</button>
+                    </form>
+                </div>
+            </div>
             </div>
             <div class="item" id="item-2">
                 <div class="child" id="c-item1"><p style="font-size: 25px; font-weight: bold;">Election date:</p>
@@ -376,6 +445,16 @@ if (!empty($error_message1)) {
             function hideEditForm() {
                 document.getElementById('editForm').style.display = 'none';
                 document.getElementById('dateDisplay').style.display = 'block';
+            }
+
+            function showEditCandidacyForm() {
+                document.getElementById('candidacyDateDisplay').style.display = 'none';
+                document.getElementById('editCandidacyForm').style.display = 'block';
+            }
+
+            function hideEditCandidacyForm() {
+                document.getElementById('editCandidacyForm').style.display = 'none';
+                document.getElementById('candidacyDateDisplay').style.display = 'block';
             }
 
         </script>

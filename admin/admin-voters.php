@@ -30,8 +30,8 @@
     </head>
 <body>
     <div class="main-content">
-        <div class="item" id="item-1"><h3>Registered Voters</h3></div>
-        <div class="item" id="item-2"><h4>Total Registered Voters: <?php echo $resvotes ?></h4></div>
+        <div class="item1" id="item-1"><p style="font-size: 30px; font-weight: bold;">Registered Voters</p></div>
+        <div class="item1" id="item-2"><h4>Total Registered Voters: <b><?php echo $resvotes ?></b></h4></div>
         <div class="item" id="item-3">
             <table id="myTable" class="table table-hover">
                 <thead>
@@ -90,9 +90,9 @@
                                 echo "<td>$formattedDate</td>";
 
                                 if ($status == 'YES') {
-                                    echo "<td>$formattedvDate</td>";
+                                    echo "<td style='color: green;'>$formattedvDate</td>";
                                 } else {
-                                    echo "<td>$status</td>";
+                                    echo "<td><i class='bx bxs-user-x' style='color: red;'></i></td>";
                                 }
                                 echo "</tr>";
                             }

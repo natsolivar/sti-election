@@ -20,11 +20,11 @@
     </head>
     <body>
         <div class="main-content">
-            <div class="item" id="item-1">
-                <h2>Running Candidates</h2>
+            <div class="item1" id="item-1">
+                <p style="font-size: 30px; font-weight: bold;">Running Candidates</p>
             </div>
                 <div class="item" id="item-3">
-                    <select id="positionDropdown" onchange="updateTable()">
+                <!--<select id="positionDropdown" onchange="updateTable()">
                         <option value="" disabled selected hidden>All candidates</option>
                         <?php 
 
@@ -40,7 +40,7 @@
                                 }
                             
                         ?>
-                    </select>
+                    </select> -->
                 <table id="myTable" class="table table-hover">
                     <thead>
                         <tr>
@@ -129,9 +129,12 @@
                                             </td>";
                                         }
                                         echo "</tr>";
-                                        }
+                                    } 
+
                                 } else {
-                                    echo "No data";
+                                    echo "<tr>";
+                                    echo "<td>NO DATA</td>";
+                                    echo "</tr>";
                                 } 
                             ?>
                     </tbody>
@@ -148,7 +151,6 @@
                         });
                     });
 
-                    // Prevent row click event when clicking on buttons
                     document.querySelectorAll('button').forEach(button => {
                         button.addEventListener('click', function(event) {
                             event.stopPropagation();
@@ -178,7 +180,15 @@
                     return confirm("Are you sure you want to proceed?");
                 }
 
-                document.getElementById("positionDropdown").value = "";
+                $(document).ready(function() {
+                    $('#myTable').DataTable({
+                        "paging": true,
+                        "lengthChange": true,
+                        "pageLength": 10,
+                        "lengthMenu": [10, 25, 50, 100]
+                    });
+                });
+
                
         </script>
         

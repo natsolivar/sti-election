@@ -44,7 +44,8 @@ body {
 }
 
 .main-content #item-1 p {
-    font-size: 20px;
+    font-size: 17px;
+    margin: 0;
 }
 
 .main-content #item-2{
@@ -97,17 +98,37 @@ body {
     padding: 0;
     border-radius: 5px;
     margin: 5px;
-    min-width: 100%;
-    }
+    justify-content: space-around;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.sub-items #sub-item1{
+    border: 1px solid black;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+#carouselExampleSlidesOnly {
+    justify-content: center;
+    margin: auto;
+}
+
+.sub-items .sub-item {
+    min-height: 200px;
+}
 
 .sub-items .sub-item img {
-    height: auto;
-    object-fit: cover;
+    height: 100%;
     border-radius: 10px;
-    }
+}
+
+.sub-items .sub-item .detail {
+    font-style: italic;
+}
 
 .sub-items #item-8 {
-    width: 50%;
+    width: auto;
     display: flex;
     justify-content: center;
     text-align: center;

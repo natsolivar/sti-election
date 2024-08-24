@@ -3,7 +3,7 @@
     include 'sidebar.php';
     include 'session.php';
     include 'db.php';
-
+    
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,6 +19,24 @@
     <div class="main-content">
         <div class="header">
             <p>The Council of Leaders</p>
+        </div>
+        <div class="container">
+            <h1>COL Advisor</h1>
+            <div class="pres">
+                
+
+                    <div class='flex' id='flex1'>
+                    <div class='img-container'>
+                    <img src='assets/images/sirpebs.jpg' alt='Council Advisor'>
+                    </div>
+                    <div class='details'>
+                    <h3 class='title'>Council Advisor</h3>
+                    <p class='price'>Mr. Phillip Edgar Sabayle</p>
+                    </div>
+                    </div>
+
+
+            </div>
         </div>
         <div class="container">
             <h1>PRESIDENT</h1>

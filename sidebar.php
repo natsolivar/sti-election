@@ -1,8 +1,26 @@
 <?php 
 	include 'session.php';
 	include 'db.php'; 
+	include 'check_login.php';
+	
 	$userProfilePic = $_SESSION['user_profile_pic'] ?? null;
 	$user_id = $_SESSION['userID'];
+
+	$que = "SELECT date_start, date_end FROM e_period LIMIT 1";
+    $result = mysqli_query($conn, $que);
+
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $date_start = $row['date_start'];
+        $date_end = $row['date_end'];
+    } else {
+        $date_start = $date_end = null;
+    }
+
+	$currentDate = new DateTime("now", new DateTimeZone('Asia/Hong_Kong'));
+    $startDate = new DateTime($date_start, new DateTimeZone('Asia/Hong_Kong'));
+    $endDate = new DateTime($date_end, new DateTimeZone('Asia/Hong_Kong'));
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -325,6 +343,13 @@
 				</a>
 				<span class="tooltip">Council of Leaders</span>
 			</li>
+			<li>
+				<a href="https://forms.office.com/r/Bymn3Q9czS?origin=lprLink">
+					<i class='bx bx-user-voice'></i>
+					<span class="links_name">Feedback</span>
+				</a>
+				<span class="tooltip">Feedback</span>
+			</li>
 			<li hidden>
 				<a href="poll.php">
                     <i class='bx bx-bar-chart-alt'></i>
@@ -346,30 +371,31 @@
 		</div>
 	</div>
 	<?php 
-		
-		$qry1 = "SELECT vote_status FROM voters WHERE user_id = '$user_id'";
-		$result = mysqli_query($conn, $qry1);
 
-		if ($result->num_rows > 0) {
-			while ($row = $result->fetch_assoc()) {
+			$qry1 = "SELECT vote_status FROM voters WHERE user_id = '$user_id'";
+			$result = mysqli_query($conn, $qry1);
+
+			if ($result->num_rows > 0) {
+				$row = $result->fetch_assoc();
 				$vote_status = $row['vote_status'];
 
-				if ($vote_status == 'NO') {
-
-					echo '<a style="--clr: #7808d0" class="button" href="#exampleModalLong" data-toggle="modal">
-							<span class="button__icon-wrapper">
-								<svg width="10" class="button__icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 15">
-								<path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
-								</svg>
-								<svg class="button__icon-svg  button__icon-svg--copy" xmlns="http://www.w3.org/2000/svg" width="10" fill="none" viewBox="0 0 14 15">
-									<path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
-								</svg>
-							</span>Vote now!
-							</a>';
-				}
-			}
-			
-		}
+				if ($startDate && $endDate) {
+					if ($currentDate >= $startDate && $currentDate <= $endDate) {
+						if ($vote_status == 'NO') {
+							echo '<a style="--clr: #7808d0" class="button" href="#exampleModalLong" data-toggle="modal">
+									<span class="button__icon-wrapper">
+										<svg width="10" class="button__icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 15">
+											<path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+										</svg>
+										<svg class="button__icon-svg  button__icon-svg--copy" xmlns="http://www.w3.org/2000/svg" width="10" fill="none" viewBox="0 0 14 15">
+											<path fill="currentColor" d="M13.376 11.552l-.264-10.44-10.44-.24.024 2.28 6.96-.048L.2 12.56l1.488 1.488 9.432-9.432-.048 6.912 2.304.024z"></path>
+										</svg>
+									</span>Vote now!
+								</a>';
+						}
+					}
+				} 
+			} 
 	
 	?>
 
@@ -377,21 +403,29 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Important Voting Information</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-	  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+        <p>Thank you for taking the time to vote for the STI College Iligan Council of Leaders. Your participation is vital in shaping the future of our college.</p>
+        <p><b>Before you finalize your vote:</b></p>
+        <ul style="padding-left:20px;">
+          <li><b>Review Your Choices:</b> Double-check that you have selected the candidates you support.</li>
+          <li><b>Confirm Your Vote:</b> Ensure that your choices are correct before submitting. Once submitted, changes cannot be made.</li>
+        </ul> 
+        <p>Your vote matters and will help us build a stronger and more responsive student leadership.</p>
+        <p>Thank you for being an active part of the STI College Iligan Community!</p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onclick="location.href='ballot.php'">Save changes</button>
+	  	<button type="button" class="btn btn-primary" onclick="location.href='ballot.php'">Proceed</button>
+      </div>
       </div>
     </div>
   </div>
 </div>
+
 	
 	<script type="text/javascript">
 		let btn = document.querySelector("#btn");

@@ -3,6 +3,8 @@
     session_start();
     include 'db.php';
     require 'config.php';
+    include 'check_login.php';
+    
 
     $dateTime = new DateTime();
 
@@ -20,7 +22,7 @@
             $query2 = "SELECT voter_id FROM registered_votes WHERE voter_id = '$voter_id'";
             $result_votes = mysqli_query($conn, $query2);
 
-            if($result_votes->num_rows < 0) {
+            if($result_votes->num_rows > 0) {
                 echo "<script>
                 alert('You have already voted.');
                 window.location.href = 'javascript:history.go(-1)'; 
@@ -47,9 +49,7 @@
     <title>EMVS</title>
 </head>
 <body>
-<div id="loading" class="loading">
-        <div class="spinner"></div>
-</div>
+
 <div class="content">
     <header class="site-header">
         <div class="site-identity">
@@ -103,7 +103,7 @@
                 <div class="container">
                     <?php 
                         
-                        $qry2 = "SELECT u.user_name FROM candidate c INNER JOIN voters v ON c.voter_id = v.voter_id INNER JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES'";
+                        $qry2 = "SELECT u.user_name FROM candidate c INNER JOIN voters v ON c.voter_id = v.voter_id INNER JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry2);
 
                         if ($result->num_rows > 0) {
@@ -124,7 +124,7 @@
 
                         $disable_vote = (($voter_grade == 'g11' || $voter_grade == 'g12'));
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TERVP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TERVP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -148,7 +148,7 @@
                         $disable_vote = (!($voter_grade == 'g11' || $voter_grade == 'g12'));
                         $disabled = $disable_vote ? 'disabled' : '';
 
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'SHVP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'SHVP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -166,13 +166,13 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'ENTSEC'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'INTSEC' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='entsec' value='$name' id='entsec'><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='intsec' value='$name' id='intsec'><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -184,7 +184,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'EXTSEC'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'EXTSEC' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -202,7 +202,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TREA'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TREA' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -220,7 +220,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'AUD'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'AUD' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -238,7 +238,7 @@
                 <div class="container">
                     <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PIO'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PIO' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -263,7 +263,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'ABM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11ABMREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11ABMREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -284,13 +284,13 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'HUMSS'));
                         $disabled = $disable_vote ? 'disabled' : '';
 
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11HUMSSREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11HUMSSREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11hummsrep' $disabled><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='11humssrep' value='$name' id='11humssrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -305,7 +305,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'STEM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11STEMREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11STEMREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -326,7 +326,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'CUART'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11CUARTREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11CUARTREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -347,7 +347,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'MAWD'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11MAWDREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11MAWDREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -368,7 +368,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'ABM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12ABMREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12ABMREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -389,13 +389,13 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'HUMSS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12HUMSSREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12HUMSSREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12hummsrep' $disabled><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='12humssrep' value='$name' id='12humssrep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -410,7 +410,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'STEM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12STEMREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12STEMREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -431,7 +431,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'CUART'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12SCUARTREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12SCUARTREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -452,7 +452,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'MAWD'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12MAWDREP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12MAWDREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -466,62 +466,62 @@
                     
                     ?>
                 </div>
-            <div class="box" ><h1>BSTM 1A REPRESENTATIVE / Vote for 1</h1></div>
-                <div class="container">
-                <?php 
-
-                        $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSTM'));
-                        $disabled = $disable_vote ? 'disabled' : '';
-                        
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1AREP'";
-                        $result = mysqli_query($conn, $qry3);
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm1arep' value='$name' id='bstm1arep' $disabled><label for='checkbox1'>$name</label></div>";
-                            }
-                        } else {
-                            echo "No candidate";
-                        }
-                    
-                    ?>
-                </div>
-            <div class="box" ><h1>BSTM 1B REPRESENTATIVE / Vote for 1</h1></div>
-                <div class="container">
-                <?php 
-                        
-                        $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSTM'));
-                        $disabled = $disable_vote ? 'disabled' : '';
-
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1BREP'";
-                        $result = mysqli_query($conn, $qry3);
-
-                        if ($result->num_rows > 0) {
-                            while ($row = $result->fetch_assoc()) {
-                                $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm1brep' value='$name' id='bstm1brep' $disabled><label for='checkbox1'>$name</label></div>";
-                            }
-                        } else {
-                            echo "No candidate";
-                        }
-                    
-                    ?>
-                </div>
-            <div class="box" ><h1>BSTM 2 REPRESENTATIVE/ Vote for 1</h1></div>
+            <div class="box" ><h1>BSTM 1 REPRESENTATIVE / Vote for 1</h1></div>
                 <div class="container">
                 <?php 
 
                         $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1AREP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
                             while ($row = $result->fetch_assoc()) {
                                 $name = $row['user_name'];
-                                echo "<div class='item'><input type='radio' name='bstm2rep' value='$name' id='bstm2rep' $disabled><label for='checkbox1'>$name</label></div>";
+                                echo "<div class='item'><input type='radio' name='bstm1arep_' value='$name' id='bstm1arep' $disabled><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
+                </div>
+            <div class="box" ><h1>BSTM 2-A REPRESENTATIVE/ Vote for 1</h1></div>
+                <div class="container">
+                <?php 
+
+                        $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2AREP' AND c.status = 'Accepted'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm2arep' value='$name' id='bstm2arep' $disabled><label for='checkbox1'>$name</label></div>";
+                            }
+                        } else {
+                            echo "No candidate";
+                        }
+                    
+                    ?>
+                </div>
+            <div class="box" ><h1>BSTM 2-B REPRESENTATIVE/ Vote for 1</h1></div>
+                <div class="container">
+                <?php 
+
+                        $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
+                        $disabled = $disable_vote ? 'disabled' : '';
+                        
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2BREP' AND c.status = 'Accepted'";
+                        $result = mysqli_query($conn, $qry3);
+
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                                $name = $row['user_name'];
+                                echo "<div class='item'><input type='radio' name='bstm2brep' value='$name' id='bstm2brep' $disabled><label for='checkbox1'>$name</label></div>";
                             }
                         } else {
                             echo "No candidate";
@@ -536,7 +536,7 @@
                         $disable_vote = (!($voter_grade == '3rd year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
 
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM3REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM3REP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -557,7 +557,7 @@
                         $disable_vote = (!($voter_grade == '4th year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM4REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM4REP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -578,7 +578,7 @@
                         $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS1REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS1REP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -599,7 +599,7 @@
                         $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS2REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS2REP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -620,7 +620,7 @@
                         $disable_vote = (!($voter_grade == '3rd year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS3REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS3REP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -641,7 +641,7 @@
                         $disable_vote = (!($voter_grade == '4th year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS4REP'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS4REP' AND c.status = 'Accepted'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -752,9 +752,9 @@
         '12stemrep': '12 STEM Representative',
         '12cuartrep': '12 CUART Representative',
         '12mawdrep': '12 MAWD Representative',
-        'bstm1arep': 'BSTM 1-A Representative',
-        'bstm1brep': 'BSTM 1-B Representative',
-        'bstm2rep': 'BSTM 2 Representative',
+        'bstm1arep_': 'BSTM 1 Representative',
+        'bstm2arep': 'BSTM 2-A Representative',
+        'bstm2brep': 'BSTM 2-B Representative',
         'bstm3rep': 'BSTM 3 Representative',
         'bstm4rep': 'BSTM 4 Representative',
         'bsis1rep': 'BSIS 1 Representative',
@@ -794,7 +794,6 @@
 
             voteSummary.innerHTML = summaryHTML;
             modal.style.display = 'block';
-            alert("Modal displayed with summary");
         });
 
         closeModal.addEventListener('click', function () {
