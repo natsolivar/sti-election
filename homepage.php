@@ -20,10 +20,10 @@
     }
 
     $que = "SELECT date_start, date_end FROM c_period ORDER BY id DESC LIMIT 1";
-    $result = mysqli_query($conn, $que);
+    $res = mysqli_query($conn, $que);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+    if ($res->num_rows > 0) {
+        $row = $res->fetch_assoc();
         $date_start = $row['date_start'];
         $date_end = $row['date_end'];
     } else {
@@ -40,10 +40,10 @@
     $greetingMessage = getGreeting();
 
     $que = "SELECT date_start, date_end FROM e_period LIMIT 1";
-    $result = mysqli_query($conn, $que);
+    $results = mysqli_query($conn, $que);
 
-    if ($result->num_rows > 0) {
-        $row = $result->fetch_assoc();
+    if ($results->num_rows > 0) {
+        $row = $results->fetch_assoc();
         $date_start = $row['date_start'];
         $date_end = $row['date_end'];
     } else {
@@ -57,12 +57,12 @@
             LEFT JOIN users u ON v.user_id = u.user_id
             LEFT JOIN party p ON c.party_code = p.party_code
             LEFT JOIN position pos ON c.position_id = pos.position_id
-            ORDER BY RAND()
+            WHERE c.status = 'Accepted'
             LIMIT 1";
-        $result = $conn->query($qry1);
+        $resultss = $conn->query($qry1);
 
-        if ($result->num_rows > 0) {
-        while ($row = $result->fetch_assoc()) {
+        if ($resultss->num_rows > 0) {
+        while ($row = $resultss->fetch_assoc()) {
             $c_id = $row['candidate_id'];
             $user_name = $row['user_name'];
             $details = $row['candidate_details'];
@@ -92,6 +92,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width-device-width; initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -125,7 +126,7 @@
 
                                 if ($currentDate < $startDate) {
                                     echo "<p>Registration of Candidacy starts in <strong>{$daysRemaining} days</strong>";
-                                }
+                                } 
 
                                 if (strtotime($row['date_start']) > time()) {
                                     echo "<p>Voting starts in <strong>{$days_remaining} days</strong></p>";
@@ -166,14 +167,11 @@
                     $endDate = new DateTime($date_end, new DateTimeZone('Asia/Hong_Kong'));
 
                     if ($currentDate < $startDate || $currentDate > $endDate) {
+                        if ($resultss -> num_rows > 0) {
                         ?>
                         <div class="item" id="item-3">
                             <?php 
-                                if ($party != NULL) {
-                                    echo "<h2>Meet a candidate from <strong>$party</strong></h2>";
-                                } else {
-                                    echo "<h2>Meet a candidate from <strong>INDEPENDENT</strong></h2>";
-                                }
+                                echo "<h2>Meet a candidate from <strong>$party</strong></h2>";
                             ?>
                         </div>
                         <div class="item" id="item-4"><h2><b>PLATFORM</b></h2></div>
@@ -214,6 +212,9 @@
                                         echo "<p align='left'>$plat</p>";
                                     }
                                 }
+                            } else {
+                                echo "<h2 style='text-align: center;'>NO CANDIDATES YET</h2>";
+                            }
                             ?>
                         </div>
                         <?php
@@ -798,7 +799,7 @@
                         </div>
                     </div>
                     <div class="carousel-item">
-                    <h2 style="font-size: 30px; font-weight: bold; text-align:center;">FOR PIO</h2>
+                    <h2 style="font-size: 30px; font-weight: bold; text-align:center;">FOR PUBLIC INFORMATION OFFICER</h2>
                         <div class="sub-items">
                             <?php 
 
@@ -811,7 +812,7 @@
 
                                     }
                                 }
-
+                            
                                 $qry = "SELECT u.user_name, c.candidate_id, p.party_name, pos.position_id, pos.position_name, i.image, vs.total_votes
                                         FROM candidate c
                                         LEFT JOIN images i ON c.candidate_id = i.candidate_id

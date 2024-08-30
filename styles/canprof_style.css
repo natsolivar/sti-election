@@ -21,6 +21,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     padding: 0.3rem;
+    justify-content: center;
     
 }
 

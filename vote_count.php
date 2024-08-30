@@ -795,7 +795,7 @@
                             $qry42 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bstm3rep' AND c.position_id = 'BSTM2BREP'";
+                            WHERE u.user_name = '$bstm2brep' AND c.position_id = 'BSTM2BREP'";
                             $result_bstm2brep = mysqli_query($conn, $qry42);
     
                             if ($result_bstm2brep && mysqli_num_rows($result_bstm2brep) > 0) {
@@ -1049,9 +1049,10 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width-device-width; initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <title>EMVS</title>
 </head>

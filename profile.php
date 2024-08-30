@@ -34,6 +34,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width-device-width; initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="styles/profile_style.css?v=<?php echo time(); ?>">
+        <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
@@ -74,6 +75,8 @@
                                 echo "Grade 11" . "<br>";
                             } elseif ($row['voter_grade'] == 'g12') {
                                 echo "Grade 12" . "<br>";
+                            } else {
+                                echo $row['voter_grade'];
                             }
                             
                         }

@@ -12,6 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
     <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <title>Login | EMVS</title>
     <style>
@@ -56,6 +57,7 @@
         .site-identity img {
             max-width: 55px;
             margin-right: 10px;
+            border-radius: 5px;
         }
 
         .login-container {
@@ -73,6 +75,7 @@
         .logo img {
             max-width: 55px;
             height: auto;
+            border-radius: 5px;
         }
 
         h2 {
@@ -125,6 +128,48 @@
             color: #777;
         }
 
+        .modal {
+    display: block; 
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-content p {
+            font-size: 20px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+
         @media (max-width: 768px) {
             .site-identity {
                 flex-direction: column;
@@ -162,7 +207,7 @@
 <body>
     <header class="site-header">
         <div class="site-identity">
-            <a href="#"><img src="assets/logo/STI-LOGO.png" alt="Site Name" /></a>
+            <a onclick="window.open('admincheck.php')"><img src="assets/logo/STI-LOGO.png" alt="EMVS" /></a>
             <h1>Election Management and Voting System</h1>
         </div>  
     </header>
@@ -179,5 +224,28 @@
             <p>&copy; STI Education Services Group, Inc. All Rights Reserved.</p>
         </footer>
     </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Announcement</h2>
+            <p>We're excited to share our system <strong>Election Management and Voting System</strong> with you, but please note that it's still in its early stages of development. The design, layout, and content may evolve as we continue to refine the user experience.</p>
+            <p>For the most optimal viewing experience, we recommend using a desktop or laptop computer. While we're working on making our system fully mobile-friendly, there may be some limitations or visual inconsistencies on smaller screens at this time.</p>
+            <p>Thank you for your understanding and patience.</p>
+        </div>
+    </div>
+    <script>
+        var modal = document.getElementById('myModal');
+        var span = document.getElementsByClassName('close')[0];
+
+        span.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
 </body>
 </html>

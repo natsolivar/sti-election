@@ -12,6 +12,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width-device-width; initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="styles/council_style.css?v=<?php echo time(); ?>">
+        <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <title>EMVS</title>
     </head>
@@ -30,8 +31,8 @@
                     <img src='assets/images/sirpebs.jpg' alt='Council Advisor'>
                     </div>
                     <div class='details'>
-                    <h3 class='title'>Council Advisor</h3>
-                    <p class='price'>Mr. Phillip Edgar Sabayle</p>
+                    <h3 class='title'>Mr. Phillip Edgar Sabayle</h3>
+                    <p class='price'>Student Affairs Officer</p>
                     </div>
                     </div>
 

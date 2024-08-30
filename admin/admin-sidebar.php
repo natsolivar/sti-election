@@ -9,6 +9,7 @@
         <meta name="viewport" content="width-device-width; initial-scale=1.0">
         <!-- <link rel="stylesheet" type="text/css" href="sidebar_style.css?v=<?php echo time(); ?>"> -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<link rel="shortcut icon" href="../assets/logo/STI-LOGO.png" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>EMVS</title>
     </head>
@@ -276,25 +277,25 @@
 		</div>
 		<ul class="nav_list">
 			<li>
-				<a href="index.php">
+				<a href="/admin/">
                     <i class='bx bx-home-alt'></i>
 					<span class="links_name">Homepage</span>
 				</a>
 			</li>
 			<li>
-				<a href="admin-candidate.php">
+				<a href="admin-candidate">
                     <i class='bx bx-male-female'></i>
 					<span class="links_name">Candidates</span>
 				</a>
 			</li>
 			<li>
-				<a href="admin-voters.php">
+				<a href="admin-voters">
                     <i class='bx bx-group'></i>
 					<span class="links_name">Voters</span>
 				</a>
 			</li>
 			<li>
-				<a href="admin-council.php">
+				<a href="admin-council">
 					<i class='bx bxs-widget'></i>
 					<span class="links_name">Election details</span>
 				</a>

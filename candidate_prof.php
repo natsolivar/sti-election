@@ -119,6 +119,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width-device-width; initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="styles/canprof_style.css?v=<?php echo time(); ?>">
+        <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900&display=swap" rel="stylesheet">
         <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
@@ -218,7 +219,7 @@
                             </table>
                         </div>
                         </div>
-                        <div style="height: 26px"></div>
+                        <div style="height: 26px; width: 100vh;"></div>
                             <div class="card shadow-sm">
                             <div class="card-header bg-transparent border-0">
                                 <h3 class="mb-0"><i class="far fa-clone pr-1"></i>Who is <?php echo $formatted_name; ?></h3>

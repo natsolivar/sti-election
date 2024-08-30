@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $candidacyEndDate = $_POST['candidacyEndDate'];
         $date_initialized = date("Y-m-d H:i:s");
 
-        $update_query = "UPDATE c_period SET date_start = '$candidacyStartDate', date_end = '$candidacyEndDate', date_initialized = '$date_initialized' WHERE id = 1";
+        $update_query = "UPDATE c_period SET date_start = '$candidacyStartDate', date_end = '$candidacyEndDate', date_initialized = '$date_initialized' WHERE id = (SELECT id FROM c_period ORDER BY id DESC LIMIT 1)";
         if ($conn->query($update_query) === TRUE) {
             echo "Candidacy dates updated successfully.";
             echo "<meta http-equiv='refresh' content='0'>";
@@ -188,6 +188,7 @@ if (!empty($error_message1)) {
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width-device-width; initial-scale=1.0">
         <link rel="stylesheet" type="text/css" href="admin-style/council_style.css?v=<?php echo time(); ?>">
+        <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
