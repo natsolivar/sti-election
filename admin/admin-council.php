@@ -14,6 +14,7 @@ $error_message = '';
 $error_message1 = '';
 $error_message2 = '';
 
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['form_type'])) {
         $formType = $_POST['form_type'];
@@ -41,29 +42,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             } else {
                 $error_message1 = "Partylist: Missing required fields.";
             }
-        } elseif ($formType == 'form2') {
-            if (isset($_POST['club_id']) && isset($_POST['club_name'])) {
-                $club_id = $conn->real_escape_string($_POST['club_id']);
-                $club_name = $conn->real_escape_string($_POST['club_name']);
-
-                $checkQuery = "SELECT COUNT(*) as count FROM club WHERE club_id='$club_id'";
-                $checkResult = $conn->query($checkQuery);
-                $row = $checkResult->fetch_assoc();
-
-                if ($row['count'] > 0) {
-                    $error_message1 = "Club Code already exists.";
-                } else {
-                    $query2 = "INSERT INTO club (club_id, club_name, date_created) VALUES ('$club_id', '$club_name', NOW())";
-                    if ($conn->query($query2) === TRUE) {
-                        header("Location: " . $_SERVER['PHP_SELF']);
-                        exit;
-                    } else {
-                        $error_message1 = "Error inserting into club: " . $conn->error;
-                    }
-                }
-            } else {
-                $error_message1 = "Club: Missing required fields.";
-            }
         } elseif ($formType == 'delete_party') {
             if (isset($_POST['delete_party_code'])) {
                 $party_code = $conn->real_escape_string($_POST['delete_party_code']);
@@ -84,27 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }
                 }
             }
-        } elseif ($formType == 'delete_club') {
-            if (isset($_POST['delete_club_id'])) {
-                $club_id = $conn->real_escape_string($_POST['delete_club_id']);
-
-                $query = "DELETE FROM club WHERE club_id='$club_id'";
-                try {
-                    if ($conn->query($query) === TRUE) {
-                        header("Location: " . $_SERVER['PHP_SELF']);
-                        exit;
-                    } else {
-                        $error_message = "Error deleting club: " . $conn->error;
-                    }
-                } catch (mysqli_sql_exception $e) {
-                    if ($e->getCode() == 1451) { 
-                        $error_message = "Unable to delete. This club is active and have members.";
-                    } else {
-                        $error_message = "Error deleting club: " . $conn->error;
-                    }
-                }
-            }
-        }
+        } 
     }
     if (isset($_POST['updateDates'])) {
         $startDate = $_POST['startDate'];
@@ -292,99 +250,75 @@ if (!empty($error_message1)) {
             </div>
             <div class="item" id="item-3">
                 <h3>Partylist</h3>
-                    <table id="table1" class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Code</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Date Created</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $row['party_code'] . "</td>";
-                                    echo "<td>" . $row['party_name'] . "</td>";
-                                    echo "<td>" . $row['date_created'] . "</td>";
-                                    echo "<td>";
-                                    echo "<form method='POST' style='display:inline;' onsubmit='return confirmDelete();'>";
-                                    echo "<input type='hidden' name='delete_party_code' value='" . $row['party_code'] . "'>";
-                                    echo "<input type='hidden' name='form_type' value='delete_party'>";
-                                    echo "<button type='submit' class='btn btn-danger btn-sm'>Delete</button>";
-                                    echo "</form>";
-                                    echo "</td>";
-                                    echo "</tr>";
-                                }
-                            }
-                            ?>
-                        </tbody>
-                        <tfoot>
-                            <tr class="input-row">
-                            <form method="POST" action="admin-council.php">
-                                <td><input type="text" name="party_code" class="form-control" placeholder="Enter Code" required></td>
-                                <td><input type="text" name="party_name" class="form-control" placeholder="Enter Name" required></td>
-                                <td></td>
-                                <td>
-                                    <input type="hidden" name="form_type" value="form1">
-                                    <button type="submit" class="btn btn-primary mt-2">Add</button>
-                                </td>
-                            </form>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <table id="table1" class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">Code</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Date Created</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    if ($result->num_rows > 0) {
+                        while ($row = $result->fetch_assoc()) {
+                            echo "<tr>";
+                            echo "<td>" . $row['party_code'] . "</td>";
+                            echo "<td>" . $row['party_name'] . "</td>";
+                            echo "<td>" . $row['date_created'] . "</td>";
+                            echo "<td>";
+                            echo "<form method='POST' style='display:inline;' onsubmit='return confirmDelete();'>";
+                            echo "<input type='hidden' name='delete_party_code' value='" . $row['party_code'] . "'>";
+                            echo "<input type='hidden' name='form_type' value='delete_party'>";
+                            echo "<button type='submit' class='btn btn-danger btn-sm'>Delete</button>";
+                            echo "</form>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+                <button onclick="openModal()" class="button-3">Add New Party</button>
             </div>
-
-            <div class="item" id="item-4">
-                <h3>Club</h3>
-                    <table id="table2" class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th scope="col">Code</th>
-                                <th scope="col">Name</th>
-                                <th scope="col">Date Created</th>
-                                <th scope="col">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            if ($res->num_rows > 0) {
-                                while($rows = $res->fetch_assoc()) {
-                                    echo "<tr>";
-                                    echo "<td>" . $rows['club_id'] . "</td>";
-                                    echo "<td>" . $rows['club_name'] . "</td>";
-                                    echo "<td>" . $rows['date_created'] . "</td>";
-                                    echo "<td>";
-                                    echo "<form method='POST' style='display:inline;' onsubmit='return confirmDelete();'>";
-                                    echo "<input type='hidden' name='delete_club_id' value='" . $rows['club_id'] . "'>";
-                                    echo "<input type='hidden' name='form_type' value='delete_club'>";
-                                    echo "<button type='submit' class='btn btn-danger btn-sm'>Delete</button>";
-                                    echo "</form>";
-                                    echo "</td>";
-                                    echo "</tr>";
-                                }
-                            }
-                            ?>
-                        </tbody>
-                        <tfoot>
-                            <tr class="input-row">
-                            <form method="POST" action="admin-council.php">
-                                <td><input type="text" name="club_id" class="form-control" placeholder="Enter Code" required></td>
-                                <td><input type="text" name="club_name" class="form-control" placeholder="Enter Name" required></td>
-                                <td></td>
-                                <td>
-                                    <input type="hidden" name="form_type" value="form2">
-                                    <button type="submit" class="btn btn-primary mt-2">Add</button>
-                                </td>
-                            </form>
-                            </tr>
-                        </tfoot>
-                    </table>
+            <div id="addPartyModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Add New Party</h2>
+                    <form method="POST" action="admin-council.php">
+                        <div>
+                            <label for="party_code">Party Code</label>
+                            <input type="text" name="party_code" id="party_code" class="form-control" placeholder="Enter Code" required>
+                        </div>
+                        <div>
+                            <label for="party_name">Party Name</label>
+                            <input type="text" name="party_name" id="party_name" class="form-control" placeholder="Enter Name" required>
+                        </div>
+                        <input type="hidden" name="form_type" value="form1">
+                        <button type="submit" class="btn btn-primary">Add Party</button>
+                    </form>
+                </div>
             </div>
             </div>
+            
         <script>
+
+            function openModal() {
+                document.getElementById("addPartyModal").style.display = "block";
+            }
+
+            function closeModal() {
+                document.getElementById("addPartyModal").style.display = "none";
+            }
+
+            // Close modal when clicking outside of modal content
+            window.onclick = function(event) {
+                var modal = document.getElementById("addPartyModal");
+                if (event.target === modal) {
+                    closeModal();
+                }
+            }
 
             function confirmDelete() {
                 return confirm("Are you sure you want to delete this item?");
@@ -399,14 +333,6 @@ if (!empty($error_message1)) {
                     });
                 });
 
-                $(document).ready(function() {
-                    $('#table2').DataTable({
-                        "paging": true,
-                        "lengthChange": true,
-                        "pageLength": 5,
-                        "lengthMenu": [5, 10]
-                    });
-                });
 
                 const today = new Date().toISOString().split('T')[0];
 

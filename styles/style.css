@@ -1,173 +1,86 @@
-@import url("sidebar_style.css");
-
-
 body {
-    background-image: url("assets/images/background.jpg");
     overflow-y: auto;
-
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
 
-.main-content {
-    position: absolute;
-    top: 0;
-    left: 80px;
-    transition: all 0.5s ease;
-    width: calc(100% - 78px);
-    display: flex;
-    flex-wrap: wrap;
-    padding-left: 0.5rem;
+.card {
+    padding: 2em;
+    text-align: center;
 }
 
-.sidebar.active ~ .main-content {
-    width: calc(100% - 240px);
-    left: 240px;
+main .grid-container-1 {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    border-bottom: 1px solid grey;
+    justify-content: space-between;
 }
 
-.main-content .item {
-    min-height: 50px; 
+main .grid-container-1 #card-1 {
+    min-width: 70% !important;
+}
+
+.vote-btn {
+    display: none;
+}
+
+main .grid-container-2 {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: center;
+}
+
+main .grid-container-2 #card-3 {
+    grid-column: span 3;
+}
+
+main .grid-container-2 #card-4 {
+    min-width: 250px;
+    max-width: 250px;
+}
+
+main .grid-container-2 #card-5 p {
     text-align: left;
-    padding: 0.5rem;
-    border-radius: 5px;
-    margin: 5px;
-    gap: 10px;
 }
 
-.main-content #item-1 {
-    flex-grow: 1;
-    width: 50%;
-    height: 250px;
-    margin-bottom: 50px;
-}
-
-.main-content #item-1 h1 {
-    font-size: 35px !important;
-}
-
-.main-content #item-1 p {
-    font-size: 17px;
-    margin: 0;
-}
-
-.main-content #item-2{
-    width: 40%;
-    height: 250px;
-}
-
-.main-content #item-3 {
-    flex-grow: 1;
-    width: 50%;
-    height: auto;
-}
-
-.main-content #item-3 h2 {
-    font-size: 20px;
-}
-
-.main-content #item-4 {
-    width: 40%;
-    height: auto;
-}
-
-.main-content #item-5 {
-    flex-grow: 1;
-    width: 15%;
-    padding: 0;
-}
-
-.main-content img {
+main .grid-container-2 #card-4 img {
     width: 100%;
     height: auto;
     object-fit: cover;
     border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
-.main-content #item-6 {
-    width: 35%;
-    
+main .grid-container-2 #card-6 {
+    grid-column: span 3;
 }
 
-.main-content #item-7 {
-    width: 40%;
+main .grid-container-2 #card-7 {
+    grid-column: span 3;
 }
 
-.sub-items {
-    display: flex;
-    min-height: 250px; 
-    max-height: 350px;
+main .grid-container-2 #card-7 #platform {
+    text-align: justify;
+}
+
+main .grid-container-1 #card-1 {
     text-align: left;
-    padding: 0;
-    border-radius: 5px;
-    margin: 5px;
-    justify-content: space-around;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.sub-items #sub-item1{
-    border: 1px solid black;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 5px;
-}
-
-#carouselExampleSlidesOnly {
-    justify-content: center;
-    margin: auto;
-}
-
-.sub-items .sub-item {
-    min-height: 200px;
-}
-
-.sub-items .sub-item img {
-    height: 100%;
-    border-radius: 10px;
-}
-
-.sub-items .sub-item .detail {
-    font-style: italic;
-}
-
-.sub-items #item-8 {
-    width: auto;
-    display: flex;
-    justify-content: center;
-    text-align: center;
+    > p {
+        font-size: 20px;
     }
+}
 
-.sub-items #item-8 #sub-item1 {
-    width: 50%;
-    height: 100%;
-    }
-
-.sub-items #item-8 #sub-item2 {
-    width: 50%;
-    height: 100%;
-    }
-
-.sub-items #item-8 #sub-item2 h2 {
-    font-size: 30px;
-    }
-
-.sub-items #item-8 #sub-item2 .percentage {
-    padding-top: 25px;
-    font-size: 50px;
-    text-align: center;
-    font-weight: bold;
-    }
-
-.sub-items #item-8 #sub-item2 .position {
-    padding-top: 50px;
-    align-items: center;
-    font-weight: bold;
-    font-size: 20px;
+main .grid-container-1 #card-2 {
+    padding: 1em;
+    justify-content: right;
 }
 
 .calendar {
-    width: 100%;
+    width: 350px;
     border-radius: 5px;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 .calendar-header {
@@ -227,4 +140,72 @@ body {
 
 .election-period {
     background-color: #0079c2;
+}
+
+.status-container {
+    display: inline-flex;
+    align-items: center; 
+    > a {
+        margin-left: 5px;
+    }
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    background-color: green;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 10px;
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.7);
+    animation: breathing 2s infinite ease-in-out;
+}
+
+@keyframes breathing {
+    0%, 100% {
+        transform: scale(1); 
+        box-shadow: 0 0 5px rgba(0, 255, 0, 0.5), 0 0 15px rgba(0, 255, 0, 0.3);
+    }
+    50% {
+        transform: scale(1.2); 
+        box-shadow: 0 0 20px rgba(0, 255, 0, 1), 0 0 30px rgba(0, 255, 0, 0.7);
+    }
+}
+
+@media(max-width: 800px){ 
+    main .grid-container-1 {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+    }
+
+    .vote-btn {
+        display: unset;
+    }
+
+    main .grid-container-2 #card-4 {
+        width: 80%;
+        grid-column: span 3;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    main .grid-container-2 #card-5 p {
+        text-align: justify;
+    }
+
+    main .grid-container-2 {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        align-items: center;
+    }
+
+    main .grid-container-1 #card-1 {
+        width: 1fr;
+    }
+
+    .calendar {
+        width: 100%;
+        top: 0;
+    }
+
 }

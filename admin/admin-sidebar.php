@@ -10,7 +10,6 @@
         <!-- <link rel="stylesheet" type="text/css" href="sidebar_style.css?v=<?php echo time(); ?>"> -->
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 		<link rel="shortcut icon" href="../assets/logo/STI-LOGO.png" />
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <title>EMVS</title>
     </head>
 	<style>
@@ -199,70 +198,6 @@
 			line-height: 50px;
 			text-align: center;
 		}
-
-
-		.button {
-			z-index: 10;
-			line-height: 1;
-			text-decoration: none;
-			display: inline-flex;
-			align-items: center;
-			gap: .75rem;
-			background-color: #0079c2;
-			color: #ffffff;
-			border-radius: 10rem;
-			font-weight: 600;
-			padding: .75rem 1.5rem;
-			padding-left: 20px;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			transition: background-color .3s;
-			position: fixed;
-			bottom:60px;
-			right:70px;
-		}
-		
-		.button__icon-wrapper {
-			flex-shrink: 0;
-			width: 25px;
-			height: 25px;
-			position: relative;
-			color: rgb(139, 128, 0);
-			background-color: #fff;
-			border-radius: 50%;
-			display: grid;
-			place-items: center;
-			overflow: hidden;
-		}
-		
-		.button:hover {
-			background-color: #d9e901;
-		}
-		
-		.button:hover .button__icon-wrapper {
-			color: #0079c2;
-		}
-		
-		.button__icon-svg--copy {
-			position: absolute;
-			transform: translate(-150%, 150%);
-		}
-		
-		.button:hover .button__icon-svg:first-child {
-			transition: transform .3s ease-in-out;
-			transform: translate(150%, -150%);
-		}
-		
-		.button:hover .button__icon-svg--copy {
-			transition: transform .3s ease-in-out .1s;
-			transform: translate(0);
-		}
-
-		a:hover{
-			text-decoration: none;
-		}
-
 		
 
 	</style>
@@ -277,7 +212,7 @@
 		</div>
 		<ul class="nav_list">
 			<li>
-				<a href="/admin/">
+				<a href="index">
                     <i class='bx bx-home-alt'></i>
 					<span class="links_name">Homepage</span>
 				</a>
@@ -292,6 +227,12 @@
 				<a href="admin-voters">
                     <i class='bx bx-group'></i>
 					<span class="links_name">Voters</span>
+				</a>
+			</li>
+			<li>
+				<a href="admin-tally">
+					<i class='bx bx-poll'></i>
+					<span class="links_name">Vote Tally</span>
 				</a>
 			</li>
 			<li>
@@ -315,10 +256,11 @@
 		let btn = document.querySelector("#btn");
 		let sidebar = document.querySelector(".sidebar");
 
-		btn.onclick = function () {
-			sidebar.classList.toggle("active");
-		}
+		sidebar.classList.add("active");
 
+		btn.onclick = function () {
+		sidebar.classList.toggle("active");
+		};
 	</script>
 </body>
 </html>

@@ -1,23 +1,11 @@
-@import url("sidebar_style.css");
 
 body {
     background-image: url("assets/images/background.jpg");
     overflow-y: auto;
-}
-
-.main-content {
-    position: absolute;
-    top: 0;
-    left: 80px;
-    transition: all 0.5s ease;
-    width: calc(100% - 78px);
-    padding: 2rem;
-    
-}
-
-.sidebar.active ~ .main-content {
-    width: calc(100% - 240px);
-    left: 240px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
 
 .button {
@@ -28,7 +16,7 @@ body {
     border-radius: 10px;
 }
 
-.main-content .student-profile .card .card-header .profile-pic {
+main .student-profile .card .card-header .profile-pic {
     width: 150px;
     height: 150px;
     object-fit: cover;

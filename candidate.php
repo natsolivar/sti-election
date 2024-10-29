@@ -17,496 +17,85 @@
         <title>EMVS</title>
     </head>
     <body>
-    <div class="main-content">
-        <div class="header">
-            <p>Running Candidates</p>
-        </div>
-        <header>
-            <h1>For PRESIDENT</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-                <?php 
+    <main>
+    <div class="header">
+    <p>Running Candidates</p>
+</div>
+<div class="main">
+<?php 
+    $qry = "SELECT p.position_name, c.candidate_id, i.image, u.user_name, v.voter_grade, v.program_code 
+            FROM position p
+            LEFT JOIN candidate c ON p.position_id = c.position_id AND c.status = 'Accepted'
+            LEFT JOIN images i ON c.candidate_id = i.candidate_id 
+            LEFT JOIN voters v ON c.voter_id = v.voter_id 
+            LEFT JOIN users u ON v.user_id = u.user_id 
+            ORDER BY p.position_rank ASC";
 
-                    $qry1 = "SELECT * FROM candidate c
-                    LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                    INNER JOIN position p ON c.position_id = p.position_id 
-                    INNER JOIN voters v ON c.voter_id = v.voter_id 
-                    INNER JOIN users u ON v.user_id = u.user_id 
-                    WHERE c.position_id = 'PRES' AND c.status = 'Accepted'";
-                    $result = mysqli_query($conn, $qry1);
+    $result = mysqli_query($conn, $qry);
 
-                    if($result->num_rows > 0) {
-                        while ($row = $result->fetch_assoc()) {
-                            $img1 = $row['image'];
-                            $user_name = $row['user_name'];
-                            $pos = $row['position_name'];
-                            $candidate_id = $row['candidate_id'];
+    if ($result->num_rows > 0) {
+        $candidates_by_position = [];
 
-                            $user_name = str_replace("(Student)", "", $user_name);
-                            $name_parts = explode(", ", trim($user_name));
-                            if (count($name_parts) == 2) {
-                                $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                            } else {
-                                $formatted_name = $user_name;
-                            }
-                            
-                            echo "<div class='flex-item'>";
-                            if (isset($img1) && !empty($img1)) {
-                                $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                                echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                            } else {
-                                echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                            }
-                            echo "<div class='details'>
-                                    <h2>$formatted_name</h2>
-                                    <p><b>$pos</b></p>
-                                </div>";
-                            echo "</div>";
-                        }
-                    } else {
-                        echo "No Candidate";
-                    }?>
-        </div>
-        </main> 
-        <header>
-            <h1>For VICE PRESIDENT</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
+        while ($row = $result->fetch_assoc()) {
+            $img = $row['image'];
+            $user_name = $row['user_name'];
+            $pos = $row['position_name'];
+            $candidate_id = $row['candidate_id'];
+            $v_grade = $row['voter_grade'];
+            $program = $row['program_code'];
 
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = 'TERVP' OR c.position_id = 'SHVP' AND c.status = 'Accepted'";
-                $result = mysqli_query($conn, $qry2);
+            if (!empty($user_name)) {
+                $user_name = str_replace("(Student)", "", $user_name);
+                $name_parts = explode(", ", trim($user_name));
+                $formatted_name = (count($name_parts) == 2) ? $name_parts[1] . " " . $name_parts[0] : $user_name;
+            } else {
+                $formatted_name = null;
+            }
 
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
+            $candidates_by_position[$pos][] = [
+                'candidate_id' => $candidate_id,
+                'formatted_name' => $formatted_name,
+                'program' => $program,
+                'v_grade' => $v_grade,
+                'image' => $img
+            ];
+        }
 
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
+        foreach ($candidates_by_position as $position => $candidates) {
+            echo "<header>
+                    <h1>For $position</h1>
+                  </header>";
+            echo "<div class='flex-container'>"; 
 
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For SECRETARY</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
+            if (!empty($candidates[0]['candidate_id'])) {
+                foreach ($candidates as $candidate) {
+                    $img = isset($candidate['image']) ? 'data:image/jpeg;base64,' . base64_encode($candidate['image']) : 'assets/images/profile.png';
+                    $candidate_id = $candidate['candidate_id'];
+                    $formatted_name = $candidate['formatted_name'];
+                    $program = $candidate['program'];
+                    $v_grade = $candidate['v_grade'];
 
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                 WHERE c.position_id = 'EXTSEC' OR c.position_id = 'INTSEC' AND c.status = 'Accepted'";
-                $result = mysqli_query($conn, $qry2);
+                    echo "<div class='flex-item'>"; 
+                    echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$img' alt='Image'></a>";
+                    echo "<div class='details'>
+                            <h2>$formatted_name</h2>
+                            <p>{$program} {$v_grade}</p>
+                          </div>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p>No Candidates for this position</p>";
+            }
 
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For TREASURER</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = 'TREA' AND c.status = 'Accepted'";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For AUDITOR</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = 'AUD' AND c.status = 'Accepted'";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For PUBLIC INFORMATION OFFICER</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = 'PIO' AND c.status = 'Accepted'";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For GRADE 11 REPRESENTATIVES</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = '11ABMREP' OR c.position_id = '11STEMREP' OR c.position_id = '11HUMSSREP' OR c.position_id = '11CUARTREP' OR c.position_id = '11MAWDREP' AND c.status = 'Accepted'
-                ORDER BY c.position_id";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For GRADE 12 REPRESENTATIVES</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = '12ABMREP' OR c.position_id = '12STEMREP' OR c.position_id = '12HUMSSREP' OR c.position_id = '12CUARTREP' OR c.position_id = '12MAWDREP' AND c.status = 'Accepted'
-                ORDER BY c.position_id";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For BSTM REPRESENTATIVES</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE (c.position_id = 'BSTM1AREP' OR c.position_id = 'BSTM2AREP' OR c.position_id = 'BSTM2BREP' OR c.position_id = 'BSTM3REP' OR c.position_id = 'BSTM4REP') 
-                AND c.status = 'Accepted'
-                ORDER BY c.position_id";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-        <header>
-            <h1>For BSIS REPRESENTATIVES</h1>
-        </header>
-        <main>
-        <div class="flex-container">
-            <?php 
-
-                $qry2 = "SELECT * FROM candidate c 
-                LEFT JOIN images i ON c.candidate_id = i.candidate_id 
-                INNER JOIN position p ON c.position_id = p.position_id 
-                INNER JOIN voters v ON c.voter_id = v.voter_id 
-                INNER JOIN users u ON v.user_id = u.user_id 
-                WHERE c.position_id = 'BSIS1REP' OR c.position_id = 'BSIS2REP' OR c.position_id = 'BSIS3REP' OR c.position_id = 'BSIS4REP' AND c.status = 'Accepted'
-                ORDER BY c.position_id";
-                $result = mysqli_query($conn, $qry2);
-
-                if($result->num_rows > 0) {
-                    while ($row = $result->fetch_assoc()) {
-                        $img1 = $row['image'];
-                        $user_name = $row['user_name'];
-                        $pos = $row['position_name'];
-                        $candidate_id = $row['candidate_id'];
-
-                        $user_name = str_replace("(Student)", "", $user_name);
-                        $name_parts = explode(", ", trim($user_name));
-                        if (count($name_parts) == 2) {
-                            $formatted_name = $name_parts[1] . " " . $name_parts[0];
-                        } else {
-                            $formatted_name = $user_name;
-                        }
-
-                        echo "<div class='flex-item'>";
-                        if (isset($img1) && !empty($img1)) {
-                            $image_url = 'data:image/jpeg;base64,' . base64_encode($img1);
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='$image_url' alt='Image 1'></a>";
-                        } else {
-                            echo "<a href='candidate_prof.php?id=$candidate_id'><img src='assets/images/profile.png' alt='Image 1' value='$candidate_id'></a>";
-                        }
-                        echo "<div class='details'>
-                                <h2>$formatted_name</h2>
-                                <p><b>$pos</b></p>
-                            </div>";
-                        echo "</div>";
-                    }
-                } else {
-                    echo "No Candidate";
-                }?>
-            </div>
-        </main> 
-    </div>
+            echo "</div>";
+        }
+    } else {
+        echo "No Candidates";
+    }
+    ?>
+</div>
+        
+    </main>
     </body>
     <script>
         document.addEventListener('DOMContentLoaded', function () {

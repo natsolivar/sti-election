@@ -42,7 +42,7 @@
         <title>EMVS</title>
     </head>
     <body>
-    <div class="main-content">
+    <main>
         <div class="student-profile py-4">
         <div class="container">
             <div class="row">
@@ -183,7 +183,7 @@
                         } else {
 
                             if ($currentDate <= $startDate) {
-                                echo "Candidacy starts in {$daysRemaining} day/s";
+                                echo "Registration of Candidacy starts in {$daysRemaining} day/s";
                             } elseif ($currentDate > $endDate) {
                                 echo "Candidacy period has ended.";
                             } else { 
@@ -334,7 +334,7 @@
             </div>
         </div>
         </div>
-    </div>
+    </main>
     </body>
     <script>
     </script>

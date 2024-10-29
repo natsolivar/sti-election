@@ -1,37 +1,29 @@
-@import url("sidebar_style.css");
 
 body {
     background-image: url("assets/images/background.jpg");
     overflow-y: auto;
-}
-
-.main-content {
-    position: absolute;
-    top: 0;
-    left: 80px;
-    transition: all 0.5s ease;
-    width: calc(100% - 78px);
-    padding: 2rem;
-}
-
-.sidebar.active ~ .main-content {
-    width: calc(100% - 240px);
-    left: 240px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
 
 .header {
     width: 50%;
     font-size: 50px;   
+    > p {
+        border-bottom: 1px solid grey;
+    }
 }
 
 header {
     text-align: center;
     margin: 40px 0 20px; 
     font-size: 20px;
-    border-bottom: 1px solid;
+    border-bottom: 1px solid grey;
 }
 
-main {
+.main {
     display: flex;
     align-items: center;
     justify-content: center; 
@@ -58,7 +50,6 @@ main {
     margin: 2rem;
     text-align: center;
     border-radius: 8px;
-    position: relative; 
 }
 
 .flex-item img {

@@ -1,6 +1,5 @@
 <?php 
 session_start();
-include 'sidebar.php';
 include 'session.php';
 include 'db.php';
 
@@ -225,8 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <p>Input the correct informations as it wont be editable in the profile page.</p>
         </div>
         <div class="button-container">
-            <div id="form-error-message" class="error-message" style="display: none;">Password requirement not met</div>
-            <button type="submit" name="register_candidate" class="btn btn-primary">Register</button>
+            <button type="submit" name="register_candidate" class="button-37">Register</button>
         </div>
     </form>
 </div>

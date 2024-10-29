@@ -1,48 +1,50 @@
-@import url("sidebar_style.css");
 
 body {
-    background-image: url("assets/images/background.jpg");
     overflow-y: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: grid;
+    grid-template-columns: auto 1fr;
 }
 
-.main-content {
-    position: absolute;
-    top: 0;
-    left: 80px;
-    transition: all 0.5s ease;
-    width: calc(100% - 78px);
-    display: flex;
-    flex-wrap: wrap;
-    padding: 2rem;
-    
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    justify-content: space-around;
+    gap: 15px;
 }
 
-.sidebar.active ~ .main-content {
-    width: calc(100% - 240px);
-    left: 240px;
+.grid-container .grid-card {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    padding: 2em;
+    border: 1px solid black;
 }
 
-.main-content .item {
-    min-height: 50px; 
-    text-align: left;
-    padding: 2rem;
-    border-radius: 5px;
-    margin: 5px;
-    flex: auto;
-}
-
-.main-content #item-1 {
-    flex-basis: 50%;
-    height: 100px; 
-}
-
-.main-content #item-2 {
-    flex-basis: 40%;
-    height: 100px;
+.grid-container .grid-card .inner-card {
+    display: grid;
+    padding: 1em;
+    border: 1px solid black;
+    justify-content: center;
     align-items: center;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    > p {
+        padding: 0;
+        margin: 0;
+    }
 }
 
-.main-content #item-3 {
-    flex-basis: 100%; 
-    height: 80vh;
+.grid-container .grid-card #title {
+    grid-column: span 2;
+}
+
+.grid-container .grid-card #img-card img {
+    border-radius: 5px;
+}
+
+.grid-container .grid-card #img-details p {
+    padding: 1rem;
+    font-size: 1.5em;
 }

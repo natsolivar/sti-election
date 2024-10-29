@@ -18,6 +18,7 @@
         <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
         <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     </head>
     <body>
         <div class="main-content">
@@ -47,21 +48,23 @@
                         <tr>
                             <th scope="col">ID</th>
                             <th scope="col">Name</th>
-                            <th scope="col">Grade/Year</th>
                             <th scope="col">Program</th>
                             <th scope="col">Position</th>
-                            <th scope="col">Date Applied</th>
                             <th scope="col">Status</th>
+                            <th scope="col">Total Votes</th>
+                            <th scope="col">Date Applied</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php 
 
-                                $query = "SELECT c.candidate_id, p.position_name, u.user_name, v.program_code, v.voter_grade,  c.position_id, c.date_applied, c.status 
+                                $query = "SELECT c.candidate_id, p.position_name, u.user_name, v.program_code, v.voter_grade,  c.position_id, c.date_applied, c.status, vs.total_votes
                                 FROM users u 
                                 INNER JOIN voters v ON u.user_id = v.user_id
                                 INNER JOIN candidate c ON v.voter_id = c.voter_id
-                                LEFT JOIN position p ON c.position_id = p.position_id";
+                                LEFT JOIN votes vs ON c.candidate_id = vs.candidate_id
+                                LEFT JOIN position p ON c.position_id = p.position_id
+                                WHERE c.status IN ('Under Review', 'Accepted')";
                                 $result = mysqli_query($conn, $query);
 
                                 if ($result->num_rows > 0) {
@@ -74,6 +77,7 @@
                                     $program = $row['program_code'];
                                     $date = $row['date_applied'];
                                     $status = $row['status'];
+                                    $tvotes = $row['total_votes'];
 
                                     $dateTime = DateTime::createFromFormat('Y-m-d H:i:s', $date);
                                     $formattedDate = $dateTime ? $dateTime->format('m/d/Y h:i A') : 'N/A';
@@ -92,10 +96,8 @@
                                         echo "<tr class='clickable-row' data-position='$position_id' data-candidate-id='$c_id'>";
                                         echo "<th scope='row'>$c_id</th>";
                                         echo "<td>$usern</td>";
-                                        echo "<td>$ggrade</td>";
-                                        echo "<td>$program</td>";
+                                        echo "<td>$ggrade, $program</td>";
                                         echo "<td>$position</td>";
-                                        echo "<td>$formattedDate</td>";
 
                                         if (!($status == 'Under Review' || $status == null)) {
 
@@ -103,9 +105,13 @@
 
                                                 echo "<td style='color: green;'>$status</td>";
 
+                                                echo "<td style='text-align: center'>$tvotes</td>";
+
                                             } elseif ($status == 'Rejected') {
 
                                                 echo "<td style='color: red;'>$status</td>";
+
+                                                echo "<td style='text-align: center;'>N/A</td>";
 
                                             } else {
 
@@ -128,8 +134,13 @@
                                                     <button type='submit' id='btn' class='btn btn-danger' onclick='event.stopPropagation();'>Reject</button>
                                                 </form>
                                             </td>";
+
+                                            echo "<td style='text-align: center;'>N/A</td>";
                                         }
+
+                                        echo "<td>$formattedDate</td>";
                                         echo "</tr>";
+
                                     } 
 
                                 } else {

@@ -1,8 +1,25 @@
 <?php
+    include 'session.php';
+    session_start();
+
+    if (isset($_SESSION['userID'])) {
+        header('Location: homepage');
+        exit();
+    } 
+
     if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
         echo '<p>Your session has expired due to inactivity. Please log in again.</p>';
     } 
+    if (isset($_SESSION['error_message'])) {
+        $error_message = $_SESSION['error_message'];
+        unset($_SESSION['error_message']);
+    } else {
+        $error_message = '';
+    }
 
+    header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
     
 ?>
 <!DOCTYPE html>
@@ -13,9 +30,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="shortcut icon" href="assets/logo/STI-LOGO.png" />
-    <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
     <title>Login | EMVS</title>
     <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 
         * {
             margin: 0;
@@ -24,18 +42,55 @@
         }
 
         body {
-            background-image: url("assets/images/index-background2.jpg");
+            font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            scroll-snap-type: x mandatory;
+            scroll-behavior: smooth;
+        }
+
+        .carousel-slide {
+            flex: 0 0 100%;
             background-repeat: no-repeat;
             background-size: cover;
             background-attachment: fixed;
             background-position: 0px 60px;
-            font-family: Arial, sans-serif;
+            scroll-snap-align: start;
+        }
+
+        .carousel-slide:nth-child(1) {
+            background-image: url('assets/images/index-background2.jpg');
+        }
+
+        .carousel-slide:nth-child(2) {
+            background-image: url('assets/images/index-background.jpg');
+        }
+
+        .carousel-slide:nth-child(3) {
+            background-image: url('assets/images/index-background3.jfif');
+        }
+
+        .carousel-slide:nth-child(4) {
+            background-image: url('assets/images/index-background4.jpg');
         }
 
         .site-header {
             padding: .5em 1em;
             background-color: #0079c2;
             width: 100%;
+        }
+
+        #top {
+            background-color: #E4D00A;
+            padding: 0.3em;
         }
 
         .site-header::after {
@@ -55,7 +110,7 @@
         }
 
         .site-identity img {
-            max-width: 55px;
+            max-width: 150px;
             margin-right: 10px;
             border-radius: 5px;
         }
@@ -73,13 +128,13 @@
         }
 
         .logo img {
-            max-width: 55px;
+            max-width: 150px;
             height: auto;
             border-radius: 5px;
         }
 
         h2 {
-            margin: 20px 0;
+            margin: 15px 0;
             font-size: 1.5em;
         }
 
@@ -128,47 +183,12 @@
             color: #777;
         }
 
-        .modal {
-    display: block; 
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
-}
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 15% auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-            max-width: 500px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        .error-message {
+            color: red;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 15px;
         }
-
-        .modal-content p {
-            font-size: 20px;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
 
         @media (max-width: 768px) {
             .site-identity {
@@ -205,47 +225,63 @@
     </style>
 </head>
 <body>
+    <header class="site-header" id="top">
+    </header>
     <header class="site-header">
         <div class="site-identity">
-            <a onclick="window.open('admincheck.php')"><img src="assets/logo/STI-LOGO.png" alt="EMVS" /></a>
-            <h1>Election Management and Voting System</h1>
+            <img src="assets/logo/emvs-sti1.png" alt="EMVS" /></a>
         </div>  
     </header>
+    <div class="carousel">
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+        <div class="carousel-slide"></div>
+    </div>
     <div class="login-container">
         <div class="logo">
-            <img src="assets/logo/STI-LOGO.png" alt="STI Logo">
+            <img src="assets/logo/EMVS-LOGO.png" alt="STI Logo">
         </div>
         <h2>Login now</h2>
+        <?php if ($error_message): ?>
+            <div class="error-message" style="color: red; text-align: center; margin-bottom: 10px;">
+                <?php echo htmlspecialchars($error_message); ?>
+            </div>
+        <?php endif; ?>
         <button class="login-button" onclick="location.href='signin.php'">
             <img src="assets/logo/microsoft-logo.png" alt="Microsoft Logo" />
             <span>SIGN IN WITH YOUR STI O365 ACCOUNT</span>
         </button>
+        <p style="font-size: 12px;"><a href="admincheck.php">Admin Login</a></p>
         <footer>
             <p>&copy; STI Education Services Group, Inc. All Rights Reserved.</p>
         </footer>
     </div>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Announcement</h2>
-            <p>We're excited to share our system <strong>Election Management and Voting System</strong> with you, but please note that it's still in its early stages of development. The design, layout, and content may evolve as we continue to refine the user experience.</p>
-            <p>For the most optimal viewing experience, we recommend using a desktop or laptop computer. While we're working on making our system fully mobile-friendly, there may be some limitations or visual inconsistencies on smaller screens at this time.</p>
-            <p>Thank you for your understanding and patience.</p>
-        </div>
-    </div>
-    <script>
-        var modal = document.getElementById('myModal');
-        var span = document.getElementsByClassName('close')[0];
+<script>
+    window.onload = function() {
+        if (sessionStorage.getItem('loggedIn') === 'true') {
+            window.location.href = 'homepage';
+        }
+    };
 
-        span.onclick = function() {
-            modal.style.display = 'none';
+    let currentIndex = 0;
+        const slides = document.querySelectorAll('.carousel-slide');
+        const slideCount = slides.length;
+
+        function showNextSlide() {
+        currentIndex++;
+        
+        if (currentIndex >= slideCount) {
+            currentIndex = 0; 
         }
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
-            }
+        document.querySelector('.carousel').scrollTo({
+            left: currentIndex * slides[0].clientWidth,
+            behavior: 'smooth'
+        });
         }
-    </script>
+
+    setInterval(showNextSlide, 5000);
+</script>
 </body>
 </html>

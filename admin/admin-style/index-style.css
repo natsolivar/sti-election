@@ -46,7 +46,6 @@ body {
     padding: 2rem;
     border-radius: 5px;
     margin: 5px;
-    background-color: white;
 }
 
 
@@ -78,14 +77,14 @@ body {
 }
 
 .main-content #item-3{
-    width: 40%;
-    height: 400px;
+    flex-grow: 1;
+    width: 500px;
 }
 
 .main-content #item-4{
+    width: 500px;
     flex-grow: 1;
-    width: 50%;
-    height: 400px;
+    max-height: 50%;
 }
 
 .main-content #item-5{

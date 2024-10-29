@@ -1,5 +1,4 @@
 <?php 
-
     include 'db.php';
 
 
@@ -10,19 +9,33 @@
     $e_start = $rrow['date_start'];
     $e_end = $rrow['date_end'];
 
-    $voteQuery = "SELECT DATE(vote_date) AS vote_date, COUNT('r_vote_id') AS total_votes FROM registered_votes WHERE vote_date BETWEEN '$e_start' AND '$e_end' GROUP BY DATE(vote_date)";
+    $voteQuery = "SELECT DATE(vote_date) AS vote_date, COUNT(r_vote_id) AS total_votes 
+                  FROM registered_votes 
+                  GROUP BY DATE(vote_date)";
     $voteResult = $conn->query($voteQuery);
 
+    $voteData = [];
+    while ($row = $voteResult->fetch_assoc()) {
+        $voteData[$row['vote_date']] = $row['total_votes'];
+    }
+
+    $period = new DatePeriod(
+        new DateTime($e_start),
+        new DateInterval('P1D'), 
+        (new DateTime($e_end))->modify('+1 day')
+    );
 
     $dates = [];
     $totalVotes = [];
 
-    while ($row = $voteResult->fetch_assoc()) {
-        $dates[] = $row['vote_date'];
-        $totalVotes[] = $row['total_votes'];
+    foreach ($period as $date) {
+        $formattedDate = $date->format('Y-m-d');
+        $dates[] = $formattedDate;
+        $totalVotes[] = isset($voteData[$formattedDate]) ? $voteData[$formattedDate] : 0;
     }
 
 ?>
+
 <script>
     var dates = <?php echo json_encode($dates); ?>;
     var totalVotes = <?php echo json_encode($totalVotes); ?>;

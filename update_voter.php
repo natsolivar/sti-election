@@ -61,10 +61,14 @@ if (isset($_POST['register'])) {
         $row = mysqli_fetch_assoc($result);
         $user_id = $row['user_id'];
 
-        $qry3 = "INSERT INTO voters (user_id, voter_gender, voter_num, voter_grade, program_code, voter_club, academic_year, date_registered, vote_status, status) VALUES ('$user_id', '$voter_gender', '$voter_num', '$voter_grade', '$voter_program', '$voter_club', '$schoolYear', NOW(), 'NO', 'ACTIVE')";
+        $qry3 = "UPDATE voters SET voter_grade = '$voter_grade', program_code = '$voter_program', voter_club = '$voter_club', academic_year = '$schoolYear', vote_status = NO', status = 'ACTIVE' WHERE user_id = '$user_id'";
         $result_insert = mysqli_query($conn, $qry3);
 
-            if ($result_insert) {
+        if ($result_insert) {
+            $qry4 = "UPDATE users SET user_pw = '$voter_pass_hashed' WHERE user_email = '$voter_email'";
+            $result_update = mysqli_query($conn, $qry4);
+
+            if ($result_update) {
                 $qry5 = "SELECT voter_id FROM voters WHERE user_id = '$userID'";
                 $result_select = mysqli_query($conn, $qry5);
                 if ($result_select->num_rows > 0) { 
@@ -75,6 +79,9 @@ if (isset($_POST['register'])) {
                 }
                 header('location: homepage.php');
                 exit;
+            } else {
+                echo 'Error updating password: ' . mysqli_error($conn);
+            }
         } else {
             echo 'Error inserting voter: ' . mysqli_error($conn);
         }
@@ -320,6 +327,27 @@ if (isset($_POST['register'])) {
                                     }
                                 ?>
                             </select>
+                        </div>
+                        <div class="input-box">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" placeholder="Enter password" name="pass" required>
+                        </div>
+                        <div class="input-box" id="confirm-pass">
+                            <label for="confirm-password">Confirm Password</label>
+                            <input type="password" id="confirm-password" placeholder="Confirm password" name="confirm-pass" required disabled>
+                        </div>
+                        <div class="input-box" id="confirm-pass">
+                            <div id="validation-message" class="validation-message">
+                                <span id="length" class="invalid">At least 8 characters</span>
+                                <span id="uppercase" class="invalid">At least 1 uppercase letter</span>
+                                <span id="special" class="invalid">At least 1 special character</span>
+                                <span id="number" class="invalid">At least 1 number</span>
+                            </div>
+                        </div>
+                        <div class="input-box" id="confirm-pass">
+                            <div id="confirm-password-validation-message" class="validation-message">
+                                <span id="confirm-message" class="invalid">Passwords do not match</span>
+                            </div>
                         </div>
 
                         <span class="gender-title">Gender</span>

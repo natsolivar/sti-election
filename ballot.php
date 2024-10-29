@@ -59,16 +59,18 @@
             <h1>UNOFFICIAL E-BALLOT OF STI COLLEGE ILIGAN</h1>
         </div> 
     </header>
-    <div class="header-content">
-        <div class="box" id="box1"><h3>STI College Council of Leaders Election</h3>
-            <p>Quezon Avenue corner Mabini Street, Iligan City 9200</p>
-            <p>Type: <strong>COL</strong></p>
+    <div class="grid-content">
+        <div class="grid" id="grid-1">
+            <h3>STI College Council of Leaders Election</h3>
+            <p>Quezon Avenue Corner Mabini Street, Iligan City 9200</p>
+            <br>
             <h3>INSTRUCTIONS FOR VOTING</h3>
             <p><strong>(1) Select the Appropriate Number of Candidates:</strong> For example, if the system allows you to vote for two candidates, make sure you choose exactly two, not more or less.</p>
             <p><strong>(2) Candidate Selection by Grade or Program:</strong> Vote a candidate based on your Grade/Year level and Academic Program.</p>
             <p><strong>(3) Review Your Choices Carefully:</strong> Thoroughly review all available options and candidates before making your selection.</p>
         </div>
-        <div class="box" id="box2"><?php 
+        <div class="grid" id="grid-2">
+        <?php 
             $qry1 = "SELECT *, DATE(date_registered) AS date_registered FROM voters WHERE voter_id = (SELECT voter_id FROM voters WHERE user_id = '".$_SESSION['userID']."')";
             $result = $conn->query($qry1);
 
@@ -83,7 +85,7 @@
                     $voter_registered = $row['date_registered'];
                     
                     echo "<p>Date: $formattedDate</p>";
-                    echo "<p><br></p>";
+                    echo "<p>Type: <strong>COL</strong></p>";
                     echo "<p>Voter ID: <strong>$voter_id</strong></p>";
                     echo "<p>Name: <strong>$_SESSION[displayName]</strong></p>";
                     echo "<p>Gender: <strong>$voter_gender</strong></p>";
@@ -96,8 +98,9 @@
                 echo "NO DATA AVAILABLE";
             }
 
-        ?></div>
+        ?>
         </div>
+    </div>
         <div class="main-content">
         <form action="vote_count.php" method="post" id="vote">
             <div class="box" ><h1>PRESIDENT / Vote for 1</h1></div>
@@ -656,20 +659,7 @@
                     
                     ?>
                 </div>
-                <button class="submit-ballot" id="scrollButton" name="vote" style="display: none;">
-                    <div>
-                        <div class="pencil"></div>
-                        <div class="folder">
-                            <div class="top">
-                                <svg viewBox="0 0 24 27">
-                                    <path d="M1,0 L23,0 C23.5522847,-1.01453063e-16 24,0.44771525 24,1 L24,8.17157288 C24,8.70200585 23.7892863,9.21071368 23.4142136,9.58578644 L20.5857864,12.4142136 C20.2107137,12.7892863 20,13.2979941 20,13.8284271 L20,26 C20,26.5522847 19.5522847,27 19,27 L1,27 C0.44771525,27 6.76353751e-17,26.5522847 0,26 L0,1 C-6.76353751e-17,0.44771525 0.44771525,1.01453063e-16 1,0 Z"></path>
-                                </svg>
-                            </div>
-                            <div class="paper"></div>
-                        </div>
-                    </div>
-                    Submit Ballot
-                </button>
+                <button class="responsive-submit" id="sub-button" name="vote" style="">Submit Vote</button>
         </form>
         </div>  
     </div> 
@@ -705,19 +695,7 @@
             });
         });
 
-        window.addEventListener('scroll', function() {
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            
-            if (scrollPosition >= documentHeight) {
-                document.getElementById('scrollButton').style.display = 'block';
-            } else {
-                document.getElementById('scrollButton').style.display = 'none';
-            }
-        });
-
-
-         window.addEventListener('load', function() {
+      window.addEventListener('load', function() {
         setTimeout(function() {
             const loading = document.getElementById('loading');
             const content = document.getElementById('content');

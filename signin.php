@@ -64,16 +64,58 @@ if (!isset($_GET['code'])) {
         error_log('Failed to fetch profile picture');
     }
 
-    $qry1 = "SELECT * FROM users WHERE user_email = '$userEmail'";
+    $qry1 = "SELECT u.user_email, u.user_id, u.session_token, v.status FROM users u INNER JOIN voters v ON u.user_id = v.user_id WHERE u.user_email = '$userEmail'";
     $results = mysqli_query($db, $qry1);
     if (mysqli_num_rows($results) == 1) {
+        $row = mysqli_fetch_assoc($results);
+        $userid = $row['user_id'];
+        $token = $row['session_token'];
+        $status = $row['status'];
+
+        if (!empty($token)) {
+            $_SESSION['error_message'] = "User already logged in";
+            header('Location: ' . ($_SESSION['redirect_to'] ?? 'index'));
+            exit();
+        }
+        
+        $subqry = "SELECT user_id FROM voters WHERE user_id = '$userid'";
+        $qryres = mysqli_query($db, $subqry);
+            if (mysqli_num_rows($qryres) == 0) {
+                $qryrow = mysqli_fetch_assoc($qryres);
+                header('location: register');
+                exit();
+            }
+
+        $inactive_date = date('Y-m-d', strtotime('-8 months'));
+        $subqry2 = "SELECT date_registered FROM voters WHERE user_id = '$userid'";
+        $qry2res = mysqli_query($db, $subqry2);
+            if (mysqli_num_rows($qry2res) == 1) {
+                $qry2row = mysqli_fetch_assoc($qry2res);
+                $date_reg = $qry2row['date_registered'];
+
+                if ($date_reg <= $inactive_date) {
+                    $subqry3 = "UPDATE voters SET status = 'INACTIVE' WHERE user_id = '$userid'";
+                    $qry3res = mysqli_query($db, $subqry3);
+                }
+            }
+        
+        $session_token = bin2hex(random_bytes(32)); 
+        $_SESSION['session_token'] = $session_token;
+
+        $qry2 = "UPDATE users SET session_token = '$session_token' WHERE user_email = '$userEmail'";
+        mysqli_query($db, $qry2);
+
         $_SESSION['userEmail'] = $userEmail;
         $_SESSION['displayName'] = $displayName;
         $_SESSION['userName'] = $userName;
         $_SESSION['user_profile_pic'] = $profile_pic_data;
         $_SESSION['userID'] = $user['id'];
+
         if (isset($_SESSION['userID'])) {
-            header('Location: ' . ($_SESSION['redirect_to'] ?? 'homepage.php'));
+            header('Location: ' . ($_SESSION['redirect_to'] ?? 'homepage'));
+            exit();
+        } else {
+            header('Location: index?error=invalid_credentials');
             exit();
         }
     } else {
@@ -84,7 +126,7 @@ if (!isset($_GET['code'])) {
         $_SESSION['userName'] = $userName;
         $_SESSION['user_profile_pic'] = $profile_pic_data;
         $_SESSION['userID'] = $user['id'];
-        header('location: register.php');
+        header('location: register');
     }
 
 
@@ -92,3 +134,9 @@ if (!isset($_GET['code'])) {
     echo 'Invalid state or code';
 }
 ?>
+<script>
+
+    if (typeof(Storage) !== "undefined") {
+        sessionStorage.setItem('loggedIn', 'true');
+    }
+</script>
