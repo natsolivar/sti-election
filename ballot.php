@@ -5,10 +5,27 @@
     require 'config.php';
     include 'check_login.php';
     
+    date_default_timezone_set('Asia/Hong_Kong');
 
     $dateTime = new DateTime();
-
     $formattedDate = $dateTime->format('Y-m-d');
+
+    function getSchoolYear($currentDate) {
+        $currentMonth = (int) date('m', strtotime($currentDate));
+        $currentYear = (int) date('Y', strtotime($currentDate));
+        
+        if ($currentMonth >= 8) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        return "$startYear-$endYear";
+        }
+    
+    $currentDate = date('Y-m-d');
+    $schoolYear = getSchoolYear($currentDate);
 
     $query1 = "SELECT * FROM voters WHERE user_id = '$_SESSION[userID]'";
     $result = mysqli_query($conn, $query1);
@@ -80,7 +97,6 @@
                     $voter_gender = $row['voter_gender'];
                     $voter_grade = $row['voter_grade'];
                     $program = $row['program_code'];
-                    $voter_club = $row['voter_club'];
                     $academic_yr = $row['academic_year'];
                     $voter_registered = $row['date_registered'];
                     
@@ -90,7 +106,6 @@
                     echo "<p>Name: <strong>$_SESSION[displayName]</strong></p>";
                     echo "<p>Gender: <strong>$voter_gender</strong></p>";
                     echo "<p>Program: <strong>$voter_grade $program</strong></p>";
-                    echo "<p>Club: <strong>$voter_club</strong></p>";
                     echo "<p>Academic Year: <strong>$academic_yr</strong></p>";
                     echo "<p>Registration Date: <strong>$voter_registered</strong></p>";
                 } 
@@ -107,7 +122,7 @@
                 <div class="container">
                     <?php 
                         
-                        $qry2 = "SELECT u.user_name FROM candidate c INNER JOIN voters v ON c.voter_id = v.voter_id INNER JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES' AND c.status = 'Accepted'";
+                        $qry2 = "SELECT u.user_name FROM candidate c INNER JOIN voters v ON c.voter_id = v.voter_id INNER JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PRES' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry2);
 
                         if ($result->num_rows > 0) {
@@ -128,7 +143,7 @@
 
                         $disable_vote = (($voter_grade == 'g11' || $voter_grade == 'g12'));
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TERVP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TERVP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -152,7 +167,7 @@
                         $disable_vote = (!($voter_grade == 'g11' || $voter_grade == 'g12'));
                         $disabled = $disable_vote ? 'disabled' : '';
 
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'SHVP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'SHVP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -170,7 +185,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'INTSEC' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'INTSEC' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -188,7 +203,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'EXTSEC' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'EXTSEC' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear' ";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -206,7 +221,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TREA' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'TREA' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -224,7 +239,7 @@
                 <div class="container">
                 <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'AUD' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'AUD' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -242,7 +257,7 @@
                 <div class="container">
                     <?php 
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PIO' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'PIO' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -267,7 +282,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'ABM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11ABMREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11ABMREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -288,7 +303,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'HUMSS'));
                         $disabled = $disable_vote ? 'disabled' : '';
 
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11HUMSSREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11HUMSSREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -309,7 +324,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'STEM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11STEMREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11STEMREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -330,7 +345,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'CUART'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11CUARTREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11CUARTREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -351,7 +366,7 @@
                         $disable_vote = (!($voter_grade == 'g11' && $voter_program == 'MAWD'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11MAWDREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '11MAWDREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -372,7 +387,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'ABM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12ABMREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12ABMREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -393,7 +408,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'HUMSS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12HUMSSREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12HUMSSREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -414,7 +429,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'STEM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12STEMREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12STEMREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -435,7 +450,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'CUART'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12SCUARTREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12SCUARTREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -456,7 +471,7 @@
                         $disable_vote = (!($voter_grade == 'g12' && $voter_program == 'MAWD'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12MAWDREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = '12MAWDREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -477,7 +492,7 @@
                         $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1AREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM1AREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -498,7 +513,7 @@
                         $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2AREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2AREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -519,7 +534,7 @@
                         $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2BREP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM2BREP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -540,7 +555,7 @@
                         $disable_vote = (!($voter_grade == '3rd year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
 
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM3REP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM3REP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -561,7 +576,7 @@
                         $disable_vote = (!($voter_grade == '4th year' && $voter_program == 'BSTM'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM4REP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSTM4REP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -582,7 +597,7 @@
                         $disable_vote = (!($voter_grade == '1st year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS1REP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS1REP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -603,7 +618,7 @@
                         $disable_vote = (!($voter_grade == '2nd year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS2REP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS2REP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -624,7 +639,7 @@
                         $disable_vote = (!($voter_grade == '3rd year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS3REP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS3REP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {
@@ -645,7 +660,7 @@
                         $disable_vote = (!($voter_grade == '4th year' && $voter_program == 'BSIS'));
                         $disabled = $disable_vote ? 'disabled' : '';
                         
-                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS4REP' AND c.status = 'Accepted'";
+                        $qry3 = "SELECT u.user_name FROM candidate c JOIN voters v ON c.voter_id = v.voter_id JOIN users u ON v.user_id = u.user_id WHERE c.position_id = 'BSIS4REP' AND c.status = 'Accepted' AND c.academic_year = '$schoolYear'";
                         $result = mysqli_query($conn, $qry3);
 
                         if ($result->num_rows > 0) {

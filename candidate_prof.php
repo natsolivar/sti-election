@@ -16,7 +16,7 @@
             $candidate_id = $_GET['id'];
             
 
-            $query = "SELECT u.user_name, v.voter_grade, v.program_code, v.voter_gender, v.voter_club, c.candidate_id, c.candidate_details, c.platform, c.party_code, p.position_name, i.image, v.academic_year, v.voter_id
+            $query = "SELECT u.user_name, v.voter_grade, v.program_code, v.voter_gender, c.candidate_id, c.candidate_details, c.platform, c.party_code, p.position_name, i.image, v.academic_year, v.voter_id
               FROM users u
               INNER JOIN voters v ON u.user_id = v.user_id
               INNER JOIN candidate c ON v.voter_id = c.voter_id
@@ -32,7 +32,6 @@
                     $grade = $row['voter_grade'];
                     $prof = $row['image'];
                     $program = $row['program_code'];
-                    $club = $row['voter_club'];
                     $gender = $row['voter_gender'];
                     $can_id = $row['candidate_id'];
                     $can_details = $row['candidate_details'];
@@ -195,19 +194,9 @@
                                 <td><?php echo $gender; ?></td>
                             </tr>
                             <tr>
-                                <th width="30%">Club</th>
-                                <td width="2%">:</td>
-                                <td><?php echo $club; ?></td>
-                            </tr>
-                            <tr>
                                 <th width="30%">Partylist</th>
                                 <td width="2%">:</td>
                                 <td><?php echo $can_party; ?></td>
-                            </tr>
-                            <tr>
-                                <th width="30%">Hobbies</th>
-                                <td width="2%">:</td>
-                                <td><?php echo $acadyr; ?></td>
                             </tr>
                             <tr>
                                 <th width="30%">Academic Year</th>

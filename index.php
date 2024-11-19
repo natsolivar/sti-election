@@ -3,7 +3,7 @@
     session_start();
 
     if (isset($_SESSION['userID'])) {
-        header('Location: homepage');
+        header('Location: selection');
         exit();
     } 
 
@@ -229,7 +229,7 @@
     </header>
     <header class="site-header">
         <div class="site-identity">
-            <img src="assets/logo/emvs-sti1.png" alt="EMVS" /></a>
+            <img src="assets/logo/sti-systems.png" alt="EMVS" /></a>
         </div>  
     </header>
     <div class="carousel">

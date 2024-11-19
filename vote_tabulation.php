@@ -4,6 +4,36 @@
     include 'db.php';
     include 'session.php';
 
+    date_default_timezone_set('Asia/Hong_Kong');
+
+    function getSchoolYear($currentDate) {
+        $currentMonth = (int) date('m', strtotime($currentDate));
+        $currentYear = (int) date('Y', strtotime($currentDate));
+        
+        if ($currentMonth >= 8) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        return "$startYear-$endYear";
+        }
+    
+    $currentDate = date('Y-m-d');
+    $schoolYear = getSchoolYear($currentDate);
+
+    $qry1 = "SELECT COUNT(r_vote_id) AS vote_count FROM registered_votes WHERE academic_year = '$schoolYear'";
+    $res = mysqli_query($conn, $qry1);
+
+    $row = mysqli_fetch_array($res);
+    $vote_count = $row['vote_count'];
+
+    if ($vote_count == 0) {
+        echo "<script>alert('Result is not yet ready');</script>";
+        echo "<script>location.href='javascript:history.go(-1)';</script>";
+    }
+
     $qry2 = "SELECT COUNT(DISTINCT voter_id) AS total FROM registered_votes";
     $ress = mysqli_query($conn, $qry2);
 
@@ -157,6 +187,10 @@
                                 if ($img1) {
                                     $image_url1 = 'data:image/jpeg;base64,' . base64_encode($img1);
                                     echo "<img src='$image_url1' alt='Candidate image' >";
+                                    echo "<p><strong>$formatted_name1</strong></p>";
+                                    echo "<p style='font-style: italic; font-size: 0.8rem;'>$partyy</p>";
+                                } else {
+                                    echo "<img src='assets/images/profile.png' alt='Image 1' alt='Candidate image'>";
                                     echo "<p><strong>$formatted_name1</strong></p>";
                                     echo "<p style='font-style: italic; font-size: 0.8rem;'>$partyy</p>";
                                 }

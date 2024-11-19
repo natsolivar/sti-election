@@ -56,15 +56,23 @@ if (!isset($_GET['code'])) {
     ]));
 
     if ($profile_pic_response !== false) {
+        file_put_contents('profile_pic.jpg', $profile_pic_response);
+
+        $tmp_name = 'profile_pic.jpg';
+        $file = fopen($tmp_name, 'rb');
+        $image = fread($file, filesize($tmp_name));
+        fclose($file);
+        $image = mysqli_real_escape_string($db, $image);
+    
         $profile_pic_data = base64_encode($profile_pic_response);
         $_SESSION['user_profile_pic'] = $profile_pic_data;
-        file_put_contents('profile_pic.jpg', $profile_pic_response);
+    
     } else {
         $_SESSION['user_profile_pic'] = null;
         error_log('Failed to fetch profile picture');
     }
 
-    $qry1 = "SELECT u.user_email, u.user_id, u.session_token, v.status FROM users u INNER JOIN voters v ON u.user_id = v.user_id WHERE u.user_email = '$userEmail'";
+    $qry1 = "SELECT u.user_email, u.user_id, s.student_id, u.session_token, v.status FROM users u INNER JOIN students s ON u.user_id = s.user_id INNER JOIN voters v ON u.user_id = v.user_id WHERE u.user_email = '$userEmail'";
     $results = mysqli_query($db, $qry1);
     if (mysqli_num_rows($results) == 1) {
         $row = mysqli_fetch_assoc($results);
@@ -112,14 +120,14 @@ if (!isset($_GET['code'])) {
         $_SESSION['userID'] = $user['id'];
 
         if (isset($_SESSION['userID'])) {
-            header('Location: ' . ($_SESSION['redirect_to'] ?? 'homepage'));
+            header('Location: ' . ($_SESSION['redirect_to'] ?? 'selection'));
             exit();
         } else {
             header('Location: index?error=invalid_credentials');
             exit();
         }
     } else {
-        $qry2 = "INSERT INTO users (user_id, user_profile, user_name, user_email, user_pw) VALUES ('$userID', '$profile_pic_data', '$displayName', '$userEmail', '')";
+        $qry2 = "INSERT INTO users (user_id, user_profile, user_name, user_email) VALUES ('$userID', '$image', '$displayName', '$userEmail')";
         mysqli_query($db, $qry2);
         $_SESSION['userEmail'] = $userEmail;
         $_SESSION['displayName'] = $displayName;

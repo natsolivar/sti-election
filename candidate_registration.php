@@ -3,6 +3,26 @@ session_start();
 include 'session.php';
 include 'db.php';
 
+date_default_timezone_set('Asia/Hong_Kong');
+
+function getSchoolYear($currentDate) {
+    $currentMonth = (int) date('m', strtotime($currentDate));
+    $currentYear = (int) date('Y', strtotime($currentDate));
+    
+    if ($currentMonth >= 8) {
+        $startYear = $currentYear;
+        $endYear = $currentYear + 1;
+    } else {
+        $startYear = $currentYear - 1;
+        $endYear = $currentYear;
+    }
+    return "$startYear-$endYear";
+    }
+
+$currentDate = date('Y-m-d');
+$schoolYear = getSchoolYear($currentDate);
+
+
 $qry5 = "SELECT voter_id, voter_grade, program_code FROM voters WHERE user_id = '$_SESSION[userID]'";
 $result_select = mysqli_query($conn, $qry5);
 $voter_id = '';
@@ -27,8 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $voter_id = $result_select->fetch_assoc()['voter_id'];
 
 
-        $qry2 = "INSERT INTO candidate (voter_id, position_id, candidate_details, platform, party_code, date_applied, status, support_count) 
-                 VALUES ('$voter_id', '$position_id', '$details', '$platform', '$party_id', NOW(), 'Under Review', 0)";
+        $qry2 = "INSERT INTO candidate (voter_id, position_id, candidate_details, platform, party_code, date_applied, academic_year, status, support_count) 
+                 VALUES ('$voter_id', '$position_id', '$details', '$platform', '$party_id', NOW(), '$schoolYear', 'Under Review', 0)";
         mysqli_query($conn, $qry2);
 
         $candidate_id = mysqli_insert_id($conn);
@@ -77,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <div class="main-content">
 <div class="container">
     <form action="candidate_registration.php" method="post" id="register_candidate" enctype="multipart/form-data" onsubmit="return validateForm()">
-        <h2>Voter Registration</h2>
+        <h2>Candidate Registration</h2>
         <div class="content">
             <div class="input-box">
                 <label for="name">Full Name</label>

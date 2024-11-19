@@ -3,6 +3,25 @@
     include 'sidebar.php';
     include 'session.php';
     include 'db.php';
+
+    date_default_timezone_set('Asia/Hong_Kong');
+
+    function getSchoolYear($currentDate) {
+        $currentMonth = (int) date('m', strtotime($currentDate));
+        $currentYear = (int) date('Y', strtotime($currentDate));
+        
+        if ($currentMonth >= 8) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        return "$startYear-$endYear";
+        }
+    
+    $currentcalendar = date('Y-m-d');
+    $schoolYear = getSchoolYear($currentcalendar);
     
 ?>
 <!DOCTYPE html>
@@ -40,375 +59,60 @@
             </div>
         </div>
         <div class="container">
-            <h1>PRESIDENT</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'PRES'";
-                    $res1 = mysqli_query ($conn, $qry1);
+    <?php 
+        $positionGroups = [
+            'Vice President' => ['Senior High Vice President', 'Tertiary Vice President'],
+            'Secretary' => ['Internal Secretary', 'External Secretary'],
+            'Grade 11 Representatives' => ['Grade 11 ABM Representative', 'Grade 11 HUMSS Representative', 'Grade 11 STEM Representative', 'Grade 11 CUART Representative', 'Grade 11 MAWD Representative'],
+            'Grade 12 Representatives' => ['Grade 12 ABM Representative', 'Grade 12 HUMSS Representative', 'Grade 12 STEM Representative', 'Grade 12 CUART Representative', 'Grade 12 MAWD Representative'],
+            'BSIS Representatives' => ['BSIS 1 Representative', 'BSIS 2 Representative', 'BSIS 3 Representative', 'BSIS 4 Representative'],
+            'BSTM Representatives' => ['BSTM 1A Representative', 'BSTM 1B Representative', 'BSTM 2 Representative', 'BSTM 2A Representative', 'BSTM 2B Representative', 'BSTM 3 Representative', 'BSTM 4 Representative']
+        ];
 
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
+        foreach ($positionGroups as $groupName => $positions) {
+            echo "<h1 style='text-transform: uppercase;'>$groupName</h1>";
+            echo "<div class='pres'>";
 
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
+            $positionPlaceholders = implode(',', array_map(fn($p) => "'$p'", $positions));
+            $qryCouncil = "SELECT p.position_name, u.user_name, i.image 
+                           FROM council co
+                           INNER JOIN position p ON co.position_id = p.position_id
+                           INNER JOIN voters v ON co.voter_id = v.voter_id
+                           INNER JOIN users u ON v.user_id = u.user_id
+                           LEFT JOIN candidate c ON co.candidate_id = c.candidate_id
+                           LEFT JOIN images i ON c.candidate_id = i.candidate_id
+                           WHERE p.position_name IN ($positionPlaceholders) 
+                           AND
+                           co.academic_year = '$schoolYear'
+                           AND
+                           co.status = 'ACTIVE'";
+            $resCouncil = mysqli_query($conn, $qryCouncil);
 
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
+            if ($resCouncil->num_rows > 0) {
+                while ($rows = $resCouncil->fetch_assoc()) {
+                    $fname = htmlspecialchars($rows['user_name'], ENT_QUOTES, 'UTF-8');
+                    $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
+                    $img = isset($rows['image']) ? 'data:image/jpeg;base64,' . base64_encode($rows['image']) : 'assets/images/profile.png';
 
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>VICE PRESIDENT</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'TERVP' OR co.position_id = 'SHVP'";
-                    $res1 = mysqli_query ($conn, $qry1);
 
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
+                    echo "<div class='flex' id='flex1'>";
+                    echo "<div class='img-container'>";
+                    echo "<img src=$img alt=''>";
+                    echo "</div>";
+                    echo "<div class='details'>";
+                    echo "<h3 class='title'>$fname</h3>";
+                    echo "<p class='price'>$position</p>";
+                    echo "</div>";
+                    echo "</div>";
+                }
+            } else {
+                echo "<p>No one appointed yet.</p>";
+            }
 
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>SECRETARY</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'EXTSEC' OR co.position_id = 'INTSEC'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>TREASURER</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'TREA'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>AUDITOR</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'AUD'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>PUBLIC INFORMATION OFFICERS</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'PIO'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>GRADE 11 REPRESENTATIVES</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = '11ABMREP' OR co.position_id = '11HUMSSREP' OR co.position_id = '11STEMREP' OR co.position_id = '11CUARTREP' OR co.position_id = '11MAWDREP'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>GRADE 12 REPRESENTATIVES</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = '12ABMREP' OR co.position_id = '12HUMSSREP' OR co.position_id = '12STEMREP' OR co.position_id = '12CUARTREP' OR co.position_id = '12MAWDREP'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>BS in TOURISM MANAGEMENT REPRESENTATIVES</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'BSTM1AREP' OR co.position_id = 'BSTM1BREP' OR co.position_id = 'BSTM2REP' OR co.position_id = 'BSTM3REP' OR co.position_id = 'BSTM4REP'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
-        <div class="container">
-            <h1>BS in INFORMATION SYSTEM REPRESENTATIVES</h1>
-            <div class="pres">
-                <?php 
-                    
-                    $qry1 = "SELECT co.*, p.position_name 
-                    FROM council_old co
-                    INNER JOIN position p ON co.position_id = p.position_id
-                    WHERE co.position_id = 'BSIS1REP' OR co.position_id = 'BSIS2REP' OR co.position_id = 'BSIS3REP' OR co.position_id = 'BSIS4REP'";
-                    $res1 = mysqli_query ($conn, $qry1);
-
-                    if ($res1 -> num_rows > 0) {
-                        while ($rows = $res1 -> fetch_assoc()) {
-                            $fname = htmlspecialchars($rows['first_name'], ENT_QUOTES, 'UTF-8');
-                            $lname = htmlspecialchars($rows['last_name'], ENT_QUOTES, 'UTF-8');
-                            $position = htmlspecialchars($rows['position_name'], ENT_QUOTES, 'UTF-8');
-                            $imgData = $rows['image'];
-                            $fullname = $fname . " " . $lname;
-
-                            $imgBase64 = base64_encode($imgData);
-                            $imgSrc = "data:image/jpeg;base64,$imgBase64";
-
-                            echo "<div class='flex' id='flex1'>";
-                            echo "<div class='img-container'>";
-                            echo "<img src=$imgSrc alt=''>";
-                            echo "</div>";
-                            echo "<div class='details'>";
-                            echo "<h3 class='title'>$fullname</h3>";
-                            echo "<p class='price'>$position</p>";
-                            echo "</div>";
-                            echo "</div>";
-
-                        }
-                    }
-                ?> 
-            </div>
-        </div>
+            echo "</div>";
+        }
+    ?>
+</div>
     </div>
     </body>
 </html>

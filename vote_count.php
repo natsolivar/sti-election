@@ -4,6 +4,23 @@
     include 'db.php';
     require 'config.php';
 
+    date_default_timezone_set('Asia/Hong_Kong');
+    function getSchoolYear($currentDate) {
+        $currentMonth = (int) date('m', strtotime($currentDate));
+        $currentYear = (int) date('Y', strtotime($currentDate));
+        
+        if ($currentMonth >= 8) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        return "$startYear-$endYear";
+        }
+    
+    $currentDate = date('Y-m-d');
+    $schoolYear = getSchoolYear($currentDate);
 
     $pres = isset($_POST['president']) ? mysqli_real_escape_string($conn, $_POST['president']) : null;;
     $tervp = isset($_POST['tervpresident']) ? mysqli_real_escape_string($conn, $_POST['tervpresident']) : null;;
@@ -54,7 +71,7 @@
             $voter_id = $row['voter_id'];
 
 
-            $qry2 = "INSERT INTO registered_votes (r_vote_id, voter_id, president, ter_vpresident, sh_vpresident, secretary_inter, secretary_exter, treasurer, auditor, pio, pio_2, g11abm_representative, g11humss_representative, g11stem_representative, g11cuart_representative, g11mawd_representative, g12abm_representative, g12humss_representative, g12stem_representative, g12cuart_representative, g12mawd_representative, g12toper_representative, bstm1a_representative, bstm1b_representative, bsis1_representative, bstm2a_representative, bstm2b_representative, bsis2_representative, bstm3_representative, bsis3_representative, bstm4_representative, bsis4_representative, vote_date) VALUES ('','$voter_id','$pres','$tervp','$shvp','$intsec','$extsec','$trea','$aud','" . (isset($selected_pio[0]) ? $selected_pio[0] : '') . "','" . (isset($selected_pio[1]) ? $selected_pio[1] : '') . "','$g11abmrep','$g11humssrep','$g11stemrep','$g11cuartrep','$g11mawdrep','$g12abmrep','$g12humssrep','$g12stemrep','$g12cuartrep','$g12mawdrep','','$bstm1arep', '','$bsis1rep','$bstm2arep','$bstm2brep','$bsis2rep','$bstm3rep','$bsis3rep','$bstm4rep','$bsis4rep', NOW())";
+            $qry2 = "INSERT INTO registered_votes (r_vote_id, voter_id, president, ter_vpresident, sh_vpresident, secretary_inter, secretary_exter, treasurer, auditor, pio, pio_2, g11abm_representative, g11humss_representative, g11stem_representative, g11cuart_representative, g11mawd_representative, g12abm_representative, g12humss_representative, g12stem_representative, g12cuart_representative, g12mawd_representative, g12toper_representative, bstm1a_representative, bstm1b_representative, bsis1_representative, bstm2a_representative, bstm2b_representative, bsis2_representative, bstm3_representative, bsis3_representative, bstm4_representative, bsis4_representative, academic_year, vote_date) VALUES ('','$voter_id','$pres','$tervp','$shvp','$intsec','$extsec','$trea','$aud','" . (isset($selected_pio[0]) ? $selected_pio[0] : '') . "','" . (isset($selected_pio[1]) ? $selected_pio[1] : '') . "','$g11abmrep','$g11humssrep','$g11stemrep','$g11cuartrep','$g11mawdrep','$g12abmrep','$g12humssrep','$g12stemrep','$g12cuartrep','$g12mawdrep','','$bstm1arep', '','$bsis1rep','$bstm2arep','$bstm2brep','$bsis2rep','$bstm3rep','$bsis3rep','$bstm4rep','$bsis4rep', '$schoolYear', NOW())";
             $results = mysqli_query($conn, $qry2);
 
             $vote_status = "UPDATE voters SET vote_status = 'YES' WHERE voter_id = '$voter_id'";
@@ -99,14 +116,13 @@
                             $qry4 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             INNER JOIN voters v ON c.voter_id = v.voter_id 
                             INNER JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$pres' AND c.position_id = 'PRES'";
+                            WHERE u.user_name = '$pres' AND c.position_id = 'PRES' AND c.academic_year = '$schoolYear'";
                             $result_pres = mysqli_query($conn, $qry4);
 
 
                             if ($result_pres->num_rows > 0) {
                                 $row_pres = mysqli_fetch_assoc($result_pres);
                                 $candidate_id_pres = $row_pres['candidate_id'];
-
 
                                 $query = "SELECT v.voter_grade FROM candidate c JOIN voters v ON c.voter_id = v.voter_id WHERE v.voter_id = '$voter_id'";
                                 $result_q = mysqli_query($conn, $query);
@@ -134,7 +150,7 @@
                             $qry6 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$tervp' AND c.position_id = 'TERVP'";
+                            WHERE u.user_name = '$tervp' AND c.position_id = 'TERVP' AND c.academic_year = '$schoolYear'";
                             $result_vp = mysqli_query($conn, $qry6);
     
                             if ($result_vp && mysqli_num_rows($result_vp) > 0) {
@@ -168,7 +184,7 @@
                             $qry8 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$shvp' AND c.position_id = 'SHVP'";
+                            WHERE u.user_name = '$shvp' AND c.position_id = 'SHVP' AND c.academic_year = '$schoolYear'";
                             $result_shvp = mysqli_query($conn, $qry8);
     
                             if ($result_shvp && mysqli_num_rows($result_shvp) > 0) {
@@ -202,7 +218,7 @@
                             $qry10 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$intsec' AND c.position_id = 'INTSEC'";
+                            WHERE u.user_name = '$intsec' AND c.position_id = 'INTSEC' AND c.academic_year = '$schoolYear'";
                             $result_intsec = mysqli_query($conn, $qry10);
     
                             if ($result_intsec && mysqli_num_rows($result_intsec) > 0) {
@@ -237,7 +253,7 @@
                             $qry12 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$extsec' AND c.position_id = 'EXTSEC'";
+                            WHERE u.user_name = '$extsec' AND c.position_id = 'EXTSEC' AND c.academic_year = '$schoolYear'";
                             $result_extsec = mysqli_query($conn, $qry12);
     
                             if ($result_extsec && mysqli_num_rows($result_extsec) > 0) {
@@ -272,7 +288,7 @@
                             $qry14 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$trea' AND c.position_id = 'TREA'";
+                            WHERE u.user_name = '$trea' AND c.position_id = 'TREA' AND c.academic_year = '$schoolYear'";
                             $result_trea = mysqli_query($conn, $qry14);
     
                             if ($result_trea && mysqli_num_rows($result_trea) > 0) {
@@ -307,7 +323,7 @@
                             $qry16 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$aud' AND c.position_id = 'AUD'";
+                            WHERE u.user_name = '$aud' AND c.position_id = 'AUD' AND c.academic_year = '$schoolYear'";
                             $result_aud = mysqli_query($conn, $qry16);
     
                             if ($result_aud && mysqli_num_rows($result_aud) > 0) {
@@ -343,7 +359,7 @@
                             $qry18 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$pio1' AND c.position_id = 'PIO'";
+                            WHERE u.user_name = '$pio1' AND c.position_id = 'PIO' AND c.academic_year = '$schoolYear'";
                             $result_pio1 = mysqli_query($conn, $qry18);
     
                             if ($result_pio1 && mysqli_num_rows($result_pio1) > 0) {
@@ -378,7 +394,7 @@
                             $qry19 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$pio2' AND c.position_id = 'PIO'";
+                            WHERE u.user_name = '$pio2' AND c.position_id = 'PIO' AND c.academic_year = '$schoolYear'";
                             $result_pio2 = mysqli_query($conn, $qry19);
     
                             if ($result_pio2 && mysqli_num_rows($result_pio2) > 0) {
@@ -412,7 +428,7 @@
                             $qry20 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g11abmrep' AND c.position_id = '11ABMREP'";
+                            WHERE u.user_name = '$g11abmrep' AND c.position_id = '11ABMREP' AND c.academic_year = '$schoolYear'";
                             $result_11abmrep = mysqli_query($conn, $qry20);
     
                             if ($result_11abmrep && mysqli_num_rows($result_11abmrep) > 0) {
@@ -447,7 +463,7 @@
                             $qry22 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g11humssrep' AND c.position_id = '11HUMSSREP'";
+                            WHERE u.user_name = '$g11humssrep' AND c.position_id = '11HUMSSREP' AND c.academic_year = '$schoolYear'";
                             $result_11humssrep = mysqli_query($conn, $qry22);
     
                             if ($result_11humssrep && mysqli_num_rows($result_11humssrep) > 0) {
@@ -481,7 +497,7 @@
                             $qry24 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g11stemrep' AND c.position_id = '11STEMREP'";
+                            WHERE u.user_name = '$g11stemrep' AND c.position_id = '11STEMREP' AND c.academic_year = '$schoolYear'";
                             $result_11stemrep = mysqli_query($conn, $qry24);
     
                             if ($result_11stemrep && mysqli_num_rows($result_11stemrep) > 0) {
@@ -516,7 +532,7 @@
                             $qry26 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g11cuartrep' AND c.position_id = '11CUARTREP'";
+                            WHERE u.user_name = '$g11cuartrep' AND c.position_id = '11CUARTREP' AND c.academic_year = '$schoolYear'";
                             $result_11cuartrep = mysqli_query($conn, $qry26);
     
                             if ($result_11cuartrep && mysqli_num_rows($result_11cuartrep) > 0) {
@@ -551,7 +567,7 @@
                             $qry28 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g11mawdrep' AND c.position_id = '11MAWDREP'";
+                            WHERE u.user_name = '$g11mawdrep' AND c.position_id = '11MAWDREP' AND c.academic_year = '$schoolYear'";
                             $result_11mawdrep = mysqli_query($conn, $qry28);
     
                             if ($result_11mawdrep && mysqli_num_rows($result_11mawdrep) > 0) {
@@ -586,7 +602,7 @@
                             $qry30 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g12abmrep' AND c.position_id = '12ABMREP'";
+                            WHERE u.user_name = '$g12abmrep' AND c.position_id = '12ABMREP' AND c.academic_year = '$schoolYear'";
                             $result_12abmrep = mysqli_query($conn, $qry30);
     
                             if ($result_12abmrep && mysqli_num_rows($result_12abmrep) > 0) {
@@ -621,7 +637,7 @@
                             $qry32 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g12humssrep' AND c.position_id = '12HUMSSREP'";
+                            WHERE u.user_name = '$g12humssrep' AND c.position_id = '12HUMSSREP' AND c.academic_year = '$schoolYear'";
                             $result_12humssrep = mysqli_query($conn, $qry32);
     
                             if ($result_12humssrep && mysqli_num_rows($result_12humssrep) > 0) {
@@ -656,7 +672,7 @@
                             $qry34 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g12cuartrep' AND c.position_id = '12CUARTREP'";
+                            WHERE u.user_name = '$g12cuartrep' AND c.position_id = '12CUARTREP' AND c.academic_year = '$schoolYear'";
                             $result_12cuartrep = mysqli_query($conn, $qry34);
     
                             if ($result_12cuartrep && mysqli_num_rows($result_12cuartrep) > 0) {
@@ -691,7 +707,7 @@
                             $qry36 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$g12mawdrep' AND c.position_id = '12MAWDREP'";
+                            WHERE u.user_name = '$g12mawdrep' AND c.position_id = '12MAWDREP' AND c.academic_year = '$schoolYear'";
                             $result_12mawdrep = mysqli_query($conn, $qry36);
     
                             if ($result_12mawdrep && mysqli_num_rows($result_12mawdrep) > 0) {
@@ -726,7 +742,7 @@
                             $qry38 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bstm1arep' AND c.position_id = 'BSTM1AREP'";
+                            WHERE u.user_name = '$bstm1arep' AND c.position_id = 'BSTM1AREP' AND c.academic_year = '$schoolYear'";
                             $result_bstm1arep = mysqli_query($conn, $qry38);
     
                             if ($result_bstm1arep && mysqli_num_rows($result_bstm1arep) > 0) {
@@ -761,7 +777,7 @@
                             $qry42 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bstm2arep' AND c.position_id = 'BSTM2AREP'";
+                            WHERE u.user_name = '$bstm2arep' AND c.position_id = 'BSTM2AREP' AND c.academic_year = '$schoolYear'";
                             $result_bstm2arep = mysqli_query($conn, $qry42);
     
                             if ($result_bstm2arep && mysqli_num_rows($result_bstm2arep) > 0) {
@@ -795,7 +811,7 @@
                             $qry42 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bstm2brep' AND c.position_id = 'BSTM2BREP'";
+                            WHERE u.user_name = '$bstm2brep' AND c.position_id = 'BSTM2BREP' AND c.academic_year = '$schoolYear'";
                             $result_bstm2brep = mysqli_query($conn, $qry42);
     
                             if ($result_bstm2brep && mysqli_num_rows($result_bstm2brep) > 0) {
@@ -831,7 +847,7 @@
                             $qry43 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bstm3rep' AND c.position_id = 'BSTM3REP'";
+                            WHERE u.user_name = '$bstm3rep' AND c.position_id = 'BSTM3REP' AND c.academic_year = '$schoolYear'";
                             $result_bstm3rep = mysqli_query($conn, $qry43);
     
                             if ($result_bstm3rep && mysqli_num_rows($result_bstm3rep) > 0) {
@@ -866,7 +882,7 @@
                             $qry44 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bstm4rep' AND c.position_id = 'BSTM4REP'";
+                            WHERE u.user_name = '$bstm4rep' AND c.position_id = 'BSTM4REP' AND c.academic_year = '$schoolYear'";
                             $result_bstm4rep = mysqli_query($conn, $qry44);
     
                             if ($result_bstm4rep && mysqli_num_rows($result_bstm4rep) > 0) {
@@ -901,7 +917,7 @@
                             $qry46 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bsis1rep' AND c.position_id = 'BSIS1REP'";
+                            WHERE u.user_name = '$bsis1rep' AND c.position_id = 'BSIS1REP' AND c.academic_year = '$schoolYear'";
                             $result_bsis1rep = mysqli_query($conn, $qry46);
     
                             if ($result_bsis1rep && mysqli_num_rows($result_bsis1rep) > 0) {
@@ -936,7 +952,7 @@
                             $qry48 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bsis2rep' AND c.position_id = 'BSIS2REP'";
+                            WHERE u.user_name = '$bsis2rep' AND c.position_id = 'BSIS2REP' AND c.academic_year = '$schoolYear'";
                             $result_bsis2rep = mysqli_query($conn, $qry48);
     
                             if ($result_bsis2rep && mysqli_num_rows($result_bsis2rep) > 0) {
@@ -971,7 +987,7 @@
                             $qry50 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bsis3rep' AND c.position_id = 'BSIS3REP'";
+                            WHERE u.user_name = '$bsis3rep' AND c.position_id = 'BSIS3REP' AND c.academic_year = '$schoolYear'";
                             $result_bsis3rep = mysqli_query($conn, $qry50);
     
                             if ($result_bsis3rep && mysqli_num_rows($result_bsis3rep) > 0) {
@@ -1006,7 +1022,7 @@
                             $qry52 = "SELECT c.candidate_id, COUNT(c.candidate_id) AS c_id FROM candidate c 
                             JOIN voters v ON c.voter_id = v.voter_id 
                             JOIN users u ON v.user_id = u.user_id 
-                            WHERE u.user_name = '$bsis4rep' AND c.position_id = 'BSIS4REP'";
+                            WHERE u.user_name = '$bsis4rep' AND c.position_id = 'BSIS4REP' AND c.academic_year = '$schoolYear'";
                             $result_bsis4rep = mysqli_query($conn, $qry52);
     
                             if ($result_bsis4rep && mysqli_num_rows($result_bsis4rep) > 0) {

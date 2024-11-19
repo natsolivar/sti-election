@@ -136,21 +136,6 @@
                        ?></td>
                     </tr>
                     <tr>
-                        <th width="30%">Club</th>
-                        <td width="2%">:</td>
-                        <td><?php 
-                        $qry6 = "SELECT voter_club FROM voters WHERE user_id = '$_SESSION[userID]'";
-                        $results = mysqli_query($conn, $qry6);
-                        if ($results->num_rows != NULL) { 
-                           while ($row = $results->fetch_assoc()) {
-                               echo $row['voter_club'] . "<br>";
-                           }
-                        } else {
-                           echo "N/A";
-                       }
-                       ?></td>
-                    </tr>
-                    <tr>
                         <th width="30%">Vote Status</th>
                         <td width="2%">:</td>
                         <td><?php 

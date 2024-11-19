@@ -1,9 +1,40 @@
 <?php
+
 session_start();
+
+require 'vendor/autoload.php';
 include 'db.php';
 include 'session.php';
 require 'config.php';
 require 'check_login.php';
+
+use Endroid\QrCode\Builder\Builder;
+use Endroid\QrCode\Writer\PngWriter;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel;
+use Endroid\QrCode\RoundBlockSizeMode;
+
+$uniqueString = uniqid('event_', true);
+
+$builder = new Builder(
+    writer: new PngWriter(),
+    writerOptions: [],
+    validateResult: false,
+    data: $uniqueString,
+    encoding: new Encoding('UTF-8'),
+    errorCorrectionLevel: ErrorCorrectionLevel::High,
+    logoPath: __DIR__.'/assets/logo/STI-LOGO2.png',
+    logoResizeToWidth: 50,
+    logoPunchoutBackground: true,
+    size: 300,
+    margin: 10,
+    roundBlockSizeMode: RoundBlockSizeMode::Margin,
+);
+
+    $result = $builder->build();
+
+    $qrCodeData = $result->getString();
+    $base64QrCode = base64_encode($qrCodeData);
 
 if (isset($_SESSION['userID'])) {
     $user_id = $_SESSION['userID'];
@@ -14,7 +45,7 @@ if (isset($_SESSION['userID'])) {
     }
     $row = mysqli_fetch_assoc($result);
     if ($row['count'] > 0) {
-        header('Location: homepage.php');
+        header('Location: selection');
         exit();
     }
 }
@@ -35,24 +66,21 @@ function getSchoolYear($currentDate) {
 
     $voter_name = $_SESSION['displayName'];
     $voter_email = $_SESSION['userEmail'];
+    $student_num = "";
     $voter_grade = "";
     $voter_gender = "";
     $voter_program = "";
-    $voter_club = "";
     $voter_num = "";
     $voter_pass = "";
     $currentDate = date('Y-m-d');
     $schoolYear = getSchoolYear($currentDate);
 
 if (isset($_POST['register'])) {
+    $student_num = mysqli_real_escape_string($conn, string: $_POST['studentnum']);
     $voter_grade = mysqli_real_escape_string($conn, $_POST['grade']);
     $voter_gender = mysqli_real_escape_string($conn, $_POST['gender']);
     $voter_program = mysqli_real_escape_string($conn, $_POST['program']);
-    $voter_club = mysqli_real_escape_string($conn, $_POST['club']);
     $voter_num = mysqli_real_escape_string($conn, $_POST['num']);
-    $voter_pass = mysqli_real_escape_string($conn, $_POST['confirm-pass']);
-    
-    $voter_pass_hashed = password_hash($voter_pass, PASSWORD_DEFAULT);
 
     $qry2 = "SELECT user_id FROM users WHERE user_id = '$_SESSION[userID]'";
     $result = mysqli_query($conn, $qry2);
@@ -61,7 +89,10 @@ if (isset($_POST['register'])) {
         $row = mysqli_fetch_assoc($result);
         $user_id = $row['user_id'];
 
-        $qry3 = "INSERT INTO voters (user_id, voter_gender, voter_num, voter_grade, program_code, voter_club, academic_year, date_registered, vote_status, status) VALUES ('$user_id', '$voter_gender', '$voter_num', '$voter_grade', '$voter_program', '$voter_club', '$schoolYear', NOW(), 'NO', 'ACTIVE')";
+        $studentqry = "INSERT INTO students (user_id, student_num, student_grade, student_program, gender, academic_year, student_qr, qr_content, date_registered, status) VALUES ('$user_id', '$student_num', '$voter_grade', '$voter_program', '$voter_gender', '$schoolYear', '$base64QrCode', '$uniqueString', NOW(), 'ACTIVE')";
+        $stu_result = mysqli_query($conn, $studentqry);
+
+        $qry3 = "INSERT INTO voters (user_id, voter_gender, voter_num, voter_grade, program_code, academic_year, date_registered, vote_status, status) VALUES ('$user_id', '$voter_gender', '$voter_num', '$voter_grade', '$voter_program', '$schoolYear', NOW(), 'NO', 'ACTIVE')";
         $result_insert = mysqli_query($conn, $qry3);
 
             if ($result_insert) {
@@ -73,7 +104,7 @@ if (isset($_POST['register'])) {
                         $_SESSION['voter_id'] = $voter_id;
                     }
                 }
-                header('location: homepage.php');
+                header('location: selection');
                 exit;
         } else {
             echo 'Error inserting voter: ' . mysqli_error($conn);
@@ -95,12 +126,13 @@ if (isset($_POST['register'])) {
         <script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
         <title>Register | EMVS</title>
         <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Poppins" , sans-serif;   
+            font-family: Poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         body {
@@ -131,6 +163,37 @@ if (isset($_POST['register'])) {
             flex-wrap: wrap;
             justify-content: space-between;
             padding: 20px 0;
+            position: relative;
+        }
+
+        .content .static-text {
+            position: absolute;
+            left: 10px; 
+            top: 19%;
+            transform: translateY(-50%); 
+            color: rgba(0, 0, 0, 0.6);
+            pointer-events: none; 
+            font-size: 14px;
+        }
+
+        .content .static-number {
+            position: absolute;
+            left: 310px; 
+            top: 66%;
+            transform: translateY(-50%); 
+            color: rgba(0, 0, 0, 0.6);
+            pointer-events: none; 
+            font-size: 14px;
+        }
+
+        .content #bottom-header input {
+            padding: 10px 10px 10px 45px;
+            box-sizing: border-box;
+        }
+
+        .content #top-header input {
+            padding: 10px 10px 10px 60px;
+            box-sizing: border-box;
         }
 
         .input-box {
@@ -138,13 +201,14 @@ if (isset($_POST['register'])) {
             flex-wrap: wrap;
             width: 50%;
             padding-bottom: 15px;
+            display: block;
         }
 
         .input-box:nth-child(2n) {
             justify-content: start;
         }
 
-        .input-box label, .gender-title {
+        .input-box label:not(.static-text,.static-number), .gender-title {
             width: 100%;
             color: #2f4f4f;
             font-weight: bold;
@@ -272,8 +336,13 @@ if (isset($_POST['register'])) {
     <body>
         <div class="container">
             <form action="register.php" method="post" id="register" novalidate>
-                <h2>Voter Registration</h2>
+                <h2>Student and Voter Registration</h2>
                     <div class="content">
+                        <div class="input-box" id="top-header">
+                            <label for="studentnum">Student Number</label>
+                            <label for="studentnum" class="static-text">02000</label>
+                            <input inputmode="numeric" placeholder="******" id="studentnum" name="studentnum" maxlength="6" autofocus required oninput="this.value = this.value.replace(/\D+/g, '')" required>
+                        </div>
                         <div class="input-box">
                             <label for="name">Full Name</label>
                             <input type="text" placeholder="<?php echo htmlspecialchars($_SESSION['displayName']); ?>" name="name" readonly>
@@ -298,28 +367,10 @@ if (isset($_POST['register'])) {
                             <select id="program" name="program" required>
                             </select>
                         </div>
-                        <div class="input-box">
+                        <div class="input-box" id="bottom-header">
                             <label for="phonenumber">Phone number</label>
-                            <input type="tel" placeholder="Enter phone number" id="num" name="num" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');" maxlength="11" required>
-                        </div>
-                        <div class="input-box">
-                            <label for="club">Club</label>
-                            <select id="club" name="club" required>
-                                <?php 
-                                    $qry6 = "SELECT club_id, club_name FROM club";
-                                    $result = mysqli_query($conn, $qry6);
-
-                                    if ($result->num_rows > 0) {
-                                        while ($row = $result->fetch_assoc()) {
-                                            $club_id = $row['club_id'];
-                                            $club_name = $row['club_name'];
-                                            echo '<option value="' . $club_id . '">' . $club_name . '</option>';
-                                        }
-                                    } else {
-                                        echo '<option value="">No clubs available</option>';
-                                    }
-                                ?>
-                            </select>
+                            <label for="phonenumber" class="static-number">+63</label>
+                            <input type="tel" placeholder="9*********" id="num" name="num" oninput="this.value = this.value.replace(/\D+/g, '')" maxlength="10" required>
                         </div>
 
                         <span class="gender-title">Gender</span>
@@ -333,7 +384,7 @@ if (isset($_POST['register'])) {
                             </div>
                     </div>
                     <div class="alert">
-                        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolore eos exercitationem sequi hic totam magnam in nemo fugit sapiente eius.</p>
+                        <p>This registration form is for informational purposes only. To officially enroll or register to vote, please contact the appropriate institution or election board.</p>
                     </div>
                     <div class="button-container">
                         <div id="form-error-message" class="error-message" style="display: none;">Password requirement not meet</div>
@@ -359,20 +410,20 @@ if (isset($_POST['register'])) {
       { value: 'MAWD', text: 'Mobile App & Web Development(MAWD)' }
     ],
     '1st year': [
-      { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
-      { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
+      { value: 'BSIS', text: 'BS in Information System(BSIS)' },
+      { value: 'BSTM', text: 'BS in Tourism Management(BSTM)' }
     ],
     '2nd year': [
-      { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
-      { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
+      { value: 'BSIS', text: 'BS in Information System(BSIS)' },
+      { value: 'BSTM', text: 'BS in Tourism Management(BSTM)' }
     ],
     '3rd year': [
-      { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
-      { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
+      { value: 'BSIS', text: 'BS in Information System(BSIS)' },
+      { value: 'BSTM', text: 'BS in Tourism Management(BSTM)' }
     ],
     '4th year': [
-      { value: 'BSIS', text: 'Bachelor of Science in Information System(BSIS)' },
-      { value: 'BSTM', text: 'Bachelor of Science in Tourism Management(BSTM)' }
+      { value: 'BSIS', text: 'BS in Information System(BSIS)' },
+      { value: 'BSTM', text: 'BS in Tourism Management(BSTM)' }
     ]
   };
 

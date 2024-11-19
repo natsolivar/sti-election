@@ -10,6 +10,25 @@
         exit();
     }
 
+    date_default_timezone_set('Asia/Hong_Kong');
+
+    function getSchoolYear($currentDate) {
+        $currentMonth = (int) date('m', strtotime($currentDate));
+        $currentYear = (int) date('Y', strtotime($currentDate));
+        
+        if ($currentMonth >= 8) {
+            $startYear = $currentYear;
+            $endYear = $currentYear + 1;
+        } else {
+            $startYear = $currentYear - 1;
+            $endYear = $currentYear;
+        }
+        return "$startYear-$endYear";
+        }
+    
+    $currentcalendar = date('Y-m-d');
+    $schoolYear = getSchoolYear($currentcalendar);
+
     function getGreeting() {
         $currentTime = new DateTime(null, new DateTimeZone('Asia/Hong_Kong'));
         $hour = $currentTime->format('G');
@@ -155,7 +174,7 @@
                 <?php 
                     if (isset($_SESSION['message'])) {
                         echo '<p style="color: green; margin-top: 20px;">' . $_SESSION['message'] . '</p>';
-                        unset($_SESSION['message']); // Clear the message after displaying
+                        unset($_SESSION['message']); 
                     }
                 ?>
                 <h1><?php 
@@ -188,9 +207,19 @@
 
                                 } elseif (strtotime($row['date_start']) <= time() && strtotime($row['date_end']) >= time()) { 
                                     echo "<p>Voting ends in <strong>{$days_remaining} " . ($days_remaining == 1 ? "day" : "days") . "</strong></p>";
-                                    echo '<div class="status-container">';
-                                    echo '<div class="status-indicator"></div>Unofficial voting result is live!<a href="vote_tabulation">Click here</a>';
-                                    echo '</div>';
+
+                                    $qry1 = "SELECT COUNT(r_vote_id) AS vote_count FROM registered_votes WHERE academic_year = '$schoolYear'";
+                                            $res = mysqli_query($conn, $qry1);
+
+                                            $row = mysqli_fetch_array($res);
+                                            $vote_count = $row['vote_count'];
+
+                                            if ($vote_count > 0) {
+                                                echo '<div class="status-container">';
+                                                echo '<div class="status-indicator"></div>Unofficial voting result is live!<a href="vote_tabulation">Click here</a>';
+                                                echo '</div>';
+                                            }
+
 
                                 } else {
                                     echo "<p>The election has ended.</p>";

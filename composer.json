@@ -1,0 +1,25 @@
+{
+    "name": "user/emvs",
+    "description": "Project Capstone",
+    "type": "library",
+    "version": "6.0.3",
+    "require": {
+        "endroid/qr-code": "^6.0",
+        "phpoffice/phpspreadsheet": "^3.4",
+        "tecnickcom/tcpdf": "^6.7"
+    },
+    "autoload": {
+        "psr-4": {
+            "user\\emvs\\": "src/"
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Renato Olivar",
+            "email": "olivar.262622@iligan.sti.edu.ph"
+        }
+    ]
+}
